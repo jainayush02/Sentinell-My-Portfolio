@@ -25,6 +25,12 @@ export interface Skill {
   level: number;
 }
 
+export interface Feature {
+  title: string;
+  description: string;
+  icon: string;
+}
+
 export interface PortfolioData {
   profile: {
     name: string;
@@ -38,8 +44,13 @@ export interface PortfolioData {
     github: string;
     linkedin: string;
     twitter: string;
-    location: string;
+    location: String;
+    dob: String;
+    careerStartDate: String;
+    resumeUrl?: String;
+    researchPapersCount: number;
   };
+  features: Feature[];
   experiences: Experience[];
   projects: Project[];
   skills: Skill[];
@@ -50,7 +61,7 @@ export const initialData: PortfolioData = {
     name: "Ayush Jain",
     age: 21,
     photoUrl: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&q=80",
-    logoUrl: "https://storage.googleapis.com/a1aa/image/logo-placeholder.png", // Will be replaced by the user's uploaded logo
+    logoUrl: "/logo.png", // Using the new PNG logo as default
     title: "B.Tech CSE (AI & Analytics) | Final Year",
     bio: "Final-year B.Tech CSE student (AI & Analytics) and AI Intern at Persistent Systems. Experienced in building and optimizing RAG pipelines, LLM agents, and machine learning models using Python and LangChain. Adept at prompt engineering, writing clean code, and collaborating with cross-functional teams to deliver scalable, real-world AI solutions.",
     email: "ayushsancheti098@gmail.com",
@@ -58,8 +69,34 @@ export const initialData: PortfolioData = {
     github: "https://github.com/jainayush02",
     linkedin: "https://linkedin.com/in/ayush-jain-2322bb214",
     twitter: "",
-    location: "Pune, Maharashtra"
+    location: "Pune, Maharashtra",
+    dob: "2003-09-08",
+    careerStartDate: "2023-01-01",
+    resumeUrl: "",
+    researchPapersCount: 0
   },
+  features: [
+    {
+      title: "Clean Code",
+      description: "Writing maintainable, well-documented code is a core principle.",
+      icon: "Code2"
+    },
+    {
+      title: "Full-Stack",
+      description: "Comfortable from pixel-perfect UIs to distributed backend systems.",
+      icon: "Terminal"
+    },
+    {
+      title: "Performance",
+      description: "Obsessed with speed — both in shipping features and app performance.",
+      icon: "Zap"
+    },
+    {
+      title: "Collaboration",
+      description: "Thriving in cross-functional teams and mentoring junior engineers.",
+      icon: "Users"
+    }
+  ],
   experiences: [
     {
       id: "1",

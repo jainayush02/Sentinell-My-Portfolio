@@ -1,20 +1,74 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# 🛡️ Sentinel | Elite Portfolio & Admin Platform
 
-# Run and deploy your AI Studio app
+A high-performance, full-stack SaaS portfolio architecture featuring a secure Administrative Command Center, real-time lead notifications, and a high-density "Engineering Journal" UI.
 
-This contains everything you need to run your app locally.
+## 🏛️ System Architecture
 
-View your app in AI Studio: https://ai.studio/apps/937f1c9e-4427-4ffe-a514-e02920893a09
+```mermaid
+graph TD
+    subgraph "Frontend Layer (Nexus UI)"
+        A[React 18 + Vite] --> B[Framer Motion Animations]
+        B --> C{API Handlers}
+    end
 
-## Run Locally
+    subgraph "Security Layer (Sentinel Shield)"
+        C --> D[Rate Limiter]
+        D --> E[OTP/JWT Verification]
+        E --> F[NoSQL Sanitization]
+    end
 
-**Prerequisites:**  Node.js
+    subgraph "Backend Engine (Node.js)"
+        F --> G[Express Router]
+        G --> H[Mongoose ODM]
+        G --> I[Twilio Notification Dispatch]
+    end
 
+    subgraph "Data & Notifications"
+        H --> J[(MongoDB Atlas)]
+        I --> K[WhatsApp Integration]
+    end
+```
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+## 🌳 Project Architecture
+
+```text
+Sentinal-Portfolio/
+├── client/                 # 🚀 React + Vite Frontend
+│   ├── public/             # Static Assets (Custom Logo, Branding)
+│   ├── src/
+│   │   ├── components/     # High-Fidelity UI Components
+│   │   ├── pages/          # Portfolio Hub & Admin Portal
+│   │   ├── lib/            # UI Frameworks (Shadcn, Tailwind)
+│   │   └── usePortfolioData.ts # Centralized State Management
+│   └── package.json        # Frontend Stack
+├── server/                 # 🛡️ Node.js + Express Backend
+│   ├── index.js            # Hardened API Entry Point
+│   ├── middleware/         # Security (JWT, OTP, Rate Limiting)
+│   ├── models/             # Database Schemas (MongoDB/Mongoose)
+│   ├── routes/             # Feature Routes (Auth, Messages)
+│   └── package.json        # Backend Stack
+├── .gitignore              # Global Security & Secret Locking
+└── README.md               # Project Documentation
+```
+
+## 🛠️ Core Technology Stack
+- **Frontend**: React 18, Vite, Framer Motion (Animations), Tailwind CSS.
+- **Backend**: Node.js, Express, JWT (Authentication), Twilio (WhatsApp API).
+- **Database**: MongoDB with Mongoose ODM.
+- **Security**: Hardened with Helmet.js, Express-Rate-Limit, and NoSQL Injection Sanitation.
+
+## 🛡️ Sentinel Shield: Security First
+This platform is built with a "Zero-Trust" administrative philosophy:
+- **Physical OTP Entry**: Login is tied directly to the Admin's phone number via high-security OTP codes.
+- **Total Endpoint Isolation**: Every administrative transaction is locked behind cryptographic JWT tokens.
+- **Anti-Brute Force**: High-accuracy rate limiting blocks automated intrusion attempts.
+- **Database Hardening**: Sanitized payloads protect against all common injection vectors.
+
+## 🚀 Quick Start
+1. **Initialize Environment**:
+   - Create `.env` files in both `client/` and `server/` using your private credentials.
+2. **Start Services**:
+   - Run `python start.py` from the root directory to launch both the frontend and backend concurrently.
+
+---
+*Built for High-Impact Engineers.*
