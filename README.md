@@ -1,4 +1,4 @@
-# 🛡️ Sentinel | Elite Portfolio & Admin Platform
+# 🛡️ Sentinell | Elite Portfolio & Admin Platform
 
 A high-performance, full-stack SaaS portfolio architecture featuring a secure Administrative Command Center, real-time lead notifications, and a high-density "Engineering Journal" UI.
 
@@ -11,7 +11,7 @@ graph TD
         B --> C{API Handlers}
     end
 
-    subgraph "Security Layer (Sentinel Shield)"
+    subgraph "Security Layer (Sentinell Shield)"
         C --> D[Rate Limiter]
         D --> E[OTP/JWT Verification]
         E --> F[NoSQL Sanitization]
@@ -32,7 +32,7 @@ graph TD
 ## 🌳 Project Architecture
 
 ```text
-Sentinal-Portfolio/
+Sentinell-Portfolio/
 ├── client/                 # 🚀 React + Vite Frontend
 │   ├── public/             # Static Assets (Custom Logo, Branding)
 │   ├── src/
@@ -57,7 +57,7 @@ Sentinal-Portfolio/
 - **Database**: MongoDB with Mongoose ODM.
 - **Security**: Hardened with Helmet.js, Express-Rate-Limit, and NoSQL Injection Sanitation.
 
-## 🛡️ Sentinel Shield: Security First
+## 🛡️ Sentinell Shield: Security First
 This platform is built with a "Zero-Trust" administrative philosophy:
 - **Physical OTP Entry**: Login is tied directly to the Admin's phone number via high-security OTP codes.
 - **Total Endpoint Isolation**: Every administrative transaction is locked behind cryptographic JWT tokens.

@@ -23,7 +23,7 @@ dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/sentinal_portfolio';
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/sentinell_portfolio';
 
 const twilioClient = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
 
@@ -39,11 +39,11 @@ app.use(cors({
     if (!origin || origin.includes('localhost') || origin.includes('127.0.0.1')) {
       return callback(null, true);
     }
-    // Allow Vercel deployments
-    if (origin.endsWith('.vercel.app')) {
+    // Allow specific Sentinell deployment
+    if (origin.includes('sentinell.vercel.app')) {
       return callback(null, true);
     }
-    callback(new Error('🛡️ SENTINAL SECURITY: Origin Not Authorized'));
+    callback(new Error('🛡️ SENTINELL SECURITY: Origin Not Authorized'));
   },
   credentials: true
 }));
@@ -73,7 +73,7 @@ if (!fs.existsSync(uploadsDir)) {
   try {
     fs.mkdirSync(uploadsDir);
   } catch (err) {
-    console.warn('⚠️ SENTINAL: Running in read-only environment (Vercel). Storage bypass active.');
+    console.warn('⚠️ SENTINELL: Running in read-only environment (Vercel). Storage bypass active.');
   }
 }
 app.use('/uploads', express.static(uploadsDir));
@@ -142,7 +142,7 @@ app.post('/api/contact', contactLimiter, async (req, res) => {
         from: 'whatsapp:+14155238886',
         to: `whatsapp:${process.env.ADMIN_PHONE_NUMBER}`,
         body: `Hi Ayush,\n\n` +
-              `You received a new message via your *Sentinel Portfolio*.\n\n` +
+              `You received a new message via your *Sentinell Portfolio*.\n\n` +
               `*Details:*\n` +
               `• Name: ${name}\n` +
               `• Email: ${email}\n` +
@@ -170,7 +170,7 @@ app.get('/api/health', (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log('🛡️ SENTINAL SHIELD: ACTIVE');
+  console.log('🛡️ SENTINELL SHIELD: ACTIVE');
   console.log(`🚀 SERVICE: Listening on Port ${PORT}`);
 });
 
