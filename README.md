@@ -1,4 +1,4 @@
-# 🛡️ Sentinell | Elite Portfolio & Admin Platform
+# 🛡️ Sentinell Studio | Elite Portfolio & Admin Platform
 
 A high-performance, full-stack SaaS portfolio architecture featuring a secure Administrative Command Center, real-time lead notifications, and a high-density "Engineering Journal" UI.
 
@@ -11,7 +11,7 @@ graph TD
         B --> C{API Handlers}
     end
 
-    subgraph "Security Layer (Sentinell Shield)"
+    subgraph "Security Layer (Sentinell Studio Shield)"
         C --> D[Rate Limiter]
         D --> E[OTP/JWT Verification]
         E --> F[NoSQL Sanitization]
@@ -57,7 +57,7 @@ Sentinell-Portfolio/
 - **Database**: MongoDB with Mongoose ODM.
 - **Security**: Hardened with Helmet.js, Express-Rate-Limit, and NoSQL Injection Sanitation.
 
-## 🛡️ Sentinell Shield: Security First
+## 🛡️ Sentinell Studio Shield: Security First
 This platform is built with a "Zero-Trust" administrative philosophy:
 - **Physical OTP Entry**: Login is tied directly to the Admin's phone number via high-security OTP codes.
 - **Total Endpoint Isolation**: Every administrative transaction is locked behind cryptographic JWT tokens.

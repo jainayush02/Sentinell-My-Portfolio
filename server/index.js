@@ -39,8 +39,8 @@ app.use(cors({
     if (!origin || origin.includes('localhost') || origin.includes('127.0.0.1')) {
       return callback(null, true);
     }
-    // Allow specific Sentinell deployment
-    if (origin.includes('sentinell.vercel.app')) {
+    // Allow specific Sentinell Studio deployment
+    if (origin.includes('sentinell-studio.vercel.app')) {
       return callback(null, true);
     }
     callback(new Error('🛡️ SENTINELL SECURITY: Origin Not Authorized'));
@@ -142,7 +142,7 @@ app.post('/api/contact', contactLimiter, async (req, res) => {
         from: 'whatsapp:+14155238886',
         to: `whatsapp:${process.env.ADMIN_PHONE_NUMBER}`,
         body: `Hi Ayush,\n\n` +
-              `You received a new message via your *Sentinell Portfolio*.\n\n` +
+              `You received a new message via your *Sentinell Studio Portfolio*.\n\n` +
               `*Details:*\n` +
               `• Name: ${name}\n` +
               `• Email: ${email}\n` +
@@ -170,7 +170,7 @@ app.get('/api/health', (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log('🛡️ SENTINELL SHIELD: ACTIVE');
+  console.log('🛡️ SENTINELL STUDIO SHIELD: ACTIVE');
   console.log(`🚀 SERVICE: Listening on Port ${PORT}`);
 });
 

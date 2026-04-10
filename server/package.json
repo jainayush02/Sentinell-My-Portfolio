@@ -1,7 +1,7 @@
 {
-  "name": "sentinell-server",
+  "name": "sentinell-studio-server",
   "version": "1.0.0",
-  "description": "Backend for Sentinell Portfolio",
+  "description": "Backend for Sentinell Studio Portfolio",
   "main": "index.js",
   "type": "module",
   "scripts": {
