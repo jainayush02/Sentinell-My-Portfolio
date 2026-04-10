@@ -106,10 +106,21 @@ export default function Portfolio() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#f8f9fa] flex items-center justify-center">
-        <div className="flex flex-col items-center gap-4">
-          <div className="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
-          <p className="text-slate-500 font-medium font-sans">Loading Portfolio...</p>
+      <div className="min-h-screen flex items-center justify-center relative overflow-hidden bg-[#fafbfc]">
+        {/* 🎨 Living Canvas Backdrop */}
+        <div className="absolute inset-0 z-0">
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-blue-100/30 blur-[120px]"></div>
+        </div>
+
+        <div className="relative z-10 flex flex-col items-center gap-4">
+          <div className="h-[2px] w-32 bg-slate-100 rounded-full overflow-hidden relative">
+            <motion.div 
+              className="absolute inset-0 bg-blue-600"
+              animate={{ x: ["-100%", "100%"] }}
+              transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+            />
+          </div>
+          <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-slate-400 animate-pulse">Sentinel Initializing</p>
         </div>
       </div>
     );

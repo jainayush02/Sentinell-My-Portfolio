@@ -70,7 +70,11 @@ const contactLimiter = rateLimit({
 // Static folder for uploads
 const uploadsDir = path.join(__dirname, 'uploads');
 if (!fs.existsSync(uploadsDir)) {
-  fs.mkdirSync(uploadsDir);
+  try {
+    fs.mkdirSync(uploadsDir);
+  } catch (err) {
+    console.warn('⚠️ SENTINAL: Running in read-only environment (Vercel). Storage bypass active.');
+  }
 }
 app.use('/uploads', express.static(uploadsDir));
 
