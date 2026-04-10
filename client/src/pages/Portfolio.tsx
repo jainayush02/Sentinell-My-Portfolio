@@ -379,7 +379,7 @@ export default function Portfolio() {
             <div className="w-12 h-1 bg-gradient-to-r from-blue-600 to-fuchsia-600 mx-auto rounded-full"></div>
           </div>
 
-          <div className="relative border-l-2 border-blue-100 ml-4 md:ml-24 space-y-12">
+          <div className="relative border-l-2 border-blue-100 ml-5 space-y-12">
             <AnimatePresence mode="popLayout">
               {(showAllExp ? experiences : experiences.slice(0, 2)).map((exp, index) => (
                 <motion.div
