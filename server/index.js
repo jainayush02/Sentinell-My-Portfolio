@@ -158,3 +158,5 @@ app.listen(PORT, () => {
   console.log('🛡️ SENTINAL SHIELD: ACTIVE');
   console.log(`🚀 SERVICE: Listening on Port ${PORT}`);
 });
+
+export default app;
