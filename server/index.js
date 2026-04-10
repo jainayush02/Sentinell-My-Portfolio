@@ -142,7 +142,7 @@ app.post('/api/contact', contactLimiter, async (req, res) => {
         from: 'whatsapp:+14155238886',
         to: `whatsapp:${process.env.ADMIN_PHONE_NUMBER}`,
         body: `Hi Ayush,\n\n` +
-              `You received a new message via your *Sentinell Studio Portfolio*.\n\n` +
+              `You received a new message via your *Sentinell Portfolio*.\n\n` +
               `*Details:*\n` +
               `• Name: ${name}\n` +
               `• Email: ${email}\n` +
@@ -170,7 +170,7 @@ app.get('/api/health', (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log('🛡️ SENTINELL STUDIO SHIELD: ACTIVE');
+  console.log('🛡️ SENTINELL SHIELD: ACTIVE');
   console.log(`🚀 SERVICE: Listening on Port ${PORT}`);
 });
 

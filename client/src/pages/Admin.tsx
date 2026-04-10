@@ -244,7 +244,7 @@ export default function Admin() {
             <div className="mx-auto w-64 h-64 flex items-center justify-center mb-1">
               <img src="/admin-logo.png" alt="Sentinell Logo" className="w-full h-full object-contain drop-shadow-2xl brightness-110" />
             </div>
-            <CardTitle className="text-3xl font-heading font-medium tracking-tight text-slate-900">Sentinell Studio Gateway</CardTitle>
+            <CardTitle className="text-3xl font-heading font-medium tracking-tight text-slate-900">Sentinell Gateway</CardTitle>
             <div className="mt-1 mx-auto w-fit">
               <p className="text-[11px] font-bold text-slate-400 uppercase tracking-[0.2em]">
                 Access is only allowed to Ayush 😂
@@ -330,7 +330,7 @@ export default function Admin() {
       <div className="md:hidden flex items-center justify-between p-4 bg-white border-b border-slate-200 sticky top-0 z-[50]">
         <div className="flex items-center gap-1.5">
           <img src="/admin-logo.png" alt="Logo" className="w-12 h-12 object-contain" />
-          <span className="font-bold text-sm tracking-tighter uppercase">Sentinell Studio <span className="text-blue-600">Admin</span></span>
+          <span className="font-bold text-sm tracking-tighter uppercase">Sentinell <span className="text-blue-600">Admin</span></span>
         </div>
         <div className="flex items-center gap-2">
           <Button onClick={handleSaveActiveTab} className="h-9 px-4 bg-blue-600 text-white rounded-lg text-xs font-bold shadow-lg shadow-blue-500/20">Sync</Button>
@@ -354,7 +354,7 @@ export default function Admin() {
           >
             <div className="p-8">
               <img src="/admin-logo.png" alt="Logo" className="w-20 h-20 object-contain mb-6 drop-shadow-lg" />
-              <h1 className="text-sm font-black tracking-tight" style={{ fontFamily: "'Anta', sans-serif" }}>Sentinell Studio <span className="text-blue-600 italic block text-[9px] tracking-widest font-sans">Admin Nexus</span></h1>
+              <h1 className="text-sm font-black tracking-tight" style={{ fontFamily: "'Anta', sans-serif" }}>Sentinell <span className="text-blue-600 italic block text-[9px] tracking-widest font-sans">Admin Nexus</span></h1>
             </div>
 
             <nav className="flex-1 px-4 space-y-2">
@@ -411,7 +411,7 @@ export default function Admin() {
             <img src="/admin-logo.png" alt="Logo" className="w-full h-full object-contain drop-shadow-md brightness-105" referrerPolicy="no-referrer" />
           </div>
           <div>
-            <h1 className="text-xl font-black tracking-widest uppercase" style={{ fontFamily: "'Anta', sans-serif" }}>Sentinell Studio <span className="text-blue-600 font-sans tracking-normal font-black">Admin</span></h1>
+            <h1 className="text-xl font-black tracking-widest uppercase" style={{ fontFamily: "'Anta', sans-serif" }}>Sentinell <span className="text-blue-600 font-sans tracking-normal font-black">Admin</span></h1>
             <div className="flex items-center gap-1.5 mt-1">
               <span className="text-[8px] text-slate-400 font-bold uppercase tracking-widest">Authorised</span>
               <span className="text-[9px] text-black font-black uppercase tracking-widest">Ayush Session</span>

@@ -120,7 +120,7 @@ export default function Portfolio() {
               transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
             />
           </div>
-          <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-slate-400 animate-pulse">Sentinell Studio Initializing</p>
+          <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-slate-400 animate-pulse">Sentinell Initializing</p>
         </div>
       </div>
     );
@@ -169,7 +169,7 @@ export default function Portfolio() {
               />
             </div>
             <div className="flex flex-col">
-              <span className="text-2xl tracking-[0.2em] font-black bg-clip-text text-transparent bg-gradient-to-r from-blue-700 to-fuchsia-600 leading-none uppercase" style={{ fontFamily: "'Anta', sans-serif" }}>Sentinell Studio</span>
+              <span className="text-2xl tracking-[0.2em] font-black bg-clip-text text-transparent bg-gradient-to-r from-blue-700 to-fuchsia-600 leading-none uppercase" style={{ fontFamily: "'Anta', sans-serif" }}>Sentinell</span>
               <div className="flex items-center gap-1.5 mt-1.5">
                 <span className="text-[10px] text-slate-500 font-medium">By</span>
                 <span className="text-[10px] text-black font-black uppercase tracking-[0.2em]">Ayush Studio</span>
@@ -237,7 +237,7 @@ export default function Portfolio() {
               className="fixed top-0 right-0 h-full w-[260px] bg-white z-[110] shadow-2xl p-6 flex flex-col"
             >
               <div className="flex justify-between items-center mb-10">
-                <span className="text-lg font-black bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-fuchsia-600 tracking-tight" style={{ fontFamily: "'Anta', sans-serif" }}>Sentinell Studio</span>
+                <span className="text-lg font-black bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-fuchsia-600 tracking-tight" style={{ fontFamily: "'Anta', sans-serif" }}>Sentinell</span>
                 <button onClick={() => setIsMenuOpen(false)} className="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center text-slate-900">
                   <X className="w-5 h-5" />
                 </button>

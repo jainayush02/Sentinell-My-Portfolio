@@ -25,7 +25,7 @@ router.post('/send-otp', async (req, res) => {
 
   try {
     await client.messages.create({
-      body: `Your Sentinell Studio Portfolio login OTP is: ${otp}. Valid for 5 minutes.`,
+      body: `Your Sentinell Portfolio login OTP is: ${otp}. Valid for 5 minutes.`,
       from: process.env.TWILIO_PHONE_NUMBER,
       to: phoneNumber
     });
