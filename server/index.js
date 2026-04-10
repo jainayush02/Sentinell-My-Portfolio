@@ -34,7 +34,17 @@ app.use(helmet({
 
 // 🛡️ SECURITY HARDENING: CORS
 app.use(cors({
-  origin: ['http://localhost:5173', 'http://127.0.0.1:5173'], // Add your production domain here later
+  origin: (origin, callback) => {
+    // Allow local development
+    if (!origin || origin.includes('localhost') || origin.includes('127.0.0.1')) {
+      return callback(null, true);
+    }
+    // Allow Vercel deployments
+    if (origin.endsWith('.vercel.app')) {
+      return callback(null, true);
+    }
+    callback(new Error('🛡️ SENTINAL SECURITY: Origin Not Authorized'));
+  },
   credentials: true
 }));
 
@@ -94,6 +104,7 @@ app.post('/api/upload', authenticateToken, upload.single('image'), (req, res) =>
   if (!req.file) {
     return res.status(400).json({ message: 'No file uploaded' });
   }
+  const API_BASE = '/api';
   const fileUrl = `/uploads/${req.file.filename}`;
   res.json({ url: fileUrl });
 });

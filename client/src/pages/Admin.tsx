@@ -11,7 +11,7 @@ import { ArrowLeft, Plus, Trash2, Hexagon, Smartphone, Key, Zap, Menu, X, Globe,
 import { Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 
-const API_BASE = `http://${window.location.hostname}:5000/api`;
+const API_BASE = '/api';
 
 export default function Admin() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);

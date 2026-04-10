@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { PortfolioData, initialData } from './data';
 
-const API_BASE = `http://${window.location.hostname}:5000/api`;
+const API_BASE = '/api';
 
 export function usePortfolioData() {
   const [data, setData] = useState<PortfolioData>(initialData);

@@ -21,7 +21,7 @@ export default function Portfolio() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [contactForm, setContactForm] = useState({ name: '', email: '', subject: '', message: '' });
 
-  const API_BASE = `http://${window.location.hostname}:5000/api`;
+  const API_BASE = '/api';
 
   const handleContactSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
