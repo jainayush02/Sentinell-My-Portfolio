@@ -4,7 +4,7 @@ import { Portfolio } from './models/Portfolio.js';
 
 dotenv.config();
 
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb+srv://admin:MxlCxbt3mmP1hxtu@senitel.m9hvy2k.mongodb.net/sentinel?retryWrites=true&w=majority';
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/sentinell_portfolio';
 
 async function update() {
   try {
