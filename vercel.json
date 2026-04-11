@@ -18,15 +18,15 @@
     },
     {
       "source": "/uploads/(.*)",
-      "destination": "/api/uploads/$1"
+      "destination": "/server/index.js"
     },
     {
       "source": "/((?!api|uploads|.*\\..*).*)",
-      "destination": "/index.html"
+      "destination": "/client/index.html"
     },
     {
       "source": "/(.*)",
-      "destination": "/$1"
+      "destination": "/client/$1"
     }
   ]
 }
