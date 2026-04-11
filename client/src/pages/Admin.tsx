@@ -216,9 +216,13 @@ export default function Admin() {
     const formData = new FormData();
     formData.append('image', file); // Field name remains 'image' as per backend multer config
 
+    const token = localStorage.getItem('adminToken');
     try {
       const response = await fetch(`${API_BASE}/upload`, {
         method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        },
         body: formData,
       });
 
