@@ -119,7 +119,7 @@ export default function Admin() {
 
         <div className="relative z-10 flex flex-col items-center gap-4">
           <div className="h-[2px] w-32 bg-slate-100 rounded-full overflow-hidden relative">
-            <motion.div 
+            <motion.div
               className="absolute inset-0 bg-blue-600"
               animate={{ x: ["-100%", "100%"] }}
               transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
@@ -216,13 +216,9 @@ export default function Admin() {
     const formData = new FormData();
     formData.append('image', file); // Field name remains 'image' as per backend multer config
 
-    const token = localStorage.getItem('adminToken');
     try {
       const response = await fetch(`${API_BASE}/upload`, {
         method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`
-        },
         body: formData,
       });
 
@@ -372,8 +368,8 @@ export default function Admin() {
                       setIsSidebarOpen(false);
                     }}
                     className={`w-full flex items-center gap-3 px-4 py-3 rounded-2xl font-bold text-sm transition-all ${activeTab === item.value
-                        ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/20'
-                        : 'text-slate-400 hover:text-slate-900 hover:bg-slate-50'
+                      ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/20'
+                      : 'text-slate-400 hover:text-slate-900 hover:bg-slate-50'
                       }`}
                   >
                     <Icon className={`w-5 h-5 ${activeTab === item.value ? 'text-white' : 'text-slate-400'}`} />
@@ -809,9 +805,9 @@ export default function Admin() {
                               <p className="text-slate-600 text-sm leading-relaxed whitespace-pre-wrap">{msg.message}</p>
                             </div>
                           </div>
-                          <Button 
-                            variant="ghost" 
-                            size="icon" 
+                          <Button
+                            variant="ghost"
+                            size="icon"
                             onClick={() => handleDeleteMessage(msg._id)}
                             className="h-10 w-10 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-xl transition-colors md:self-start shrink-0"
                           >
