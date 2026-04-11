@@ -172,7 +172,7 @@ export default function Portfolio() {
               <span className="text-2xl tracking-[0.2em] font-black bg-clip-text text-transparent bg-gradient-to-r from-blue-700 to-fuchsia-600 leading-none uppercase" style={{ fontFamily: "'Anta', sans-serif" }}>Sentinell</span>
               <div className="flex items-center gap-1.5 mt-1.5">
                 <span className="text-[10px] text-slate-500 font-medium">By</span>
-                <span className="text-[10px] text-black font-black uppercase tracking-[0.2em]">Ayush Studio</span>
+                <span className="text-[10px] text-black font-black uppercase tracking-[0.2em]" style={{ fontFamily: "'Macondo', cursive" }}>Kryonex Studio</span>
               </div>
             </div>
           </div>

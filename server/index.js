@@ -40,7 +40,7 @@ app.use(cors({
       return callback(null, true);
     }
     // Allow specific Sentinell Studio deployment
-    if (origin.includes('sentinell-studio.vercel.app')) {
+    if (origin.includes('sentinell-studio.vercel.app') || origin.includes('sentinell.kryonex.dev')) {
       return callback(null, true);
     }
     callback(new Error('🛡️ SENTINELL SECURITY: Origin Not Authorized'));
