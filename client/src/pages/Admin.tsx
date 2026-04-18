@@ -7,9 +7,12 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
-import { ArrowLeft, Plus, Trash2, Hexagon, Smartphone, Key, Zap, Menu, X, Globe, Github, Download, Users, Briefcase, Code2, Award, Mail, MessageSquare } from 'lucide-react';
+import { ArrowLeft, Plus, Trash2, Hexagon, Smartphone, Key, Zap, Menu, X, Globe, Github, Download, Users, Briefcase, Code2, Award, Mail, MessageSquare, ChevronDown, ChevronUp } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'motion/react';
+import { Suspense, lazy } from 'react';
+
+const RichTextEditor = lazy(() => import('@/src/components/RichTextEditor'));
 
 const API_BASE = '/api';
 
@@ -40,6 +43,14 @@ export default function Admin() {
   const [experiences, setExperiences] = useState(data.experiences);
   const [projects, setProjects] = useState(data.projects);
   const [skills, setSkills] = useState(data.skills);
+  const [expandedItems, setExpandedItems] = useState<Record<string, boolean>>({});
+
+  const toggleExpand = (id: string) => {
+    setExpandedItems(prev => ({
+      ...prev,
+      [id]: !prev[id]
+    }));
+  };
 
   // Update local state when data loads from backend
   useEffect(() => {
@@ -575,14 +586,18 @@ export default function Admin() {
 
           {/* Experience Tab */}
           <TabsContent value="experience" className="animate-in fade-in slide-in-from-bottom-2 duration-300">
-            <Card className="bg-white/[0.04] backdrop-blur-xl border border-white/[0.08] rounded-[2rem] overflow-hidden shadow-2xl shadow-black/20">
-              <CardHeader className="border-b border-white/[0.05] bg-white/[0.02] p-8 flex flex-row items-center justify-between">
+            <Card className="bg-[#0b0b1a]/80 backdrop-blur-xl border border-white/[0.05] rounded-[2rem] overflow-hidden shadow-2xl shadow-black/40">
+              <CardHeader className="border-b border-white/[0.05] p-8 flex flex-row items-center justify-between">
                 <div>
                   <CardTitle className="text-xl font-heading font-bold text-white uppercase tracking-widest">Operations Registry</CardTitle>
                   <CardDescription className="text-white/30 text-xs font-medium">Timeline of professional deployment and career nodes.</CardDescription>
                 </div>
                 <Button
-                  onClick={() => setExperiences([...experiences, { id: Date.now().toString(), role: '', company: '', period: '', description: '', skills: [] }])}
+                  onClick={() => {
+                    const newId = Date.now().toString();
+                    setExperiences([...experiences, { id: newId, role: '', company: '', period: '', description: '', skills: [] }]);
+                    setExpandedItems(prev => ({ ...prev, [newId]: true }));
+                  }}
                   className="bg-gradient-to-r from-violet-600 to-cyan-500 text-white hover:opacity-90 h-10 px-6 rounded-xl font-bold text-[10px] uppercase tracking-widest"
                 >
                   <Plus className="w-4 h-4 mr-2" /> New Deployment
@@ -590,56 +605,104 @@ export default function Admin() {
               </CardHeader>
               <CardContent className="space-y-8 p-8">
                 {experiences.map((exp, index) => (
-                  <div key={exp.id} className="p-8 border border-white/10 rounded-[2rem] relative bg-white/[0.02] group transition-all hover:bg-white/[0.04] hover:border-violet-500/20">
-                    <Button
-                      variant="ghost" size="icon"
-                      className="absolute top-6 right-6 text-white/20 hover:text-red-400 hover:bg-red-400/10 rounded-xl transition-all"
-                      onClick={() => setExperiences(experiences.filter(e => e.id !== exp.id))}
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </Button>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-4 pr-12">
-                      <div className="space-y-2">
-                        <Label className="text-[10px] font-bold uppercase tracking-widest text-white/40 px-1">Designation</Label>
-                        <Input value={exp.role} onChange={e => {
-                          const newExp = [...experiences];
-                          newExp[index].role = e.target.value;
-                          setExperiences(newExp);
-                        }} className="bg-white/[0.03] border-white/[0.1] h-12 rounded-xl focus-visible:ring-violet-500/50 text-white" />
+                  <div key={exp.id} className={`border border-white/10 rounded-[2rem] relative bg-white/[0.02] group transition-all hover:bg-white/[0.04] hover:border-violet-500/20 ${expandedItems[exp.id] ? 'p-8' : 'p-4 px-8'}`}>
+                    <div className={`flex items-center justify-between transition-all duration-300 ${expandedItems[exp.id] ? 'mb-4 border-b border-white/5 pb-6' : ''}`}>
+                      <div className="flex items-center gap-4">
+                        <div className="w-8 h-8 rounded-lg bg-violet-500/10 flex items-center justify-center text-violet-400 font-bold text-xs ring-1 ring-violet-500/20">
+                          {index + 1}
+                        </div>
+                        {!expandedItems[exp.id] && (
+                          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex items-center gap-3">
+                            <span className="text-sm font-bold text-white uppercase tracking-wider">{exp.role || 'New Terminal Node'}</span>
+                            <span className="text-[10px] text-white/30 font-medium">@ {exp.company || 'Unassigned'}</span>
+                          </motion.div>
+                        )}
                       </div>
-                      <div className="space-y-2">
-                        <Label className="text-[10px] font-bold uppercase tracking-widest text-white/40 px-1">Entity (Company)</Label>
-                        <Input value={exp.company} onChange={e => {
-                          const newExp = [...experiences];
-                          newExp[index].company = e.target.value;
-                          setExperiences(newExp);
-                        }} className="bg-white/[0.03] border-white/[0.1] h-12 rounded-xl focus-visible:ring-violet-500/50 text-white" />
-                      </div>
-                      <div className="space-y-2">
-                        <Label className="text-[10px] font-bold uppercase tracking-widest text-white/40 px-1">Active Duration</Label>
-                        <Input value={exp.period} onChange={e => {
-                          const newExp = [...experiences];
-                          newExp[index].period = e.target.value;
-                          setExperiences(newExp);
-                        }} className="bg-white/[0.03] border-white/[0.1] h-12 rounded-xl focus-visible:ring-violet-500/50 text-white" placeholder="e.g. NOV 2025 - Present" />
-                      </div>
-                      <div className="space-y-2">
-                        <Label className="text-[10px] font-bold uppercase tracking-widest text-white/40 px-1">Stack Index (CSV)</Label>
-                        <Input value={exp.skills?.join(', ') || ''} onChange={e => {
-                          const newExp = [...experiences];
-                          newExp[index].skills = e.target.value.split(',').map(s => s.trim()).filter(Boolean);
-                          setExperiences(newExp);
-                        }} className="bg-white/[0.03] border-white/[0.1] h-12 rounded-xl focus-visible:ring-violet-500/50 text-white" />
-                      </div>
-                      <div className="space-y-2 md:col-span-2">
-                        <Label className="text-[10px] font-bold uppercase tracking-widest text-white/40 px-1">Mission Specs</Label>
-                        <Textarea value={exp.description} onChange={e => {
-                          const newExp = [...experiences];
-                          newExp[index].description = e.target.value;
-                          setExperiences(newExp);
-                        }} className="bg-white/[0.03] border-white/[0.1] min-h-[100px] rounded-xl p-4 resize-none focus-visible:ring-violet-500/50 text-white text-sm" />
+                      <div className="flex items-center gap-2">
+                        <Button
+                          variant="ghost" size="icon"
+                          className="h-9 w-9 text-white/20 hover:text-white hover:bg-white/10 rounded-xl transition-all"
+                          onClick={() => toggleExpand(exp.id)}
+                        >
+                          {expandedItems[exp.id] ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                        </Button>
+                        <Button
+                          variant="ghost" size="icon"
+                          className="h-9 w-9 text-white/20 hover:text-red-400 hover:bg-red-400/10 rounded-xl transition-all"
+                          onClick={() => setExperiences(experiences.filter(e => e.id !== exp.id))}
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
                       </div>
                     </div>
+
+                    <AnimatePresence>
+                      {expandedItems[exp.id] && (
+                        <motion.div
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: 'auto', opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          className="overflow-hidden"
+                        >
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-4">
+                            <div className="space-y-2">
+                              <Label className="text-[10px] font-bold uppercase tracking-widest text-white/40 px-1">Designation</Label>
+                              <Input value={exp.role} onChange={e => {
+                                const newExp = [...experiences];
+                                newExp[index].role = e.target.value;
+                                setExperiences(newExp);
+                              }} className="bg-white/[0.03] border-white/[0.1] h-12 rounded-xl focus-visible:ring-violet-500/50 text-white" />
+                            </div>
+                            <div className="space-y-2">
+                              <Label className="text-[10px] font-bold uppercase tracking-widest text-white/40 px-1">Entity (Company)</Label>
+                              <Input value={exp.company} onChange={e => {
+                                const newExp = [...experiences];
+                                newExp[index].company = e.target.value;
+                                setExperiences(newExp);
+                              }} className="bg-white/[0.03] border-white/[0.1] h-12 rounded-xl focus-visible:ring-violet-500/50 text-white" />
+                            </div>
+                            <div className="space-y-2">
+                              <Label className="text-[10px] font-bold uppercase tracking-widest text-white/40 px-1">Operational Zone (Location)</Label>
+                              <Input value={exp.location || ''} onChange={e => {
+                                const newExp = [...experiences];
+                                newExp[index].location = e.target.value;
+                                setExperiences(newExp);
+                              }} className="bg-white/[0.03] border-white/[0.1] h-12 rounded-xl focus-visible:ring-violet-500/50 text-white" />
+                            </div>
+                            <div className="space-y-2">
+                              <Label className="text-[10px] font-bold uppercase tracking-widest text-white/40 px-1">Time Cycle (Period)</Label>
+                              <Input value={exp.period} onChange={e => {
+                                const newExp = [...experiences];
+                                newExp[index].period = e.target.value;
+                                setExperiences(newExp);
+                              }} className="bg-white/[0.03] border-white/[0.1] h-12 rounded-xl focus-visible:ring-violet-500/50 text-white" placeholder="e.g. NOV 2025 - Present" />
+                            </div>
+                            <div className="space-y-2">
+                              <Label className="text-[10px] font-bold uppercase tracking-widest text-white/40 px-1">Stack Index (CSV)</Label>
+                              <Input value={exp.skills?.join(', ') || ''} onChange={e => {
+                                const newExp = [...experiences];
+                                newExp[index].skills = e.target.value.split(',').map(s => s.trim()).filter(Boolean);
+                                setExperiences(newExp);
+                              }} className="bg-white/[0.03] border-white/[0.1] h-12 rounded-xl focus-visible:ring-violet-500/50 text-white" />
+                            </div>
+                            <div className="space-y-2 md:col-span-2">
+                              <Label className="text-[10px] font-bold uppercase tracking-widest text-white/40 px-1">Mission Specs</Label>
+                              <Suspense fallback={<div className="h-[200px] w-full bg-white/[0.02] border border-white/10 rounded-xl animate-pulse" />}>
+                                <RichTextEditor 
+                                  value={exp.description} 
+                                  onChange={(val) => {
+                                    const newExp = [...experiences];
+                                    newExp[index].description = val;
+                                    setExperiences(newExp);
+                                  }}
+                                  placeholder="Detail your professional impact..."
+                                />
+                              </Suspense>
+                            </div>
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
                   </div>
                 ))}
               </CardContent>
@@ -648,23 +711,27 @@ export default function Admin() {
 
           {/* Projects Tab */}
           <TabsContent value="projects" className="animate-in fade-in slide-in-from-bottom-2 duration-300">
-            <Card className="bg-white/[0.04] backdrop-blur-xl border border-white/[0.08] rounded-[2rem] overflow-hidden shadow-2xl shadow-black/20">
-              <CardHeader className="border-b border-white/[0.05] bg-white/[0.02] p-8 flex flex-row items-center justify-between">
+            <Card className="bg-[#0b0b1a]/80 backdrop-blur-xl border border-white/[0.05] rounded-[2rem] overflow-hidden shadow-2xl shadow-black/40">
+              <CardHeader className="border-b border-white/[0.05] p-8 flex flex-row items-center justify-between">
                 <div>
                   <CardTitle className="text-xl font-heading font-bold text-white uppercase tracking-widest">Project Repository</CardTitle>
                   <CardDescription className="text-white/30 text-xs font-medium">Live projects and documentation nodes.</CardDescription>
                 </div>
                 <Button
-                  onClick={() => setProjects([...projects, {
-                    id: Date.now().toString(),
-                    title: '',
-                    description: '',
-                    type: 'project',
-                    githubLink: '',
-                    liveLink: '',
-                    image: '',
-                    tags: []
-                  }])}
+                  onClick={() => {
+                    const newId = Date.now().toString();
+                    setProjects([...projects, {
+                      id: newId,
+                      title: '',
+                      description: '',
+                      type: 'project',
+                      githubLink: '',
+                      liveLink: '',
+                      image: '',
+                      tags: []
+                    }]);
+                    setExpandedItems(prev => ({ ...prev, [newId]: true }));
+                  }}
                   className="bg-gradient-to-r from-violet-600 to-cyan-500 text-white hover:opacity-90 h-10 px-6 rounded-xl font-bold text-[10px] uppercase tracking-widest"
                 >
                   <Plus className="w-4 h-4 mr-2" /> Add Project
@@ -672,79 +739,121 @@ export default function Admin() {
               </CardHeader>
               <CardContent className="space-y-8 p-8">
                 {projects.map((project, index) => (
-                  <div key={project.id} className="p-8 border border-white/10 rounded-[2rem] relative bg-white/[0.02] group transition-all hover:bg-white/[0.04] hover:border-violet-500/20">
-                    <Button
-                      variant="ghost" size="icon"
-                      className="absolute top-6 right-6 text-white/20 hover:text-red-400 hover:bg-red-400/10 rounded-xl transition-all"
-                      onClick={() => setProjects(projects.filter(p => p.id !== project.id))}
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </Button>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-4 pr-12">
-                      <div className="space-y-2">
-                        <Label className="text-[10px] font-bold uppercase tracking-widest text-white/40 px-1">System Title</Label>
-                        <Input value={project.title} onChange={e => {
-                          const newProj = [...projects];
-                          newProj[index].title = e.target.value;
-                          setProjects(newProj);
-                        }} className="bg-white/[0.03] border-white/[0.1] h-12 rounded-xl focus-visible:ring-violet-500/50 text-white" />
+                  <div key={project.id} className={`border border-white/10 rounded-[2rem] relative bg-white/[0.02] group transition-all hover:bg-white/[0.04] hover:border-violet-500/20 ${expandedItems[project.id] ? 'p-8' : 'p-4 px-8'}`}>
+                    <div className={`flex items-center justify-between transition-all duration-300 ${expandedItems[project.id] ? 'mb-4 border-b border-white/5 pb-6' : ''}`}>
+                      <div className="flex items-center gap-4">
+                        <div className="w-8 h-8 rounded-lg bg-cyan-500/10 flex items-center justify-center text-cyan-400 font-bold text-xs ring-1 ring-cyan-500/20">
+                          {index + 1}
+                        </div>
+                        {!expandedItems[project.id] && (
+                          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex items-center gap-3">
+                            <span className="text-sm font-bold text-white uppercase tracking-wider">{project.title || 'Undeployed System'}</span>
+                            <span className="px-2 py-0.5 rounded-full bg-white/5 text-[9px] text-white/40 font-bold uppercase tracking-widest border border-white/5">
+                              {project.type}
+                            </span>
+                          </motion.div>
+                        )}
                       </div>
-                      <div className="space-y-2">
-                        <Label className="text-[10px] font-bold uppercase tracking-widest text-white/40 px-1">Classification</Label>
-                        <select
-                          value={project.type}
-                          onChange={e => {
-                            const newProj = [...projects];
-                            newProj[index].type = e.target.value as 'project' | 'blog';
-                            setProjects(newProj);
-                          }}
-                          className="flex h-12 w-full rounded-xl border border-white/10 bg-white/[0.03] px-3 py-2 text-sm text-white focus-visible:outline-none focus:ring-2 focus:ring-violet-500/50"
+                      <div className="flex items-center gap-2">
+                        <Button
+                          variant="ghost" size="icon"
+                          className="h-9 w-9 text-white/20 hover:text-white hover:bg-white/10 rounded-xl transition-all"
+                          onClick={() => toggleExpand(project.id)}
                         >
-                          <option value="project" className="bg-[#0b0b1a] text-white">Project</option>
-                          <option value="blog" className="bg-[#0b0b1a] text-white">Documentation / Blog</option>
-                        </select>
-                      </div>
-                      <div className="space-y-2">
-                        <Label className="text-[10px] font-bold uppercase tracking-widest text-white/40 px-1">GitHub Source</Label>
-                        <Input value={project.githubLink || ''} onChange={e => {
-                          const newProj = [...projects];
-                          newProj[index].githubLink = e.target.value;
-                          setProjects(newProj);
-                        }} className="bg-white/[0.03] border-white/[0.1] h-12 rounded-xl focus-visible:ring-violet-500/50 text-white" />
-                      </div>
-                      <div className="space-y-2">
-                        <Label className="text-[10px] font-bold uppercase tracking-widest text-white/40 px-1">Live Uplink</Label>
-                        <Input value={project.liveLink || ''} onChange={e => {
-                          const newProj = [...projects];
-                          newProj[index].liveLink = e.target.value;
-                          setProjects(newProj);
-                        }} className="bg-white/[0.03] border-white/[0.1] h-12 rounded-xl focus-visible:ring-violet-500/50 text-white" />
-                      </div>
-                      <div className="space-y-2">
-                        <Label className="text-[10px] font-bold uppercase tracking-widest text-white/40 px-1">Image Asset Link</Label>
-                        <Input value={project.image || ''} onChange={e => {
-                          const newProj = [...projects];
-                          newProj[index].image = e.target.value;
-                          setProjects(newProj);
-                        }} className="bg-white/[0.03] border-white/[0.1] h-12 rounded-xl focus-visible:ring-violet-500/50 text-white" />
-                      </div>
-                      <div className="space-y-2">
-                        <Label className="text-[10px] font-bold uppercase tracking-widest text-white/40 px-1">Tags (CSV)</Label>
-                        <Input value={project.tags?.join(', ') || ''} onChange={e => {
-                          const newProj = [...projects];
-                          newProj[index].tags = e.target.value.split(',').map(t => t.trim()).filter(Boolean);
-                          setProjects(newProj);
-                        }} className="bg-white/[0.03] border-white/[0.1] h-12 rounded-xl focus-visible:ring-violet-500/50 text-white" />
-                      </div>
-                      <div className="space-y-2 md:col-span-2">
-                        <Label className="text-[10px] font-bold uppercase tracking-widest text-white/40 px-1">Project Spec</Label>
-                        <Textarea value={project.description} onChange={e => {
-                          const newProj = [...projects];
-                          newProj[index].description = e.target.value;
-                          setProjects(newProj);
-                        }} className="bg-white/[0.03] border-white/[0.1] min-h-[100px] rounded-xl p-4 resize-none focus-visible:ring-violet-500/50 text-white text-sm" />
+                          {expandedItems[project.id] ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                        </Button>
+                        <Button
+                          variant="ghost" size="icon"
+                          className="h-9 w-9 text-white/20 hover:text-red-400 hover:bg-red-400/10 rounded-xl transition-all"
+                          onClick={() => setProjects(projects.filter(p => p.id !== project.id))}
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
                       </div>
                     </div>
+
+                    <AnimatePresence>
+                      {expandedItems[project.id] && (
+                        <motion.div
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: 'auto', opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          className="overflow-hidden"
+                        >
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-4">
+                            <div className="space-y-2">
+                              <Label className="text-[10px] font-bold uppercase tracking-widest text-white/40 px-1">System Title</Label>
+                              <Input value={project.title} onChange={e => {
+                                const newProj = [...projects];
+                                newProj[index].title = e.target.value;
+                                setProjects(newProj);
+                              }} className="bg-white/[0.03] border-white/[0.1] h-12 rounded-xl focus-visible:ring-violet-500/50 text-white" />
+                            </div>
+                            <div className="space-y-2">
+                              <Label className="text-[10px] font-bold uppercase tracking-widest text-white/40 px-1">Classification</Label>
+                              <select
+                                value={project.type}
+                                onChange={e => {
+                                  const newProj = [...projects];
+                                  newProj[index].type = e.target.value as 'project' | 'blog';
+                                  setProjects(newProj);
+                                }}
+                                className="flex h-12 w-full rounded-xl border border-white/10 bg-white/[0.03] px-3 py-2 text-sm text-white focus-visible:outline-none focus:ring-2 focus:ring-violet-500/50"
+                              >
+                                <option value="project" className="bg-[#0b0b1a] text-white">Project</option>
+                                <option value="blog" className="bg-[#0b0b1a] text-white">Documentation / Blog</option>
+                              </select>
+                            </div>
+                            <div className="space-y-2">
+                              <Label className="text-[10px] font-bold uppercase tracking-widest text-white/40 px-1">GitHub Source</Label>
+                              <Input value={project.githubLink || ''} onChange={e => {
+                                const newProj = [...projects];
+                                newProj[index].githubLink = e.target.value;
+                                setProjects(newProj);
+                              }} className="bg-white/[0.03] border-white/[0.1] h-12 rounded-xl focus-visible:ring-violet-500/50 text-white" />
+                            </div>
+                            <div className="space-y-2">
+                              <Label className="text-[10px] font-bold uppercase tracking-widest text-white/40 px-1">Live Uplink</Label>
+                              <Input value={project.liveLink || ''} onChange={e => {
+                                const newProj = [...projects];
+                                newProj[index].liveLink = e.target.value;
+                                setProjects(newProj);
+                              }} className="bg-white/[0.03] border-white/[0.1] h-12 rounded-xl focus-visible:ring-violet-500/50 text-white" />
+                            </div>
+                            <div className="space-y-2">
+                              <Label className="text-[10px] font-bold uppercase tracking-widest text-white/40 px-1">Image Asset Link</Label>
+                              <Input value={project.image || ''} onChange={e => {
+                                const newProj = [...projects];
+                                newProj[index].image = e.target.value;
+                                setProjects(newProj);
+                              }} className="bg-white/[0.03] border-white/[0.1] h-12 rounded-xl focus-visible:ring-violet-500/50 text-white" />
+                            </div>
+                            <div className="space-y-2">
+                              <Label className="text-[10px] font-bold uppercase tracking-widest text-white/40 px-1">Tags (CSV)</Label>
+                              <Input value={project.tags?.join(', ') || ''} onChange={e => {
+                                const newProj = [...projects];
+                                newProj[index].tags = e.target.value.split(',').map(t => t.trim()).filter(Boolean);
+                                setProjects(newProj);
+                              }} className="bg-white/[0.03] border-white/[0.1] h-12 rounded-xl focus-visible:ring-violet-500/50 text-white" />
+                            </div>
+                            <div className="space-y-2 md:col-span-2">
+                              <Label className="text-[10px] font-bold uppercase tracking-widest text-white/40 px-1">Project Spec</Label>
+                              <Suspense fallback={<div className="h-[200px] w-full bg-white/[0.02] border border-white/10 rounded-xl animate-pulse" />}>
+                                <RichTextEditor 
+                                  value={project.description} 
+                                  onChange={(val) => {
+                                    const newProj = [...projects];
+                                    newProj[index].description = val;
+                                    setProjects(newProj);
+                                  }}
+                                  placeholder="Describe the system architecture, features, and tech stack..."
+                                />
+                              </Suspense>
+                            </div>
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
                   </div>
                 ))}
               </CardContent>

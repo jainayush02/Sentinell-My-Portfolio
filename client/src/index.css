@@ -106,6 +106,108 @@
   }
 }
 
+/* --- RICH TEXT EDITOR (TIPTAP) STYLES --- */
+.ProseMirror {
+  outline: none !important;
+  color: rgba(255, 255, 255, 0.8) !important;
+}
+
+.ProseMirror p {
+  margin-bottom: 0.5rem;
+}
+
+.ProseMirror ul, .ProseMirror ol {
+  margin-bottom: 1rem;
+  padding-left: 1.5rem;
+}
+
+.ProseMirror ul li {
+  list-style-type: disc;
+}
+
+.ProseMirror ol li {
+  list-style-type: decimal;
+}
+
+.ProseMirror a {
+  color: #22d3ee;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.ProseMirror blockquote {
+  border-left: 3px solid #a78bfa;
+  padding-left: 1rem;
+  margin-left: 0;
+  color: rgba(255, 255, 255, 0.5);
+  font-style: italic;
+}
+
+.ProseMirror code {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 0.2rem 0.4rem;
+  border-radius: 0.3rem;
+  font-family: monospace;
+  color: #a78bfa;
+}
+
+/* --- PORTFOLIO FORMATTED CONTENT --- */
+.formatted-content {
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.8;
+}
+
+.formatted-content p {
+  margin-bottom: 1rem;
+}
+
+.formatted-content ul, 
+.formatted-content ol {
+  margin-bottom: 1.5rem;
+  padding-left: 0;
+}
+
+.formatted-content li {
+  margin-bottom: 0.65rem;
+  position: relative;
+  list-style-type: none;
+  padding-left: 1.5rem;
+  line-height: 1.6;
+}
+
+.formatted-content li p {
+  margin: 0 !important;
+  display: inline; /* Ensure p doesn't create a block that offsets the bullet */
+}
+
+.formatted-content li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 6px;
+  height: 6px;
+  background-color: #a78bfa;
+  border-radius: 50%;
+  display: inline-block;
+  box-shadow: 0 0 8px rgba(167, 139, 250, 0.4);
+}
+
+.formatted-content strong {
+  color: white;
+  font-weight: 700;
+}
+
+.formatted-content a {
+  color: #22d3ee;
+  text-decoration: underline;
+  transition: opacity 0.2s;
+}
+
+.formatted-content a:hover {
+  opacity: 0.8;
+}
+
 /* Glassy Scrollbar */
 ::-webkit-scrollbar {
   width: 8px;

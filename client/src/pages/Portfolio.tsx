@@ -32,13 +32,13 @@ const ProjectTagStrip = ({ tags, isExpanded, onToggle }: { tags: string[]; isExp
   }, [tags]);
 
   return (
-    <div className="flex justify-between items-start mb-6 min-h-[40px]">
+    <div className="flex justify-between items-start mb-6 min-h-[40px] gap-4">
       <div
         ref={containerRef}
-        className={`flex flex-wrap gap-2 transition-all duration-300 ${!isExpanded ? 'max-h-[34px] overflow-hidden' : ''}`}
+        className={`flex flex-wrap gap-2.5 transition-all duration-300 ${!isExpanded ? 'max-h-[38px] overflow-hidden' : ''}`}
       >
         {tags?.map((tag, i) => (
-          <span key={i} className="px-3 py-1 bg-violet-500/10 text-violet-300 text-[10px] font-bold rounded-lg border border-violet-500/20 font-sans whitespace-nowrap">
+          <span key={i} className="px-3 py-1.5 bg-violet-500/5 text-violet-300/90 text-[10px] font-bold rounded-xl border border-violet-500/20 font-sans whitespace-nowrap backdrop-blur-md hover:bg-violet-500/10 transition-colors">
             {tag}
           </span>
         ))}
@@ -49,7 +49,7 @@ const ProjectTagStrip = ({ tags, isExpanded, onToggle }: { tags: string[]; isExp
             e.preventDefault();
             onToggle();
           }}
-          className="ml-2 px-1 py-1 text-violet-400 text-[9px] font-black uppercase tracking-tighter hover:text-cyan-400 transition-colors whitespace-nowrap self-start mt-1"
+          className="flex-shrink-0 px-3 py-1 text-violet-400 text-[10px] font-black uppercase tracking-widest hover:text-cyan-400 hover:bg-white/5 rounded-lg transition-all whitespace-nowrap border border-white/5 hover:border-violet-500/20 shadow-sm mt-0.5"
         >
           {isExpanded ? 'Less -' : '+ More'}
         </button>
@@ -580,18 +580,19 @@ export default function Portfolio() {
                         </div>
                       </div>
                       <div className="relative">
-                        <p className={`text-white/60 leading-relaxed transition-all duration-300 ${!expandedExperiences[exp.id] ? 'line-clamp-3 md:line-clamp-none' : ''}`}>
-                          {exp.description}
-                        </p>
-                        {exp.description.length > 150 && (
+                        <div 
+                          className={`formatted-content text-white/60 leading-relaxed transition-all duration-300 ${!expandedExperiences[exp.id] ? 'line-clamp-[12]' : ''}`}
+                          dangerouslySetInnerHTML={{ __html: exp.description || '' }}
+                        />
+                        {(exp.description.length > 1000) && (
                           <button
                             onClick={(e) => {
                               e.preventDefault();
                               toggleExperienceExpansion(exp.id);
                             }}
-                            className="md:hidden text-violet-400 text-xs font-bold mt-2 hover:text-cyan-400 transition-colors uppercase tracking-widest"
+                            className="text-violet-400 text-[10px] font-black mt-4 hover:text-cyan-400 transition-all uppercase tracking-[0.2em] border-b border-violet-500/20 hover:border-cyan-400/50 pb-1"
                           >
-                            {expandedExperiences[exp.id] ? 'Less -' : 'More +'}
+                            {expandedExperiences[exp.id] ? 'View Less' : 'Read Full Specs +'}
                           </button>
                         )}
                       </div>
@@ -702,18 +703,19 @@ export default function Portfolio() {
 
                         <h3 className="text-xl sm:text-3xl font-bold text-white mb-4 group-hover:text-violet-400 transition-colors tracking-tight leading-none">{project.title}</h3>
                         <div className="relative mb-6 flex-grow">
-                          <p className={`text-sm sm:text-base text-white/60 leading-relaxed transition-all duration-300 ${!expandedProjects[project.id] ? 'line-clamp-3 sm:line-clamp-none' : ''}`}>
-                            {project.description}
-                          </p>
-                          {project.description.length > 120 && (
+                          <div 
+                            className={`formatted-content text-sm sm:text-base text-white/60 leading-relaxed transition-all duration-300 ${!expandedProjects[project.id] ? 'line-clamp-[12]' : ''}`}
+                            dangerouslySetInnerHTML={{ __html: project.description || '' }}
+                          />
+                          {(project.description.length > 1000) && (
                             <button
                               onClick={(e) => {
                                 e.preventDefault();
                                 toggleProjectExpansion(project.id);
                               }}
-                              className="lg:hidden text-violet-400 text-xs font-bold mt-2 hover:text-cyan-400 transition-colors uppercase tracking-widest"
+                              className="text-violet-400 text-[10px] font-black mt-4 hover:text-cyan-400 transition-all uppercase tracking-[0.2em] border-b border-violet-500/20 hover:border-cyan-400/50 pb-1"
                             >
-                              {expandedProjects[project.id] ? 'Less -' : 'More +'}
+                              {expandedProjects[project.id] ? 'Collapse Specs' : 'Expand Project Specs +'}
                             </button>
                           )}
                         </div>
