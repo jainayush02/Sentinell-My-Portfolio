@@ -7,7 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
-import { ArrowLeft, Plus, Trash2, Hexagon, Smartphone, Key, Zap, Menu, X, Globe, Github, Download, Users, Briefcase, Code2, Award, Mail } from 'lucide-react';
+import { ArrowLeft, Plus, Trash2, Hexagon, Smartphone, Key, Zap, Menu, X, Globe, Github, Download, Users, Briefcase, Code2, Award, Mail, MessageSquare } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -111,21 +111,21 @@ export default function Admin() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center relative overflow-hidden bg-[#fafbfc]">
-        {/* 🎨 Living Canvas Backdrop */}
+      <div className="min-h-screen flex items-center justify-center relative overflow-hidden bg-[#060612]">
+        {/* Living Canvas Backdrop */}
         <div className="absolute inset-0 z-0">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-blue-100/30 blur-[120px]"></div>
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-violet-600/10 blur-[120px]"></div>
         </div>
 
         <div className="relative z-10 flex flex-col items-center gap-4">
-          <div className="h-[2px] w-32 bg-slate-100 rounded-full overflow-hidden relative">
+          <div className="h-[2px] w-32 bg-white/5 rounded-full overflow-hidden relative">
             <motion.div
-              className="absolute inset-0 bg-blue-600"
+              className="absolute inset-0 bg-gradient-to-r from-violet-500 to-cyan-400"
               animate={{ x: ["-100%", "100%"] }}
-              transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+              transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
             />
           </div>
-          <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-slate-400 animate-pulse">Synchronizing Node</p>
+          <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-white/40 animate-pulse">Synchronizing Node</p>
         </div>
       </div>
     );
@@ -237,17 +237,27 @@ export default function Admin() {
 
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-[#f8f9fa] flex items-center justify-center p-4 font-sans text-slate-900 relative">
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-fuchsia-50/50 pointer-events-none" />
-        <Card className="w-full max-w-md bg-white border-slate-200 shadow-2xl shadow-blue-500/10 relative z-10 rounded-[2rem] overflow-hidden">
+      <div className="min-h-screen bg-[#060612] flex items-center justify-center p-4 font-sans text-white relative overflow-hidden">
+        {/* Aurora Background */}
+        <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
+          <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-violet-600/10 blur-[120px] rounded-full"></div>
+          <div className="absolute bottom-[10%] right-[-5%] w-[40%] h-[40%] bg-cyan-600/10 blur-[120px] rounded-full"></div>
+        </div>
+        <div className="fixed inset-0 opacity-[0.03] pointer-events-none z-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] transition-opacity duration-1000"></div>
+
+        <Card className="w-full max-w-md bg-white/[0.03] backdrop-blur-3xl border-white/[0.08] shadow-2xl shadow-black/50 relative z-10 rounded-[2.5rem] overflow-hidden">
           <CardHeader className="text-center pt-8 pb-4">
-            <div className="mx-auto w-64 h-64 flex items-center justify-center mb-1">
-              <img src="/admin-logo.png" alt="Sentinell Logo" className="w-full h-full object-contain drop-shadow-2xl brightness-110" />
-            </div>
-            <CardTitle className="text-3xl font-heading font-medium tracking-tight text-slate-900">Sentinell Gateway</CardTitle>
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="mx-auto w-32 h-32 flex items-center justify-center mb-4"
+            >
+              <img src="/admin-logo.png" alt="Sentinell Logo" className="w-full h-full object-contain drop-shadow-2xl brightness-125" />
+            </motion.div>
+            <CardTitle className="text-3xl font-heading font-bold tracking-tight text-white mb-2">Sentinell Gateway</CardTitle>
             <div className="mt-1 mx-auto w-fit">
-              <p className="text-[11px] font-bold text-slate-400 uppercase tracking-[0.2em]">
-                Access is only allowed to Ayush 😂
+              <p className="text-[10px] font-bold text-white/30 uppercase tracking-[0.2em] px-4 py-1.5 bg-white/[0.03] rounded-full border border-white/[0.05]">
+                Authorised Personnel Only
               </p>
             </div>
           </CardHeader>
@@ -255,11 +265,11 @@ export default function Admin() {
             {!otpSent ? (
               <form onSubmit={handleSendOtp} className="space-y-6">
                 <div className="space-y-2">
-                  <Label htmlFor="phone" className="text-xs font-bold uppercase tracking-widest text-slate-400 flex items-center gap-2 mb-3">
-                    <Smartphone className="w-3.5 h-3.5" /> Mobile Number
+                  <Label htmlFor="phone" className="text-[10px] font-bold uppercase tracking-widest text-white/40 flex items-center gap-2 mb-3 px-1">
+                    <Smartphone className="w-3.5 h-3.5 text-violet-400" /> Mobile Number
                   </Label>
-                  <div className="flex h-14 bg-slate-50 border border-slate-200 rounded-2xl overflow-hidden focus-within:ring-2 focus-within:ring-blue-600 focus-within:border-transparent transition-all">
-                    <div className="bg-slate-200/40 px-5 flex items-center justify-center border-r border-slate-200 text-slate-600 font-bold text-sm select-none">
+                  <div className="flex h-14 bg-white/[0.03] border border-white/[0.1] rounded-2xl overflow-hidden focus-within:ring-2 focus-within:ring-violet-500/50 focus-within:border-violet-500/30 transition-all">
+                    <div className="bg-white/[0.05] px-5 flex items-center justify-center border-r border-white/[0.05] text-white/40 font-bold text-sm select-none">
                       +91
                     </div>
                     <Input
@@ -268,14 +278,14 @@ export default function Admin() {
                       value={phoneNumber}
                       onChange={(e) => setPhoneNumber(e.target.value.replace(/\D/g, '').slice(0, 10))}
                       placeholder="00000 00000"
-                      className="bg-transparent border-0 focus-visible:ring-0 focus-visible:ring-offset-0 h-full text-lg font-medium tracking-wider"
+                      className="bg-transparent border-0 focus-visible:ring-0 focus-visible:ring-offset-0 h-full text-lg font-medium tracking-wider text-white placeholder:text-white/20"
                       required
                     />
                   </div>
                 </div>
-                <Button type="submit" disabled={isSubmitting} className="w-full h-14 bg-gradient-to-r from-blue-600 to-blue-700 text-white hover:opacity-90 shadow-xl shadow-blue-600/20 rounded-2xl text-base font-semibold group">
+                <Button type="submit" disabled={isSubmitting} className="w-full h-14 bg-gradient-to-r from-violet-600 to-cyan-500 text-white hover:opacity-90 shadow-xl shadow-violet-600/20 rounded-2xl text-base font-bold group">
                   {isSubmitting ? 'Transmitting...' : (
-                    <span className="flex items-center justify-center gap-2">
+                    <span className="flex items-center justify-center gap-2 uppercase tracking-widest text-xs">
                       Request Access Code <ArrowLeft className="w-4 h-4 rotate-180 group-hover:translate-x-1 transition-transform" />
                     </span>
                   )}
@@ -284,28 +294,28 @@ export default function Admin() {
             ) : (
               <form onSubmit={handleVerifyOtp} className="space-y-6 text-center animate-in fade-in slide-in-from-bottom-4 duration-500">
                 <div className="space-y-2 text-left">
-                  <Label htmlFor="otp" className="text-xs font-bold uppercase tracking-widest text-slate-400 flex items-center gap-2 mb-3">
-                    <Key className="w-3.5 h-3.5" /> Login Code
+                  <Label htmlFor="otp" className="text-[10px] font-bold uppercase tracking-widest text-white/40 flex items-center gap-2 mb-3 px-1">
+                    <Key className="w-3.5 h-3.5 text-cyan-400" /> Security Token
                   </Label>
                   <Input
                     id="otp"
                     type="text"
                     value={otp}
                     onChange={(e) => setOtp(e.target.value)}
-                    placeholder="Enter 6-digit code"
+                    placeholder="••••••"
                     maxLength={6}
-                    className="bg-slate-50 border-slate-200 text-slate-900 focus-visible:ring-blue-600 h-14 tracking-[0.6em] text-center text-xl font-bold rounded-2xl"
+                    className="bg-white/[0.03] border-white/[0.1] text-white focus-visible:ring-violet-500/50 h-14 tracking-[1em] text-center text-xl font-bold rounded-2xl placeholder:text-white/10"
                     required
                   />
                 </div>
                 <div className="space-y-4">
-                  <Button type="submit" disabled={isSubmitting} className="w-full h-14 bg-gradient-to-r from-blue-600 to-blue-700 text-white hover:opacity-90 shadow-xl shadow-blue-600/20 rounded-2xl text-base font-semibold">
+                  <Button type="submit" disabled={isSubmitting} className="w-full h-14 bg-gradient-to-r from-violet-600 to-cyan-500 text-white hover:opacity-90 shadow-xl shadow-violet-600/20 rounded-2xl text-base font-bold uppercase tracking-widest text-xs">
                     {isSubmitting ? 'Decrypting...' : 'Verify Identity'}
                   </Button>
                   <button
                     type="button"
                     onClick={() => setOtpSent(false)}
-                    className="text-xs font-medium text-slate-400 hover:text-blue-600 transition-colors tracking-widest flex items-center justify-center gap-2 w-full mt-4"
+                    className="text-[10px] font-bold text-white/30 hover:text-white transition-colors tracking-widest flex items-center justify-center gap-2 w-full mt-4 uppercase"
                   >
                     Reset Connection
                   </button>
@@ -313,8 +323,8 @@ export default function Admin() {
               </form>
             )}
 
-            <div className="text-center mt-10 pt-8 border-t border-slate-100/60">
-              <Link to="/" className="text-xs font-bold uppercase tracking-widest text-slate-400 hover:text-blue-600 flex items-center justify-center gap-2 transition-colors">
+            <div className="text-center mt-10 pt-8 border-t border-white/[0.05]">
+              <Link to="/" className="text-[10px] font-bold uppercase tracking-widest text-white/30 hover:text-white flex items-center justify-center gap-2 transition-colors">
                 <ArrowLeft className="w-4 h-4" /> Return to Command Center
               </Link>
             </div>
@@ -325,20 +335,27 @@ export default function Admin() {
   }
 
   return (
-    <div className="min-h-screen bg-[#f8f9fa] flex flex-col">
+    <div className="min-h-screen bg-[#060612] flex flex-col relative overflow-hidden text-white selection:bg-violet-500/30">
+      {/* Aurora Background */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
+        <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-violet-600/10 blur-[120px] rounded-full"></div>
+        <div className="absolute bottom-[10%] right-[-5%] w-[40%] h-[40%] bg-cyan-600/10 blur-[120px] rounded-full"></div>
+      </div>
+      <div className="fixed inset-0 opacity-[0.03] pointer-events-none z-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] transition-opacity duration-1000"></div>
+
       {/* Mobile Header */}
-      <div className="md:hidden flex items-center justify-between p-4 bg-white border-b border-slate-200 sticky top-0 z-[50]">
+      <div className="md:hidden flex items-center justify-between p-4 bg-[#060612]/80 backdrop-blur-md border-b border-white/5 sticky top-0 z-[50]">
         <div className="flex items-center gap-1.5">
-          <img src="/admin-logo.png" alt="Logo" className="w-12 h-12 object-contain" />
-          <span className="font-bold text-sm tracking-tighter uppercase">Sentinell <span className="text-blue-600">Admin</span></span>
+          <img src="/admin-logo.png" alt="Logo" className="w-10 h-10 object-contain brightness-125" />
+          <span className="font-bold text-xs tracking-widest uppercase">Sentinell <span className="text-violet-400">Admin</span></span>
         </div>
         <div className="flex items-center gap-2">
-          <Button onClick={handleSaveActiveTab} className="h-9 px-4 bg-blue-600 text-white rounded-lg text-xs font-bold shadow-lg shadow-blue-500/20">Sync</Button>
+          <Button onClick={handleSaveActiveTab} className="h-8 px-4 bg-gradient-to-r from-violet-600 to-cyan-500 text-white rounded-lg text-[10px] font-bold shadow-lg shadow-violet-500/20 uppercase tracking-widest">Sync</Button>
           <button
             onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-            className="w-9 h-9 flex items-center justify-center bg-slate-50 rounded-lg"
+            className="w-8 h-8 flex items-center justify-center bg-white/5 rounded-lg border border-white/10"
           >
-            {isSidebarOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            {isSidebarOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
           </button>
         </div>
       </div>
@@ -350,14 +367,14 @@ export default function Admin() {
             initial={{ x: -280 }}
             animate={{ x: 0 }}
             exit={{ x: -280 }}
-            className="fixed inset-y-0 left-0 w-72 bg-white border-r border-slate-200 z-[60] flex flex-col shadow-2xl md:hidden"
+            className="fixed inset-y-0 left-0 w-72 bg-[#060612]/95 backdrop-blur-2xl border-r border-white/5 z-[60] flex flex-col shadow-2xl md:hidden"
           >
             <div className="p-8">
-              <img src="/admin-logo.png" alt="Logo" className="w-20 h-20 object-contain mb-6 drop-shadow-lg" />
-              <h1 className="text-sm font-black tracking-tight" style={{ fontFamily: "'Anta', sans-serif" }}>Sentinell <span className="text-blue-600 italic block text-[9px] tracking-widest font-sans">Admin Nexus</span></h1>
+              <img src="/admin-logo.png" alt="Logo" className="w-16 h-16 object-contain mb-4 drop-shadow-lg brightness-125" />
+              <h1 className="text-xs font-black tracking-widest uppercase italic text-violet-400">Sentinell <span className="text-white block text-[8px] tracking-[0.3em] font-sans not-italic font-bold opacity-40">Command Center</span></h1>
             </div>
 
-            <nav className="flex-1 px-4 space-y-2">
+            <nav className="flex-1 px-4 space-y-1">
               {navItems.map((item) => {
                 const Icon = item.icon;
                 return (
@@ -367,15 +384,15 @@ export default function Admin() {
                       setActiveTab(item.value);
                       setIsSidebarOpen(false);
                     }}
-                    className={`w-full flex items-center gap-3 px-4 py-3 rounded-2xl font-bold text-sm transition-all ${activeTab === item.value
-                      ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/20'
-                      : 'text-slate-400 hover:text-slate-900 hover:bg-slate-50'
+                    className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-[10px] uppercase tracking-widest transition-all ${activeTab === item.value
+                      ? 'bg-white/10 text-violet-400 border border-white/10'
+                      : 'text-white/40 hover:text-white hover:bg-white/5'
                       }`}
                   >
-                    <Icon className={`w-5 h-5 ${activeTab === item.value ? 'text-white' : 'text-slate-400'}`} />
+                    <Icon className={`w-4 h-4 ${activeTab === item.value ? 'text-violet-400' : 'text-white/40'}`} />
                     {item.label}
                     {item.value === 'messages' && messages.length > 0 && (
-                      <span className="ml-auto bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full animate-pulse shadow-sm min-w-[20px] text-center">
+                      <span className="ml-auto bg-violet-600 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full min-w-[20px] text-center">
                         {messages.length}
                       </span>
                     )}
@@ -384,11 +401,11 @@ export default function Admin() {
               })}
             </nav>
 
-            <div className="p-4 border-t border-slate-100 flex flex-col gap-2">
-              <Button variant="outline" className="w-full justify-start h-11 rounded-xl border-slate-200 text-slate-700 hover:bg-slate-100 px-4" asChild>
+            <div className="p-4 border-t border-white/5 flex flex-col gap-2">
+              <Button variant="outline" className="w-full justify-start h-10 rounded-xl border-white/10 bg-white/5 text-white/60 hover:text-white hover:bg-white/10 px-4 text-[10px] uppercase tracking-widest font-bold" asChild>
                 <Link to="/"><ArrowLeft className="w-4 h-4 mr-2" /> Live Site</Link>
               </Button>
-              <Button variant="secondary" onClick={handleLogout} className="w-full justify-start h-11 rounded-xl bg-slate-100 text-slate-700 hover:bg-slate-200 px-4">
+              <Button variant="secondary" onClick={handleLogout} className="w-full justify-start h-10 rounded-xl bg-white/5 text-white/60 hover:text-white hover:bg-white/10 px-4 text-[10px] uppercase tracking-widest font-bold border border-transparent">
                 Logout
               </Button>
             </div>
@@ -399,48 +416,48 @@ export default function Admin() {
       {/* Mobile Backdrop */}
       {isSidebarOpen && (
         <div
-          className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[55] md:hidden"
+          className="fixed inset-0 bg-[#060612]/60 backdrop-blur-md z-[55] md:hidden"
           onClick={() => setIsSidebarOpen(false)}
         />
       )}
 
       {/* Desktop Navigation Header */}
-      <div className="hidden md:flex items-center justify-between px-12 py-4 bg-white border-b border-slate-100 sticky top-0 z-[40] shadow-sm">
-        <div className="flex items-center gap-2">
-          <div className="w-28 h-28 flex items-center justify-center">
-            <img src="/admin-logo.png" alt="Logo" className="w-full h-full object-contain drop-shadow-md brightness-105" referrerPolicy="no-referrer" />
+      <div className="hidden md:flex items-center justify-between px-12 py-3 bg-[#060612]/60 backdrop-blur-xl border-b border-white/5 sticky top-0 z-[40] shadow-2xl shadow-black/20">
+        <div className="flex items-center gap-4">
+          <div className="w-12 h-12 flex items-center justify-center">
+            <img src="/admin-logo.png" alt="Logo" className="w-full h-full object-contain brightness-125" referrerPolicy="no-referrer" />
           </div>
           <div>
-            <h1 className="text-xl font-black tracking-widest uppercase" style={{ fontFamily: "'Anta', sans-serif" }}>Sentinell <span className="text-blue-600 font-sans tracking-normal font-black">Admin</span></h1>
-            <div className="flex items-center gap-1.5 mt-1">
-              <span className="text-[8px] text-slate-400 font-bold uppercase tracking-widest">Authorised</span>
-              <span className="text-[9px] text-black font-black uppercase tracking-widest">Ayush Session</span>
+            <h1 className="text-sm font-black tracking-[0.2em] uppercase text-white">Sentinell <span className="text-violet-400">Admin</span></h1>
+            <div className="flex items-center gap-2 mt-0.5">
+              <span className="text-[7px] text-white/30 font-bold uppercase tracking-[0.3em]">Authorized Session</span>
+              <div className="w-1 h-1 rounded-full bg-violet-400 animate-pulse"></div>
             </div>
           </div>
         </div>
-        <div className="flex gap-3">
+        <div className="flex gap-4">
           <Button
             onClick={handleSaveActiveTab}
-            className="h-10 px-6 bg-blue-600 text-white hover:bg-blue-700 shadow-lg shadow-blue-500/20 rounded-xl font-bold text-xs flex items-center gap-2"
+            className="h-10 px-6 bg-gradient-to-r from-violet-600 to-cyan-500 text-white hover:opacity-90 shadow-xl shadow-violet-600/20 rounded-xl font-bold text-[10px] flex items-center gap-2 uppercase tracking-widest"
           >
             <Download className="w-3.5 h-3.5" /> Sync Registry
           </Button>
-          <Button variant="outline" className="border-slate-200 text-slate-700 hover:bg-slate-100 h-10 px-4 rounded-xl font-bold text-xs" asChild>
+          <Button variant="outline" className="border-white/10 bg-white/5 text-white/60 hover:text-white hover:bg-white/10 h-10 px-6 rounded-xl font-bold text-[10px] uppercase tracking-widest transition-all" asChild>
             <Link to="/">Live Preview</Link>
           </Button>
-          <Button variant="secondary" onClick={handleLogout} className="bg-slate-200 text-slate-700 hover:bg-slate-300 h-10 px-4 rounded-xl font-bold text-xs">Logout</Button>
+          <Button variant="secondary" onClick={handleLogout} className="bg-white/5 border border-transparent hover:border-white/10 text-white/40 hover:text-white h-10 px-6 rounded-xl font-bold text-[10px] uppercase tracking-widest transition-all">Logout</Button>
         </div>
       </div>
 
       {/* Main Content Area */}
-      <main className="flex-1 p-4 md:p-10 lg:p-12 xl:p-16 max-w-7xl mx-auto w-full">
+      <main className="flex-1 p-6 md:p-10 lg:p-12 xl:p-16 max-w-7xl mx-auto w-full relative z-10">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="hidden md:flex bg-slate-50 border border-slate-200 p-2 mb-12 shadow-sm rounded-full w-fit mx-auto gap-3">
+          <TabsList className="hidden md:flex bg-white/[0.03] border border-white/10 p-1.5 mb-16 shadow-2xl shadow-black/20 rounded-full w-fit mx-auto gap-2 backdrop-blur-xl">
             {navItems.map((item) => (
               <TabsTrigger
                 key={item.value}
                 value={item.value}
-                className="rounded-full px-12 py-4 data-[state=active]:bg-white data-[state=active]:text-blue-600 data-[state=active]:shadow-md transition-all font-bold text-sm tracking-wide text-slate-500 hover:text-slate-900 border border-transparent data-[state=active]:border-slate-100 relative"
+                className="rounded-full px-10 py-3.5 data-[state=active]:bg-white/10 data-[state=active]:text-violet-400 data-[state=active]:shadow-xl transition-all font-bold text-[10px] uppercase tracking-[0.2em] text-white/40 hover:text-white border border-transparent data-[state=active]:border-white/10 relative"
               >
                 {item.label}
                 {item.value === 'messages' && messages.length > 0 && (
@@ -452,94 +469,93 @@ export default function Admin() {
             ))}
           </TabsList>
 
-          {/* Profile Tab */}
           <TabsContent value="profile" className="animate-in fade-in slide-in-from-bottom-2 duration-300">
-            <Card className="bg-white border-slate-200 shadow-xl shadow-slate-200/50 rounded-3xl overflow-hidden">
-              <CardHeader className="border-b border-slate-50 bg-slate-50/50">
-                <CardTitle className="text-xl">Profile Setup</CardTitle>
-                <CardDescription className="text-slate-500">Your professional details shown on the website.</CardDescription>
+            <Card className="bg-white/[0.04] backdrop-blur-xl border border-white/[0.08] rounded-[2rem] overflow-hidden shadow-2xl shadow-black/20">
+              <CardHeader className="border-b border-white/[0.05] bg-white/[0.02] p-8">
+                <CardTitle className="text-xl font-heading font-bold text-white uppercase tracking-widest">Profile Identity</CardTitle>
+                <CardDescription className="text-white/30 text-xs font-medium">Core metadata and professional uplink configurations.</CardDescription>
               </CardHeader>
-              <CardContent className="space-y-8 p-8">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <CardContent className="p-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
                   <div className="space-y-2">
-                    <Label className="text-slate-700 font-semibold">Full Name</Label>
-                    <Input value={profile.name} onChange={e => setProfile({ ...profile, name: e.target.value })} className="bg-slate-50 border-slate-200 h-12 rounded-xl focus-visible:ring-blue-600" />
+                    <Label className="text-[10px] font-bold uppercase tracking-widest text-white/40 px-1">Full Identity</Label>
+                    <Input value={profile.name} onChange={e => setProfile({ ...profile, name: e.target.value })} className="bg-white/[0.03] border-white/[0.1] h-12 rounded-xl focus-visible:ring-violet-500/50 text-white placeholder:text-white/20" />
                   </div>
                   <div className="space-y-2">
-                    <Label className="text-slate-700 font-semibold">Date of Birth</Label>
-                    <Input type="date" value={profile.dob || ''} onChange={e => setProfile({ ...profile, dob: e.target.value })} className="bg-slate-50 border-slate-200 h-12 rounded-xl focus-visible:ring-blue-600" />
+                    <Label className="text-[10px] font-bold uppercase tracking-widest text-white/40 px-1">Temporal Origin (DOB)</Label>
+                    <Input type="date" value={profile.dob || ''} onChange={e => setProfile({ ...profile, dob: e.target.value })} className="bg-white/[0.03] border-white/[0.1] h-12 rounded-xl focus-visible:ring-violet-500/50 text-white invert-calendar-icon" />
                   </div>
                   <div className="space-y-2">
-                    <Label className="text-slate-700 font-semibold">Career Start Date</Label>
-                    <Input type="date" value={profile.careerStartDate || ''} onChange={e => setProfile({ ...profile, careerStartDate: e.target.value })} className="bg-slate-50 border-slate-200 h-12 rounded-xl focus-visible:ring-blue-600" />
+                    <Label className="text-[10px] font-bold uppercase tracking-widest text-white/40 px-1">Career Launch Date</Label>
+                    <Input type="date" value={profile.careerStartDate || ''} onChange={e => setProfile({ ...profile, careerStartDate: e.target.value })} className="bg-white/[0.03] border-white/[0.1] h-12 rounded-xl focus-visible:ring-violet-500/50 text-white" />
                   </div>
                   <div className="space-y-2">
-                    <Label className="text-slate-700 font-semibold">Specialization</Label>
-                    <Input value={profile.title} onChange={e => setProfile({ ...profile, title: e.target.value })} className="bg-slate-50 border-slate-200 h-12 rounded-xl focus-visible:ring-blue-600" />
+                    <Label className="text-[10px] font-bold uppercase tracking-widest text-white/40 px-1">Primary Designation</Label>
+                    <Input value={profile.title} onChange={e => setProfile({ ...profile, title: e.target.value })} className="bg-white/[0.03] border-white/[0.1] h-12 rounded-xl focus-visible:ring-violet-500/50 text-white" />
                   </div>
                   <div className="space-y-2">
-                    <Label className="text-slate-700 font-semibold">Secure Email</Label>
-                    <Input value={profile.email} onChange={e => setProfile({ ...profile, email: e.target.value })} className="bg-slate-50 border-slate-200 h-12 rounded-xl focus-visible:ring-blue-600" />
+                    <Label className="text-[10px] font-bold uppercase tracking-widest text-white/40 px-1">Secure Uplink (Email)</Label>
+                    <Input value={profile.email} onChange={e => setProfile({ ...profile, email: e.target.value })} className="bg-white/[0.03] border-white/[0.1] h-12 rounded-xl focus-visible:ring-violet-500/50 text-white" />
                   </div>
                   <div className="space-y-2 md:col-span-2">
-                    <Label className="text-slate-700 font-semibold">Short Bio</Label>
-                    <Textarea value={profile.bio} onChange={e => setProfile({ ...profile, bio: e.target.value })} className="bg-slate-50 border-slate-200 min-h-[120px] rounded-xl focus-visible:ring-blue-600 resize-none p-4" />
+                    <Label className="text-[10px] font-bold uppercase tracking-widest text-white/40 px-1">Executive Summary (Bio)</Label>
+                    <Textarea value={profile.bio} onChange={e => setProfile({ ...profile, bio: e.target.value })} className="bg-white/[0.03] border-white/[0.1] min-h-[140px] rounded-2xl focus-visible:ring-violet-500/50 text-white resize-none p-5 text-sm leading-relaxed" />
                   </div>
                   <div className="space-y-2">
-                    <Label className="text-slate-700 font-semibold">Profile Photo Link</Label>
+                    <Label className="text-[10px] font-bold uppercase tracking-widest text-white/40 px-1">Visual ID Link (Avatar)</Label>
                     <div className="flex gap-3">
-                      <Input value={profile.photoUrl || ''} onChange={e => setProfile({ ...profile, photoUrl: e.target.value })} className="bg-slate-50 border-slate-200 h-12 rounded-xl flex-1 focus-visible:ring-blue-600" />
+                      <Input value={profile.photoUrl || ''} onChange={e => setProfile({ ...profile, photoUrl: e.target.value })} className="bg-white/[0.03] border-white/[0.1] h-12 rounded-xl flex-1 focus-visible:ring-violet-500/50 text-white" />
                       <div className="relative w-28 shrink-0">
                         <Input type="file" accept="image/*" onChange={e => handleFileUpload(e, 'photoUrl')} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" />
-                        <Button type="button" variant="outline" className="w-full h-12 rounded-xl border-slate-200 hover:bg-slate-50">Upload</Button>
+                        <Button type="button" variant="outline" className="w-full h-12 rounded-xl border-white/10 bg-white/5 text-white/60 hover:text-white uppercase tracking-widest text-[9px] font-bold transition-all">Upload</Button>
                       </div>
                     </div>
                   </div>
                   <div className="space-y-2">
-                    <Label className="text-slate-700 font-semibold">Logo Link</Label>
+                    <Label className="text-[10px] font-bold uppercase tracking-widest text-white/40 px-1">Brand Artifact (Logo)</Label>
                     <div className="flex gap-3">
-                      <Input value={profile.logoUrl || ''} onChange={e => setProfile({ ...profile, logoUrl: e.target.value })} className="bg-slate-50 border-slate-200 h-12 rounded-xl flex-1 focus-visible:ring-blue-600" />
+                      <Input value={profile.logoUrl || ''} onChange={e => setProfile({ ...profile, logoUrl: e.target.value })} className="bg-white/[0.03] border-white/[0.1] h-12 rounded-xl flex-1 focus-visible:ring-violet-500/50 text-white" />
                       <div className="relative w-28 shrink-0">
                         <Input type="file" accept="image/*" onChange={e => handleFileUpload(e, 'logoUrl')} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" />
-                        <Button type="button" variant="outline" className="w-full h-12 rounded-xl border-slate-200 hover:bg-slate-50">Upload</Button>
+                        <Button type="button" variant="outline" className="w-full h-12 rounded-xl border-white/10 bg-white/5 text-white/60 hover:text-white uppercase tracking-widest text-[9px] font-bold transition-all">Upload</Button>
                       </div>
                     </div>
                   </div>
                   <div className="space-y-2">
-                    <Label className="text-slate-700 font-semibold">GitHub Connectivity</Label>
-                    <Input value={profile.github} onChange={e => setProfile({ ...profile, github: e.target.value })} className="bg-slate-50 border-slate-200 h-12 rounded-xl focus-visible:ring-blue-600" />
+                    <Label className="text-[10px] font-bold uppercase tracking-widest text-white/40 px-1">GitHub Endpoint</Label>
+                    <Input value={profile.github} onChange={e => setProfile({ ...profile, github: e.target.value })} className="bg-white/[0.03] border-white/[0.1] h-12 rounded-xl focus-visible:ring-violet-500/50 text-white" />
                   </div>
                   <div className="space-y-2">
-                    <Label className="text-slate-700 font-semibold">LinkedIn Connectivity</Label>
-                    <Input value={profile.linkedin} onChange={e => setProfile({ ...profile, linkedin: e.target.value })} className="bg-slate-50 border-slate-200 h-12 rounded-xl focus-visible:ring-blue-600" />
+                    <Label className="text-[10px] font-bold uppercase tracking-widest text-white/40 px-1">LinkedIn Endpoint</Label>
+                    <Input value={profile.linkedin} onChange={e => setProfile({ ...profile, linkedin: e.target.value })} className="bg-white/[0.03] border-white/[0.1] h-12 rounded-xl focus-visible:ring-violet-500/50 text-white" />
                   </div>
                   <div className="space-y-2">
-                    <Label className="text-slate-700 font-semibold">Current Headquarters</Label>
-                    <Input value={profile.location || ''} onChange={e => setProfile({ ...profile, location: e.target.value })} className="bg-slate-50 border-slate-200 h-12 rounded-xl focus-visible:ring-blue-600" />
+                    <Label className="text-[10px] font-bold uppercase tracking-widest text-white/40 px-1">Operational Base</Label>
+                    <Input value={profile.location || ''} onChange={e => setProfile({ ...profile, location: e.target.value })} className="bg-white/[0.03] border-white/[0.1] h-12 rounded-xl focus-visible:ring-violet-500/50 text-white" />
                   </div>
                   <div className="space-y-2 md:col-span-2">
-                    <Label className="text-slate-700 font-semibold">Professional Resume (PDF/DOCX)</Label>
+                    <Label className="text-[10px] font-bold uppercase tracking-widest text-white/40 px-1">Professional Protocol (CV)</Label>
                     <div className="flex gap-3">
-                      <Input value={profile.resumeUrl || ''} onChange={e => setProfile({ ...profile, resumeUrl: e.target.value })} className="bg-slate-50 border-slate-200 h-12 rounded-xl flex-1 focus-visible:ring-blue-600" placeholder="Paste link or upload below" />
+                      <Input value={profile.resumeUrl || ''} onChange={e => setProfile({ ...profile, resumeUrl: e.target.value })} className="bg-white/[0.03] border-white/[0.1] h-12 rounded-xl flex-1 focus-visible:ring-violet-500/50 text-white" />
                       <div className="relative w-28 shrink-0">
                         <Input type="file" accept=".pdf,.doc,.docx" onChange={e => handleFileUpload(e, 'resumeUrl')} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" />
-                        <Button type="button" variant="outline" className="w-full h-12 rounded-xl border-slate-200 hover:bg-slate-50">Upload CV</Button>
+                        <Button type="button" variant="outline" className="w-full h-12 rounded-xl border-white/10 bg-white/5 text-white/60 hover:text-white uppercase tracking-widest text-[9px] font-bold transition-all">Upload CV</Button>
                       </div>
                     </div>
                   </div>
                   <div className="space-y-2 md:col-span-2">
-                    <Label className="text-slate-700 font-semibold">Work Showcase Link (View My Work Button)</Label>
-                    <Input 
-                      value={profile.workLink || ''} 
-                      onChange={e => setProfile({ ...profile, workLink: e.target.value })} 
-                      className="bg-slate-50 border-slate-200 h-12 rounded-xl focus-visible:ring-blue-600" 
-                      placeholder="e.g. https://github.com/jainayush02 or your portfolio url" 
+                    <Label className="text-[10px] font-bold uppercase tracking-widest text-white/40 px-1">Work Showcase Link</Label>
+                    <Input
+                      value={profile.workLink || ''}
+                      onChange={e => setProfile({ ...profile, workLink: e.target.value })}
+                      className="bg-white/[0.03] border-white/[0.1] h-12 rounded-xl focus-visible:ring-violet-500/50 text-white"
+                      placeholder="Redirect URL for 'View My Work' button"
                     />
-                    <p className="text-[10px] text-slate-400 font-medium px-1">If provided, the "View My Work" button will redirect here. Otherwise, it will scroll to projects.</p>
+                    <p className="text-[10px] text-white/20 font-medium px-1">Optional override for the main CTA scroll behavior.</p>
                   </div>
                   <div className="space-y-2 md:col-span-2">
-                    <Label className="text-slate-700 font-semibold">Research Papers Published (Count)</Label>
-                    <Input type="number" value={profile.researchPapersCount || 0} onChange={e => setProfile({ ...profile, researchPapersCount: parseInt(e.target.value) || 0 })} className="bg-slate-50 border-slate-200 h-12 rounded-xl focus-visible:ring-blue-600" />
+                    <Label className="text-[10px] font-bold uppercase tracking-widest text-white/40 px-1">Research Index (Count)</Label>
+                    <Input type="number" value={profile.researchPapersCount || 0} onChange={e => setProfile({ ...profile, researchPapersCount: parseInt(e.target.value) || 0 })} className="bg-white/[0.03] border-white/[0.1] h-12 rounded-xl focus-visible:ring-violet-500/50 text-white" />
                   </div>
                 </div>
               </CardContent>
@@ -548,69 +564,69 @@ export default function Admin() {
 
           {/* Experience Tab */}
           <TabsContent value="experience" className="animate-in fade-in slide-in-from-bottom-2 duration-300">
-            <Card className="bg-white border-slate-200 shadow-xl shadow-slate-200/50 rounded-3xl overflow-hidden">
-              <CardHeader className="border-b border-slate-50 bg-slate-50/50 flex flex-row items-center justify-between">
+            <Card className="bg-white/[0.04] backdrop-blur-xl border border-white/[0.08] rounded-[2rem] overflow-hidden shadow-2xl shadow-black/20">
+              <CardHeader className="border-b border-white/[0.05] bg-white/[0.02] p-8 flex flex-row items-center justify-between">
                 <div>
-                  <CardTitle className="text-xl">Work Experience</CardTitle>
-                  <CardDescription className="text-slate-500">Timeline of your professional journey.</CardDescription>
+                  <CardTitle className="text-xl font-heading font-bold text-white uppercase tracking-widest">Operations Registry</CardTitle>
+                  <CardDescription className="text-white/30 text-xs font-medium">Timeline of professional deployment and career nodes.</CardDescription>
                 </div>
                 <Button
                   onClick={() => setExperiences([...experiences, { id: Date.now().toString(), role: '', company: '', period: '', description: '', skills: [] }])}
-                  className="bg-slate-900 text-white hover:bg-slate-800 h-10 px-4 rounded-xl"
+                  className="bg-gradient-to-r from-violet-600 to-cyan-500 text-white hover:opacity-90 h-10 px-6 rounded-xl font-bold text-[10px] uppercase tracking-widest"
                 >
-                  <Plus className="w-4 h-4 mr-2" /> Add Experience
+                  <Plus className="w-4 h-4 mr-2" /> New Deployment
                 </Button>
               </CardHeader>
               <CardContent className="space-y-8 p-8">
                 {experiences.map((exp, index) => (
-                  <div key={exp.id} className="p-8 border border-slate-100 rounded-3xl relative bg-slate-50/50 group transition-all hover:bg-white hover:border-blue-100 hover:shadow-lg hover:shadow-blue-900/5">
+                  <div key={exp.id} className="p-8 border border-white/10 rounded-[2rem] relative bg-white/[0.02] group transition-all hover:bg-white/[0.04] hover:border-violet-500/20">
                     <Button
                       variant="ghost" size="icon"
-                      className="absolute top-6 right-6 text-red-500 hover:text-red-600 hover:bg-red-50 rounded-xl"
+                      className="absolute top-6 right-6 text-white/20 hover:text-red-400 hover:bg-red-400/10 rounded-xl transition-all"
                       onClick={() => setExperiences(experiences.filter(e => e.id !== exp.id))}
                     >
                       <Trash2 className="w-4 h-4" />
                     </Button>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8 pr-12">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-4 pr-12">
                       <div className="space-y-2">
-                        <Label className="text-slate-700 font-semibold">Job Title</Label>
+                        <Label className="text-[10px] font-bold uppercase tracking-widest text-white/40 px-1">Designation</Label>
                         <Input value={exp.role} onChange={e => {
                           const newExp = [...experiences];
                           newExp[index].role = e.target.value;
                           setExperiences(newExp);
-                        }} className="bg-white border-slate-200 h-12 rounded-xl" />
+                        }} className="bg-white/[0.03] border-white/[0.1] h-12 rounded-xl focus-visible:ring-violet-500/50 text-white" />
                       </div>
                       <div className="space-y-2">
-                        <Label className="text-slate-700 font-semibold">Company Name</Label>
+                        <Label className="text-[10px] font-bold uppercase tracking-widest text-white/40 px-1">Entity (Company)</Label>
                         <Input value={exp.company} onChange={e => {
                           const newExp = [...experiences];
                           newExp[index].company = e.target.value;
                           setExperiences(newExp);
-                        }} className="bg-white border-slate-200 h-12 rounded-xl" />
+                        }} className="bg-white/[0.03] border-white/[0.1] h-12 rounded-xl focus-visible:ring-violet-500/50 text-white" />
                       </div>
                       <div className="space-y-2">
-                        <Label className="text-slate-700 font-semibold">Time Period</Label>
+                        <Label className="text-[10px] font-bold uppercase tracking-widest text-white/40 px-1">Active Duration</Label>
                         <Input value={exp.period} onChange={e => {
                           const newExp = [...experiences];
                           newExp[index].period = e.target.value;
                           setExperiences(newExp);
-                        }} className="bg-white border-slate-200 h-12 rounded-xl" placeholder="e.g. NOV 2025 - Present" />
+                        }} className="bg-white/[0.03] border-white/[0.1] h-12 rounded-xl focus-visible:ring-violet-500/50 text-white" placeholder="e.g. NOV 2025 - Present" />
                       </div>
                       <div className="space-y-2">
-                        <Label className="text-slate-700 font-semibold">Core Stack (CSV)</Label>
+                        <Label className="text-[10px] font-bold uppercase tracking-widest text-white/40 px-1">Stack Index (CSV)</Label>
                         <Input value={exp.skills?.join(', ') || ''} onChange={e => {
                           const newExp = [...experiences];
                           newExp[index].skills = e.target.value.split(',').map(s => s.trim()).filter(Boolean);
                           setExperiences(newExp);
-                        }} className="bg-white border-slate-200 h-12 rounded-xl" />
+                        }} className="bg-white/[0.03] border-white/[0.1] h-12 rounded-xl focus-visible:ring-violet-500/50 text-white" />
                       </div>
                       <div className="space-y-2 md:col-span-2">
-                        <Label className="text-slate-700 font-semibold">Deployment Summary</Label>
+                        <Label className="text-[10px] font-bold uppercase tracking-widest text-white/40 px-1">Mission Specs</Label>
                         <Textarea value={exp.description} onChange={e => {
                           const newExp = [...experiences];
                           newExp[index].description = e.target.value;
                           setExperiences(newExp);
-                        }} className="bg-white border-slate-200 min-h-[100px] rounded-xl p-4 resize-none" />
+                        }} className="bg-white/[0.03] border-white/[0.1] min-h-[100px] rounded-xl p-4 resize-none focus-visible:ring-violet-500/50 text-white text-sm" />
                       </div>
                     </div>
                   </div>
@@ -621,11 +637,11 @@ export default function Admin() {
 
           {/* Projects Tab */}
           <TabsContent value="projects" className="animate-in fade-in slide-in-from-bottom-2 duration-300">
-            <Card className="bg-white border-slate-200 shadow-xl shadow-slate-200/50 rounded-3xl overflow-hidden">
-              <CardHeader className="border-b border-slate-50 bg-slate-50/50 flex flex-row items-center justify-between">
+            <Card className="bg-white/[0.04] backdrop-blur-xl border border-white/[0.08] rounded-[2rem] overflow-hidden shadow-2xl shadow-black/20">
+              <CardHeader className="border-b border-white/[0.05] bg-white/[0.02] p-8 flex flex-row items-center justify-between">
                 <div>
-                  <CardTitle className="text-xl">Project Repository</CardTitle>
-                  <CardDescription className="text-slate-500">Live projects and documentation.</CardDescription>
+                  <CardTitle className="text-xl font-heading font-bold text-white uppercase tracking-widest">Project Repository</CardTitle>
+                  <CardDescription className="text-white/30 text-xs font-medium">Live projects and documentation nodes.</CardDescription>
                 </div>
                 <Button
                   onClick={() => setProjects([...projects, {
@@ -638,32 +654,32 @@ export default function Admin() {
                     image: '',
                     tags: []
                   }])}
-                  className="bg-slate-900 text-white hover:bg-slate-800 h-10 px-4 rounded-xl"
+                  className="bg-gradient-to-r from-violet-600 to-cyan-500 text-white hover:opacity-90 h-10 px-6 rounded-xl font-bold text-[10px] uppercase tracking-widest"
                 >
                   <Plus className="w-4 h-4 mr-2" /> Add Project
                 </Button>
               </CardHeader>
               <CardContent className="space-y-8 p-8">
                 {projects.map((project, index) => (
-                  <div key={project.id} className="p-8 border border-slate-100 rounded-3xl relative bg-slate-50/50 group transition-all hover:bg-white hover:border-blue-100 hover:shadow-lg hover:shadow-blue-900/5">
+                  <div key={project.id} className="p-8 border border-white/10 rounded-[2rem] relative bg-white/[0.02] group transition-all hover:bg-white/[0.04] hover:border-violet-500/20">
                     <Button
                       variant="ghost" size="icon"
-                      className="absolute top-6 right-6 text-red-500 hover:text-red-600 hover:bg-red-50 rounded-xl"
+                      className="absolute top-6 right-6 text-white/20 hover:text-red-400 hover:bg-red-400/10 rounded-xl transition-all"
                       onClick={() => setProjects(projects.filter(p => p.id !== project.id))}
                     >
                       <Trash2 className="w-4 h-4" />
                     </Button>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8 pr-12">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-4 pr-12">
                       <div className="space-y-2">
-                        <Label className="text-slate-700 font-semibold">System Title</Label>
+                        <Label className="text-[10px] font-bold uppercase tracking-widest text-white/40 px-1">System Title</Label>
                         <Input value={project.title} onChange={e => {
                           const newProj = [...projects];
                           newProj[index].title = e.target.value;
                           setProjects(newProj);
-                        }} className="bg-white border-slate-200 h-12 rounded-xl" />
+                        }} className="bg-white/[0.03] border-white/[0.1] h-12 rounded-xl focus-visible:ring-violet-500/50 text-white" />
                       </div>
                       <div className="space-y-2">
-                        <Label className="text-slate-700 font-semibold">Classification</Label>
+                        <Label className="text-[10px] font-bold uppercase tracking-widest text-white/40 px-1">Classification</Label>
                         <select
                           value={project.type}
                           onChange={e => {
@@ -671,51 +687,51 @@ export default function Admin() {
                             newProj[index].type = e.target.value as 'project' | 'blog';
                             setProjects(newProj);
                           }}
-                          className="flex h-12 w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600"
+                          className="flex h-12 w-full rounded-xl border border-white/10 bg-white/[0.03] px-3 py-2 text-sm text-white focus-visible:outline-none focus:ring-2 focus:ring-violet-500/50"
                         >
-                          <option value="project">Project</option>
-                          <option value="blog">Documentation / Blog</option>
+                          <option value="project" className="bg-[#0b0b1a] text-white">Project</option>
+                          <option value="blog" className="bg-[#0b0b1a] text-white">Documentation / Blog</option>
                         </select>
                       </div>
                       <div className="space-y-2">
-                        <Label className="text-slate-700 font-semibold">GitHub Source</Label>
+                        <Label className="text-[10px] font-bold uppercase tracking-widest text-white/40 px-1">GitHub Source</Label>
                         <Input value={project.githubLink || ''} onChange={e => {
                           const newProj = [...projects];
                           newProj[index].githubLink = e.target.value;
                           setProjects(newProj);
-                        }} className="bg-white border-slate-200 h-12 rounded-xl" />
+                        }} className="bg-white/[0.03] border-white/[0.1] h-12 rounded-xl focus-visible:ring-violet-500/50 text-white" />
                       </div>
                       <div className="space-y-2">
-                        <Label className="text-slate-700 font-semibold">Live Uplink</Label>
+                        <Label className="text-[10px] font-bold uppercase tracking-widest text-white/40 px-1">Live Uplink</Label>
                         <Input value={project.liveLink || ''} onChange={e => {
                           const newProj = [...projects];
                           newProj[index].liveLink = e.target.value;
                           setProjects(newProj);
-                        }} className="bg-white border-slate-200 h-12 rounded-xl" />
+                        }} className="bg-white/[0.03] border-white/[0.1] h-12 rounded-xl focus-visible:ring-violet-500/50 text-white" />
                       </div>
                       <div className="space-y-2">
-                        <Label className="text-slate-700 font-semibold">Image Asset Link</Label>
+                        <Label className="text-[10px] font-bold uppercase tracking-widest text-white/40 px-1">Image Asset Link</Label>
                         <Input value={project.image || ''} onChange={e => {
                           const newProj = [...projects];
                           newProj[index].image = e.target.value;
                           setProjects(newProj);
-                        }} className="bg-white border-slate-200 h-12 rounded-xl" />
+                        }} className="bg-white/[0.03] border-white/[0.1] h-12 rounded-xl focus-visible:ring-violet-500/50 text-white" />
                       </div>
                       <div className="space-y-2">
-                        <Label className="text-slate-700 font-semibold">Tags (CSV)</Label>
+                        <Label className="text-[10px] font-bold uppercase tracking-widest text-white/40 px-1">Tags (CSV)</Label>
                         <Input value={project.tags?.join(', ') || ''} onChange={e => {
                           const newProj = [...projects];
                           newProj[index].tags = e.target.value.split(',').map(t => t.trim()).filter(Boolean);
                           setProjects(newProj);
-                        }} className="bg-white border-slate-200 h-12 rounded-xl" />
+                        }} className="bg-white/[0.03] border-white/[0.1] h-12 rounded-xl focus-visible:ring-violet-500/50 text-white" />
                       </div>
                       <div className="space-y-2 md:col-span-2">
-                        <Label className="text-slate-700 font-semibold">Project Spec</Label>
+                        <Label className="text-[10px] font-bold uppercase tracking-widest text-white/40 px-1">Project Spec</Label>
                         <Textarea value={project.description} onChange={e => {
                           const newProj = [...projects];
                           newProj[index].description = e.target.value;
                           setProjects(newProj);
-                        }} className="bg-white border-slate-200 min-h-[100px] rounded-xl p-4 resize-none" />
+                        }} className="bg-white/[0.03] border-white/[0.1] min-h-[100px] rounded-xl p-4 resize-none focus-visible:ring-violet-500/50 text-white text-sm" />
                       </div>
                     </div>
                   </div>
@@ -726,41 +742,41 @@ export default function Admin() {
 
           {/* Skills Tab */}
           <TabsContent value="skills" className="animate-in fade-in slide-in-from-bottom-2 duration-300">
-            <Card className="bg-white border-slate-200 shadow-xl shadow-slate-200/50 rounded-3xl overflow-hidden">
-              <CardHeader className="border-b border-slate-50 bg-slate-50/50 flex flex-row items-center justify-between">
+            <Card className="bg-white/[0.04] backdrop-blur-xl border border-white/[0.08] rounded-[2rem] overflow-hidden shadow-2xl shadow-black/20">
+              <CardHeader className="border-b border-white/[0.05] bg-white/[0.02] p-8 flex flex-row items-center justify-between">
                 <div>
-                  <CardTitle className="text-xl">Competency Matrix</CardTitle>
-                  <CardDescription className="text-slate-500">Skill level distribution metrics.</CardDescription>
+                  <CardTitle className="text-xl font-heading font-bold text-white uppercase tracking-widest">Skill Matrix</CardTitle>
+                  <CardDescription className="text-white/30 text-xs font-medium">Efficiency calibration nodes across technical stacks.</CardDescription>
                 </div>
                 <Button
                   onClick={() => setSkills([...skills, { name: '', level: 50 }])}
-                  className="bg-slate-900 text-white hover:bg-slate-800 h-10 px-4 rounded-xl"
+                  className="bg-gradient-to-r from-violet-600 to-cyan-500 text-white hover:opacity-90 h-10 px-6 rounded-xl font-bold text-[10px] uppercase tracking-widest"
                 >
-                  <Plus className="w-4 h-4 mr-2" /> Add Competency
+                  <Plus className="w-4 h-4 mr-2" /> New Matrix Node
                 </Button>
               </CardHeader>
-              <CardContent className="space-y-8 p-8">
+              <CardContent className="p-8">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {skills.map((skill, index) => (
-                    <div key={index} className="p-6 border border-slate-100 rounded-2xl relative bg-slate-50/50 hover:bg-white transition-all hover:shadow-lg hover:shadow-blue-900/5">
+                    <div key={index} className="p-6 border border-white/10 rounded-2xl relative bg-white/[0.02] group transition-all hover:bg-white/[0.04] hover:border-violet-500/20">
                       <Button
                         variant="ghost" size="icon"
-                        className="absolute top-3 right-3 h-8 w-8 text-red-500 hover:text-red-600 hover:bg-red-50 rounded-lg"
+                        className="absolute top-3 right-3 h-8 w-8 text-white/20 hover:text-red-400 hover:bg-red-400/10 rounded-lg transition-all"
                         onClick={() => setSkills(skills.filter((_, i) => i !== index))}
                       >
-                        <Trash2 className="w-4 h-4" />
+                        <Trash2 className="w-3.5 h-3.5" />
                       </Button>
                       <div className="space-y-4 pr-6">
-                        <div className="space-y-1">
-                          <Label className="text-xs font-bold uppercase tracking-wider text-slate-400">Skill</Label>
+                        <div className="space-y-2">
+                          <Label className="text-[10px] font-bold uppercase tracking-widest text-white/40 px-1">Node Title</Label>
                           <Input value={skill.name} onChange={e => {
                             const newSkills = [...skills];
                             newSkills[index].name = e.target.value;
                             setSkills(newSkills);
-                          }} className="bg-white border-slate-200 h-10 rounded-lg" />
+                          }} className="bg-white/[0.03] border-white/[0.1] h-10 rounded-xl focus-visible:ring-violet-500/50 text-white placeholder:text-white/10" />
                         </div>
-                        <div className="space-y-1">
-                          <Label className="text-xs font-bold uppercase tracking-wider text-slate-400">Efficiency ({skill.level}%)</Label>
+                        <div className="space-y-2">
+                          <Label className="text-[10px] font-bold uppercase tracking-widest text-white/40 px-1 flex justify-between">Efficiency <span>{skill.level}%</span></Label>
                           <input
                             type="range"
                             min="0" max="100"
@@ -770,7 +786,7 @@ export default function Admin() {
                               newSkills[index].level = parseInt(e.target.value);
                               setSkills(newSkills);
                             }}
-                            className="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
+                            className="w-full h-1.5 bg-white/10 rounded-lg appearance-none cursor-pointer accent-violet-500"
                           />
                         </div>
                       </div>
@@ -783,51 +799,61 @@ export default function Admin() {
 
           {/* Messages Tab */}
           <TabsContent value="messages" className="animate-in fade-in slide-in-from-bottom-2 duration-300">
-            <Card className="bg-white border-slate-200 shadow-xl shadow-slate-200/50 rounded-3xl overflow-hidden">
-              <CardHeader className="border-b border-slate-50 bg-slate-50/50 flex flex-row items-center justify-between">
+            <Card className="bg-white/[0.04] backdrop-blur-xl border border-white/[0.08] rounded-[2rem] overflow-hidden shadow-2xl shadow-black/20">
+              <CardHeader className="border-b border-white/[0.05] bg-white/[0.02] p-8 flex flex-row items-center justify-between">
                 <div>
-                  <CardTitle className="text-xl">Admin Inbox</CardTitle>
-                  <CardDescription className="text-slate-500">Incoming transmissions from the uplink.</CardDescription>
+                  <CardTitle className="text-xl font-heading font-bold text-white uppercase tracking-widest">Admin Inbox</CardTitle>
+                  <CardDescription className="text-white/30 text-xs font-medium">Incoming transmissions from the global uplink.</CardDescription>
                 </div>
-                <div className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-xs font-bold">
-                  {messages.length} Messages
+                <div className="bg-violet-600/20 text-violet-400 border border-violet-500/20 px-4 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-widest">
+                  {messages.length} Synchronized
                 </div>
               </CardHeader>
-              <CardContent className="p-8">
-                {messages.length === 0 ? (
-                  <div className="text-center py-20 bg-slate-50/50 rounded-3xl border border-dashed border-slate-200">
-                    <Mail className="w-12 h-12 text-slate-300 mx-auto mb-4" />
-                    <p className="text-slate-500 font-medium">Uplink silent. No new messages detected.</p>
-                  </div>
-                ) : (
-                  <div className="space-y-4">
-                    {messages.map((msg) => (
-                      <div key={msg._id} className="p-6 border border-slate-100 rounded-3xl bg-white hover:border-blue-100 transition-all group relative shadow-sm hover:shadow-md">
-                        <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
-                          <div className="space-y-3 flex-1">
+              <CardContent className="p-0">
+                <div className="divide-y divide-white/5">
+                  {messages.length === 0 ? (
+                    <div className="p-20 text-center space-y-4">
+                      <div className="w-16 h-16 bg-white/[0.03] rounded-full flex items-center justify-center mx-auto border border-white/5 text-white/20">
+                        <MessageSquare className="w-8 h-8" />
+                      </div>
+                      <p className="text-white/20 font-bold uppercase tracking-[0.2em] text-[10px]">Registry Empty</p>
+                    </div>
+                  ) : (
+                    messages.map((msg) => (
+                      <div key={msg._id} className="p-8 hover:bg-white/[0.02] transition-all group relative">
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="absolute top-8 right-8 text-white/20 hover:text-red-400 hover:bg-red-400/10 rounded-xl transition-all"
+                          onClick={() => handleDeleteMessage(msg._id)}
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
+                        <div className="flex flex-col md:flex-row md:items-center gap-6 mb-6">
+                          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-violet-600/20 to-cyan-500/20 flex items-center justify-center border border-white/10 shrink-0">
+                            <span className="text-lg font-bold text-violet-400">{msg.name[0].toUpperCase()}</span>
+                          </div>
+                          <div>
+                            <h3 className="text-base font-bold text-white mb-1">{msg.name}</h3>
                             <div className="flex flex-wrap items-center gap-3">
-                              <span className="text-sm font-bold text-slate-900">{msg.name}</span>
-                              <span className="text-xs font-medium text-slate-400 bg-slate-50 px-2 py-0.5 rounded-full">{msg.email}</span>
-                              <span className="text-[10px] text-slate-400 font-medium uppercase tracking-widest">{new Date(msg.createdAt).toLocaleString()}</span>
-                            </div>
-                            <div>
-                              <h4 className="text-slate-900 font-bold text-lg mb-1">{msg.subject}</h4>
-                              <p className="text-slate-600 text-sm leading-relaxed whitespace-pre-wrap">{msg.message}</p>
+                              <span className="text-[10px] font-bold text-white/40 uppercase tracking-widest flex items-center gap-1.5">
+                                <span className="w-1 h-1 rounded-full bg-cyan-400"></span> {msg.email}
+                              </span>
+                              <span className="text-[10px] font-bold text-white/20 uppercase tracking-widest">|</span>
+                              <span className="text-[10px] font-bold text-white/40 uppercase tracking-widest flex items-center gap-1.5">
+                                <span className="w-1 h-1 rounded-full bg-violet-400"></span> {new Date(msg.createdAt).toLocaleDateString()}
+                              </span>
                             </div>
                           </div>
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={() => handleDeleteMessage(msg._id)}
-                            className="h-10 w-10 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-xl transition-colors md:self-start shrink-0"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </Button>
+                        </div>
+                        <div className="bg-white/[0.03] border border-white/5 rounded-2xl p-6">
+                          <h4 className="text-white/80 font-bold text-sm mb-2">{msg.subject}</h4>
+                          <p className="text-white/60 text-sm leading-relaxed whitespace-pre-wrap">{msg.message}</p>
                         </div>
                       </div>
-                    ))}
-                  </div>
-                )}
+                    ))
+                  )}
+                </div>
               </CardContent>
             </Card>
           </TabsContent>

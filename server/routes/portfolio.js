@@ -20,14 +20,20 @@ router.get('/', async (req, res) => {
 // Update portfolio data
 router.post('/', authenticateToken, async (req, res) => {
   try {
-    const data = req.body;
+    const allowed = ['profile', 'projects', 'skills', 'experience', 'experiences', 'education', 'certifications'];
+    const data = Object.fromEntries(Object.entries(req.body).filter(([k]) => allowed.includes(k)));
+
     // We update the existing one or create a new one if none exists
     let portfolio = await Portfolio.findOne().sort({ createdAt: -1 });
     
     if (portfolio) {
       // Update existing
       portfolio.set(data);
+      // Ensure complex nested objects are marked as modified
       portfolio.markModified('profile');
+      portfolio.markModified('projects');
+      portfolio.markModified('skills');
+      portfolio.markModified('experiences');
       await portfolio.save();
     } else {
       // Create new

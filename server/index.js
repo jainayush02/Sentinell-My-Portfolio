@@ -10,20 +10,18 @@ import authRoutes from './routes/auth.js';
 import messagesRoutes from './routes/messages.js';
 import { authenticateToken } from './middleware/auth.js';
 import multer from 'multer';
-import path from 'path';
-import { fileURLToPath } from 'url';
-import fs from 'fs';
+import { fileTypeFromBuffer } from 'file-type';
+import { Readable } from 'stream';
 import twilio from 'twilio';
 import mongoSanitize from 'express-mongo-sanitize';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/sentinell_portfolio';
+const MONGODB_URI = process.env.MONGODB_URI;
+
+let bucket; // GridFS bucket
 
 const twilioClient = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
 
@@ -67,55 +65,95 @@ const contactLimiter = rateLimit({
   message: { message: 'Too many messages sent. Please try again later.' }
 });
 
-// Static folder for uploads
-const uploadsDir = path.join(__dirname, 'uploads');
-if (!fs.existsSync(uploadsDir)) {
-  try {
-    fs.mkdirSync(uploadsDir);
-  } catch (err) {
-    console.warn('⚠️ SENTINELL: Running in read-only environment (Vercel). Storage bypass active.');
-  }
-}
-app.use('/uploads', express.static(uploadsDir));
-
-// Multer Storage Configuration
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, 'uploads/');
-  },
-  filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
-  }
-});
+// Multer Memory Storage (Required for GridFS/file-type)
+const storage = multer.memoryStorage();
 
 const upload = multer({
   storage: storage,
   limits: { fileSize: 5 * 1024 * 1024 }, // 5MB limit
   fileFilter: (req, file, cb) => {
     const filetypes = /jpeg|jpg|png|webp|pdf|docx|doc/;
-    const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
+    // We still check extension for quick rejection
+    const extname = filetypes.test(file.originalname.split('.').pop().toLowerCase());
     const mimetype = filetypes.test(file.mimetype);
     if (extname && mimetype) {
       return cb(null, true);
     }
-    cb(new Error('Error: Only Images, PDFs and Word docs are allows!'));
+    cb(new Error('Error: Only images, PDFs and Word documents are allowed.'));
   }
 });
 
-// 🛡️ SECURE Upload Endpoint (Requires Admin Token)
-app.post('/api/upload', authenticateToken, upload.single('image'), (req, res) => {
+// 🛡️ File Retrieval Route (GridFS)
+app.get('/api/files/:id', async (req, res) => {
+  try {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      return res.status(400).json({ message: 'Invalid file ID' });
+    }
+
+    const _id = new mongoose.Types.ObjectId(req.params.id);
+    const files = await bucket.find({ _id }).toArray();
+    
+    if (files.length === 0) {
+      return res.status(404).json({ message: 'File not found' });
+    }
+
+    const file = files[0];
+    res.set('Content-Type', file.contentType || 'application/octet-stream');
+    
+    const downloadStream = bucket.openDownloadStream(_id);
+    downloadStream.pipe(res);
+  } catch (err) {
+    res.status(500).json({ message: 'Error retrieving file' });
+  }
+});
+
+// 🛡️ SECURE Upload Endpoint (GridFS + Real Type Check)
+app.post('/api/upload', authenticateToken, upload.single('image'), async (req, res) => {
   if (!req.file) {
     return res.status(400).json({ message: 'No file uploaded' });
   }
-  const API_BASE = '/api';
-  const fileUrl = `/uploads/${req.file.filename}`;
-  res.json({ url: fileUrl });
+
+  // FIX 3: Verify real magic bytes
+  const type = await fileTypeFromBuffer(req.file.buffer);
+  const allowedMimes = ['image/jpeg', 'image/png', 'image/webp', 'application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/msword'];
+  
+  if (!type || !allowedMimes.includes(type.mime)) {
+    return res.status(400).json({ message: 'Security Alert: File type spoofing detected.' });
+  }
+
+  try {
+    // FIX 4: Stream to GridFS
+    const readableStream = new Readable();
+    readableStream.push(req.file.buffer);
+    readableStream.push(null);
+
+    const uploadStream = bucket.openUploadStream(req.file.originalname, {
+      contentType: type.mime,
+      metadata: { originalName: req.file.originalname }
+    });
+
+    readableStream.pipe(uploadStream);
+
+    uploadStream.on('finish', () => {
+      res.json({ url: `/api/files/${uploadStream.id}` });
+    });
+
+    uploadStream.on('error', (err) => {
+      throw err;
+    });
+  } catch (err) {
+    console.error('GridFS Upload Error:', err);
+    res.status(500).json({ message: 'Failed to store file' });
+  }
 });
 
 // MongoDB Connection
 mongoose.connect(MONGODB_URI)
-  .then(() => console.log('✅ DATABASE: Secure connection active'))
+  .then(() => {
+    console.log('✅ DATABASE: Secure connection active');
+    const { db } = mongoose.connection;
+    bucket = new mongoose.mongo.GridFSBucket(db, { bucketName: 'uploads' });
+  })
   .catch(err => console.error('❌ MongoDB connection error:', err));
 
 // Models
@@ -129,8 +167,23 @@ app.use('/api/messages', messagesRoutes);
 app.post('/api/contact', contactLimiter, async (req, res) => {
   try {
     const { name, email, subject, message } = req.body;
-    if (!name || !email || !subject || !message) {
-      return res.status(400).json({ message: 'All fields are required' });
+    
+    // FIX 5: Strict Validation
+    const errors = {};
+    if (!name || name.trim().length === 0) errors.name = 'Name is required';
+    else if (name.length > 100) errors.name = 'Name must be under 100 chars';
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!email || !emailRegex.test(email)) errors.email = 'Valid email is required';
+
+    if (!subject || subject.trim().length === 0) errors.subject = 'Subject is required';
+    else if (subject.length > 200) errors.subject = 'Subject must be under 200 chars';
+
+    if (!message || message.trim().length === 0) errors.message = 'Message is required';
+    else if (message.length > 2000) errors.message = 'Message must be under 2000 chars';
+
+    if (Object.keys(errors).length > 0) {
+      return res.status(400).json({ message: 'Validation failed', errors });
     }
     const newMessage = new Message({ name, email, subject, message });
     await newMessage.save();
