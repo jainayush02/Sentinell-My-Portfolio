@@ -175,21 +175,25 @@ export default function Portfolio() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center relative overflow-hidden bg-[#fafbfc]">
+      <div className="min-h-screen flex items-center justify-center relative overflow-hidden bg-[#060612]">
         {/* 🎨 Living Canvas Backdrop */}
         <div className="absolute inset-0 z-0">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-blue-100/30 blur-[120px]"></div>
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-violet-500/10 blur-[120px]"></div>
+          <div className="absolute top-1/2 left-1/2 -translate-x-[40%] -translate-y-[40%] w-[400px] h-[400px] rounded-full bg-cyan-500/5 blur-[100px]"></div>
         </div>
 
-        <div className="relative z-10 flex flex-col items-center gap-4">
-          <div className="h-[2px] w-32 bg-slate-100 rounded-full overflow-hidden relative">
+        <div className="relative z-10 flex flex-col items-center gap-6">
+          <div className="h-[1.5px] w-48 bg-white/5 rounded-full overflow-hidden relative">
             <motion.div
-              className="absolute inset-0 bg-blue-600"
+              className="absolute inset-0 bg-gradient-to-r from-violet-500 to-cyan-400"
               animate={{ x: ["-100%", "100%"] }}
-              transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
             />
           </div>
-          <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-slate-400 animate-pulse">Sentinell Initializing</p>
+          <div className="flex flex-col items-center gap-1.5">
+            <p className="text-[10px] font-bold uppercase tracking-[0.5em] text-white/40 animate-pulse">Initializing System</p>
+            <p className="text-[9px] font-medium uppercase tracking-[0.2em] text-violet-400/30">Sentinell Neural Interface</p>
+          </div>
         </div>
       </div>
     );
