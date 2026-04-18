@@ -2,6 +2,7 @@ import express from 'express';
 import twilio from 'twilio';
 import jwt from 'jsonwebtoken';
 import { OtpStore } from '../models/OtpStore.js';
+import { Portfolio } from '../models/Portfolio.js';
 
 const router = express.Router();
 const client = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
@@ -73,6 +74,37 @@ router.post('/verify-otp', async (req, res) => {
   // Generate JWT
   const token = jwt.sign({ phoneNumber }, process.env.JWT_SECRET, { expiresIn: '24h' });
   res.json({ token });
+});
+
+// Generate SSO Magic Link
+router.get('/sso-url', async (req, res) => {
+  try {
+    const portfolio = await Portfolio.findOne().sort({ createdAt: -1 });
+    // Default to the provided target if workLink is not set
+    let workLink = portfolio?.profile?.workLink || 'https://www.kryonex.dev/portal';
+    
+    // Ensure clean URL for appending params
+    workLink = workLink.split('?')[0];
+
+    // Generate a short-lived SSO token
+    const ssoToken = jwt.sign(
+      { 
+        role: 'portfolio_visitor', 
+        origin: 'sentinell',
+        iat: Math.floor(Date.now() / 1000)
+      }, 
+      process.env.SSO_SHARED_SECRET, 
+      { expiresIn: '1m' } // Very short lived for security
+    );
+
+    const fullUrl = workLink.startsWith('http') ? workLink : `https://${workLink}`;
+    const ssoUrl = `${fullUrl}?sso_token=${ssoToken}`;
+    
+    res.json({ url: ssoUrl });
+  } catch (error) {
+    console.error('SSO Generation Error:', error);
+    res.status(500).json({ message: 'Failed to generate SSO uplink' });
+  }
 });
 
 export default router;

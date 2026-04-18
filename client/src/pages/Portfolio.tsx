@@ -109,6 +109,46 @@ export default function Portfolio() {
     }
   };
 
+  const [isAuthorizing, setIsAuthorizing] = useState(false);
+
+  const handleViewWork = async (e?: React.MouseEvent) => {
+    if (e) e.preventDefault();
+    
+    // If no workLink configured, just scroll to projects
+    if (!profile.workLink) {
+      scrollToSection('projects');
+      setIsMenuOpen(false);
+      return;
+    }
+
+    setIsAuthorizing(true);
+    const toastId = toast.loading('Authorizing secure uplink...');
+
+    try {
+      const response = await fetch(`${API_BASE}/auth/sso-url`);
+      if (response.ok) {
+        const { url } = await response.json();
+        toast.success('Access Granted. Redirecting to Kryonex Studio.', { id: toastId });
+        
+        // Short delay for visual feedback
+        setTimeout(() => {
+          window.open(url, '_blank');
+          setIsAuthorizing(false);
+          setIsMenuOpen(false);
+        }, 1000);
+      } else {
+        throw new Error('SSO Failed');
+      }
+    } catch (err) {
+      toast.error('Authentication bypass failed. Manual login may be required.', { id: toastId });
+      // Fallback to regular link
+      const url = profile.workLink.startsWith('http') ? profile.workLink : `https://${profile.workLink}`;
+      window.open(url, '_blank');
+      setIsAuthorizing(false);
+      setIsMenuOpen(false);
+    }
+  };
+
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id);
     if (element) {
@@ -351,20 +391,11 @@ export default function Portfolio() {
                   <Button
                     variant="outline"
                     className="w-full h-11 rounded-xl border-white/10 bg-white/5 font-bold flex items-center justify-center gap-2 hover:bg-white/10 transition-all shadow-sm cursor-pointer"
-                    onClick={() => {
-                      if (profile.workLink) {
-                        const url = profile.workLink.startsWith('http')
-                          ? profile.workLink
-                          : `https://${profile.workLink}`;
-                        window.open(url, '_blank');
-                      } else {
-                        scrollToSection('projects');
-                        setIsMenuOpen(false);
-                      }
-                    }}
+                    disabled={isAuthorizing}
+                    onClick={handleViewWork}
                   >
                     <span className="bg-clip-text text-transparent bg-gradient-to-r from-violet-400 to-cyan-400">
-                      View My Work
+                      {isAuthorizing ? 'Authorizing...' : 'View My Work'}
                     </span>
                     <ExternalLink className="w-4 h-4 text-cyan-400" />
                   </Button>
@@ -423,19 +454,11 @@ export default function Portfolio() {
                   <Button
                     variant="outline"
                     className="rounded-xl border-white/10 bg-white/5 h-12 px-8 shadow-sm flex items-center gap-2 font-bold cursor-pointer text-base transition-all hover:bg-white/10"
-                    onClick={() => {
-                      if (profile.workLink) {
-                        const url = profile.workLink.startsWith('http')
-                          ? profile.workLink
-                          : `https://${profile.workLink}`;
-                        window.open(url, '_blank');
-                      } else {
-                        scrollToSection('projects');
-                      }
-                    }}
+                    disabled={isAuthorizing}
+                    onClick={handleViewWork}
                   >
                     <span className="bg-clip-text text-transparent bg-gradient-to-r from-violet-400 to-cyan-400">
-                      View My Work
+                      {isAuthorizing ? 'Connecting...' : 'View My Work'}
                     </span>
                     <ExternalLink className="w-4 h-4 text-cyan-400" />
                   </Button>
