@@ -203,7 +203,19 @@ export default function Portfolio() {
               >
                 <Download className="w-4 h-4 group-hover:translate-y-0.5 transition-transform" /> Download CV
               </Button>
-              <Button onClick={() => scrollToSection('projects')} className="rounded-xl bg-gradient-to-r from-blue-600 to-fuchsia-600 text-white hover:opacity-90 h-11 px-6 shadow-lg shadow-blue-500/25 border-0">
+              <Button
+                onClick={() => {
+                  if (profile.workLink) {
+                    const url = profile.workLink.startsWith('http') 
+                      ? profile.workLink 
+                      : `https://${profile.workLink}`;
+                    window.open(url, '_blank');
+                  } else {
+                    scrollToSection('projects');
+                  }
+                }}
+                className="rounded-xl bg-gradient-to-r from-blue-600 to-fuchsia-600 text-white hover:opacity-90 h-11 px-6 shadow-lg shadow-blue-500/25 border-0"
+              >
                 View My Work <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
             </div>

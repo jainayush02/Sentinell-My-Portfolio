@@ -48,6 +48,7 @@ export interface PortfolioData {
     dob: String;
     careerStartDate: String;
     resumeUrl?: String;
+    workLink?: string;
     researchPapersCount: number;
   };
   features: Feature[];
@@ -73,6 +74,7 @@ export const initialData: PortfolioData = {
     dob: "2003-09-08",
     careerStartDate: "2023-01-01",
     resumeUrl: "",
+    workLink: "",
     researchPapersCount: 0
   },
   features: [

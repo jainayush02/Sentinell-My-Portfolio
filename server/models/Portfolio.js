@@ -44,6 +44,7 @@ const portfolioSchema = new mongoose.Schema({
     dob: String,
     careerStartDate: String,
     resumeUrl: String,
+    workLink: String,
     researchPapersCount: { type: Number, default: 0 }
   },
   experiences: [experienceSchema],

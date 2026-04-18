@@ -528,6 +528,16 @@ export default function Admin() {
                     </div>
                   </div>
                   <div className="space-y-2 md:col-span-2">
+                    <Label className="text-slate-700 font-semibold">Work Showcase Link (View My Work Button)</Label>
+                    <Input 
+                      value={profile.workLink || ''} 
+                      onChange={e => setProfile({ ...profile, workLink: e.target.value })} 
+                      className="bg-slate-50 border-slate-200 h-12 rounded-xl focus-visible:ring-blue-600" 
+                      placeholder="e.g. https://github.com/jainayush02 or your portfolio url" 
+                    />
+                    <p className="text-[10px] text-slate-400 font-medium px-1">If provided, the "View My Work" button will redirect here. Otherwise, it will scroll to projects.</p>
+                  </div>
+                  <div className="space-y-2 md:col-span-2">
                     <Label className="text-slate-700 font-semibold">Research Papers Published (Count)</Label>
                     <Input type="number" value={profile.researchPapersCount || 0} onChange={e => setProfile({ ...profile, researchPapersCount: parseInt(e.target.value) || 0 })} className="bg-slate-50 border-slate-200 h-12 rounded-xl focus-visible:ring-blue-600" />
                   </div>
