@@ -217,8 +217,19 @@ export default function Admin() {
     formData.append('image', file); // Field name remains 'image' as per backend multer config
 
     try {
+      const token = localStorage.getItem('adminToken');
+      console.log('🛡️ SENTINELL DEBUG: Token present:', !!token);
+      
+      if (!token) {
+        toast.error('Session expired. Please log in again.');
+        return;
+      }
+
       const response = await fetch(`${API_BASE}/upload`, {
         method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        },
         body: formData,
       });
 

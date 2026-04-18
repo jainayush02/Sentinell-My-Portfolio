@@ -99,6 +99,7 @@ app.get('/api/files/:id', async (req, res) => {
 
     const file = files[0];
     res.set('Content-Type', file.contentType || 'application/octet-stream');
+    res.set('Content-Disposition', `attachment; filename="${file.filename || 'download'}"`);
     
     const downloadStream = bucket.openDownloadStream(_id);
     downloadStream.pipe(res);

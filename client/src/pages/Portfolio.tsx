@@ -8,7 +8,7 @@ import { toast } from 'sonner';
 import {
   Github, Linkedin, Twitter, Mail, MapPin, Clock,
   Briefcase, Code2, Zap, Users, ArrowRight, Download,
-  ExternalLink, ChevronRight, Terminal, Globe, Award, Menu, X
+  ExternalLink, ChevronRight, Terminal, Globe, Award, Menu, X, Eye
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
@@ -259,7 +259,7 @@ export default function Portfolio() {
         <motion.header
           className="fixed top-0 w-full z-50 bg-[#060612]/80 backdrop-blur-xl border-b border-white/[0.06]"
         >
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 h-20 flex items-center justify-between">
+          <div className="max-w-7xl mx-auto px-2 sm:px-2.5 h-20 flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="w-24 h-24 flex items-center justify-center overflow-hidden">
                 <img
@@ -291,34 +291,6 @@ export default function Portfolio() {
                   </a>
                 )}
               </div>
-              <Button
-                variant="outline"
-                className="rounded-xl border-white/10 bg-white/5 text-white hover:bg-white/10 h-11 px-6 shadow-sm flex items-center gap-2 group transition-all cursor-pointer"
-                onClick={() => {
-                  if (profile.resumeUrl) {
-                    window.open(profile.resumeUrl, '_blank');
-                  } else {
-                    toast.error('Resume not yet uploaded by author');
-                  }
-                }}
-              >
-                <Download className="w-4 h-4 group-hover:translate-y-0.5 transition-transform" /> Download CV
-              </Button>
-              <Button
-                onClick={() => {
-                  if (profile.workLink) {
-                    const url = profile.workLink.startsWith('http')
-                      ? profile.workLink
-                      : `https://${profile.workLink}`;
-                    window.open(url, '_blank');
-                  } else {
-                    scrollToSection('projects');
-                  }
-                }}
-                className="rounded-xl bg-gradient-to-r from-violet-500 to-cyan-500 text-white hover:opacity-90 h-11 px-6 shadow-lg shadow-violet-500/25 border-0 font-bold cursor-pointer"
-              >
-                View My Work <ArrowRight className="w-4 h-4 ml-2" />
-              </Button>
             </div>
 
             {/* Mobile Menu Toggle */}
@@ -377,7 +349,8 @@ export default function Portfolio() {
                     <a href={profile.linkedin} className="w-10 h-10 rounded-xl bg-white/[0.05] flex items-center justify-center text-white/60"><Linkedin className="w-5 h-5" /></a>
                   </div>
                   <Button
-                    className="w-full h-11 rounded-xl bg-gradient-to-r from-violet-500 to-cyan-500 text-white text-sm shadow-lg shadow-violet-500/20 font-bold border-0"
+                    variant="outline"
+                    className="w-full h-11 rounded-xl border-white/10 bg-white/5 font-bold flex items-center justify-center gap-2 hover:bg-white/10 transition-all shadow-sm cursor-pointer"
                     onClick={() => {
                       if (profile.workLink) {
                         const url = profile.workLink.startsWith('http')
@@ -390,11 +363,14 @@ export default function Portfolio() {
                       }
                     }}
                   >
-                    View My Work <ArrowRight className="w-4 h-4 ml-2" />
+                    <span className="bg-clip-text text-transparent bg-gradient-to-r from-violet-400 to-cyan-400">
+                      View My Work
+                    </span>
+                    <ExternalLink className="w-4 h-4 text-cyan-400" />
                   </Button>
                   <Button
                     variant="outline"
-                    className="w-full h-11 rounded-xl border-white/10 bg-white/5 text-white text-sm font-bold flex items-center justify-center gap-2 hover:bg-white/10 transition-all"
+                    className="w-full h-11 rounded-xl border-white/10 bg-white/5 font-bold flex items-center justify-center gap-2 hover:bg-white/10 transition-all shadow-sm group"
                     onClick={() => {
                       if (profile.resumeUrl) {
                         window.open(profile.resumeUrl, '_blank');
@@ -403,7 +379,10 @@ export default function Portfolio() {
                       }
                     }}
                   >
-                    <Download className="w-4 h-4" /> Download CV
+                    <span className="bg-clip-text text-transparent bg-gradient-to-r from-violet-400 to-cyan-400">
+                      Download CV
+                    </span>
+                    <Download className="w-4 h-4 text-cyan-400 group-hover:translate-y-0.5 transition-transform" />
                   </Button>
                   <a href="/admin" className="flex items-center justify-center gap-2 w-full py-2 text-[10px] font-bold text-white/30 hover:text-violet-400 transition-colors uppercase tracking-[0.2em] mt-2">
                     <Terminal className="w-3 h-3" /> Admin Portal
@@ -442,6 +421,8 @@ export default function Portfolio() {
 
                 <div className="flex flex-col sm:flex-row gap-4 pt-4">
                   <Button
+                    variant="outline"
+                    className="rounded-xl border-white/10 bg-white/5 h-12 px-8 shadow-sm flex items-center gap-2 font-bold cursor-pointer text-base transition-all hover:bg-white/10"
                     onClick={() => {
                       if (profile.workLink) {
                         const url = profile.workLink.startsWith('http')
@@ -452,13 +433,15 @@ export default function Portfolio() {
                         scrollToSection('projects');
                       }
                     }}
-                    className="rounded-xl bg-gradient-to-r from-violet-500 to-cyan-500 text-white hover:opacity-90 h-12 px-8 shadow-lg shadow-violet-500/25 border-0 font-bold cursor-pointer text-base"
                   >
-                    View My Work <ArrowRight className="w-4 h-4 ml-2" />
+                    <span className="bg-clip-text text-transparent bg-gradient-to-r from-violet-400 to-cyan-400">
+                      View My Work
+                    </span>
+                    <ExternalLink className="w-4 h-4 text-cyan-400" />
                   </Button>
                   <Button
                     variant="outline"
-                    className="rounded-xl border-white/10 bg-white/5 text-white hover:bg-white/10 h-12 px-8 shadow-sm flex items-center gap-2 group transition-all cursor-pointer text-base"
+                    className="rounded-xl border-white/10 bg-white/5 h-12 px-8 shadow-sm flex items-center gap-2 font-bold cursor-pointer text-base transition-all hover:bg-white/10 group"
                     onClick={() => {
                       if (profile.resumeUrl) {
                         window.open(profile.resumeUrl, '_blank');
@@ -467,7 +450,10 @@ export default function Portfolio() {
                       }
                     }}
                   >
-                    <Download className="w-4 h-4 group-hover:translate-y-0.5 transition-transform" /> Download CV
+                    <span className="bg-clip-text text-transparent bg-gradient-to-r from-violet-400 to-cyan-400">
+                      Download CV
+                    </span>
+                    <Download className="w-4 h-4 text-cyan-400 group-hover:translate-y-0.5 transition-transform" />
                   </Button>
                 </div>
               </motion.div>

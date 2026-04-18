@@ -15,6 +15,14 @@ export function usePortfolioData() {
         if (response.ok) {
           const result = await response.json();
           if (result.profile) {
+            // FIX: Sanitise hardcoded localhost URLs for production
+            Object.keys(result.profile).forEach(key => {
+              const value = result.profile[key];
+              if (typeof value === 'string' && value.includes('localhost:5000')) {
+                result.profile[key] = value.split('5000')[1];
+                console.log(`🛡️ SENTINELL: Sanitised URL for ${key}`);
+              }
+            });
             result.profile = { ...initialData.profile, ...result.profile };
           }
           setData(result);
