@@ -379,6 +379,23 @@ export default function Portfolio() {
                   <Button
                     className="w-full h-11 rounded-xl bg-gradient-to-r from-violet-500 to-cyan-500 text-white text-sm shadow-lg shadow-violet-500/20 font-bold border-0"
                     onClick={() => {
+                      if (profile.workLink) {
+                        const url = profile.workLink.startsWith('http')
+                          ? profile.workLink
+                          : `https://${profile.workLink}`;
+                        window.open(url, '_blank');
+                      } else {
+                        scrollToSection('projects');
+                        setIsMenuOpen(false);
+                      }
+                    }}
+                  >
+                    View My Work <ArrowRight className="w-4 h-4 ml-2" />
+                  </Button>
+                  <Button
+                    variant="outline"
+                    className="w-full h-11 rounded-xl border-white/10 bg-white/5 text-white text-sm font-bold flex items-center justify-center gap-2 hover:bg-white/10 transition-all"
+                    onClick={() => {
                       if (profile.resumeUrl) {
                         window.open(profile.resumeUrl, '_blank');
                       } else {
@@ -386,7 +403,7 @@ export default function Portfolio() {
                       }
                     }}
                   >
-                    <Download className="w-4 h-4 mr-2" /> Download CV
+                    <Download className="w-4 h-4" /> Download CV
                   </Button>
                   <a href="/admin" className="flex items-center justify-center gap-2 w-full py-2 text-[10px] font-bold text-white/30 hover:text-violet-400 transition-colors uppercase tracking-[0.2em] mt-2">
                     <Terminal className="w-3 h-3" /> Admin Portal
@@ -421,6 +438,37 @@ export default function Portfolio() {
                   <p className="mt-6 text-sm md:text-lg text-white/60 leading-relaxed max-w-xl">
                     {profile.bio}
                   </p>
+                </div>
+
+                <div className="flex flex-col sm:flex-row gap-4 pt-4">
+                  <Button
+                    onClick={() => {
+                      if (profile.workLink) {
+                        const url = profile.workLink.startsWith('http')
+                          ? profile.workLink
+                          : `https://${profile.workLink}`;
+                        window.open(url, '_blank');
+                      } else {
+                        scrollToSection('projects');
+                      }
+                    }}
+                    className="rounded-xl bg-gradient-to-r from-violet-500 to-cyan-500 text-white hover:opacity-90 h-12 px-8 shadow-lg shadow-violet-500/25 border-0 font-bold cursor-pointer text-base"
+                  >
+                    View My Work <ArrowRight className="w-4 h-4 ml-2" />
+                  </Button>
+                  <Button
+                    variant="outline"
+                    className="rounded-xl border-white/10 bg-white/5 text-white hover:bg-white/10 h-12 px-8 shadow-sm flex items-center gap-2 group transition-all cursor-pointer text-base"
+                    onClick={() => {
+                      if (profile.resumeUrl) {
+                        window.open(profile.resumeUrl, '_blank');
+                      } else {
+                        toast.error('Resume not yet uploaded by author');
+                      }
+                    }}
+                  >
+                    <Download className="w-4 h-4 group-hover:translate-y-0.5 transition-transform" /> Download CV
+                  </Button>
                 </div>
               </motion.div>
 
