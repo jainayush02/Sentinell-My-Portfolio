@@ -136,7 +136,7 @@ export default function Admin() {
               transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
             />
           </div>
-          <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-white/40 animate-pulse">Synchronizing Node</p>
+          <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-white/70 animate-pulse">Synchronizing Node</p>
         </div>
       </div>
     );
@@ -215,7 +215,7 @@ export default function Admin() {
     toast.success('Project Repository Updated');
   };
 
-  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>, field: string) => {
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>, callback: (url: string) => void) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
@@ -225,12 +225,10 @@ export default function Admin() {
     }
 
     const formData = new FormData();
-    formData.append('image', file); // Field name remains 'image' as per backend multer config
+    formData.append('image', file);
 
     try {
       const token = localStorage.getItem('adminToken');
-      console.log('🛡️ SENTINELL DEBUG: Token present:', !!token);
-      
       if (!token) {
         toast.error('Session expired. Please log in again.');
         return;
@@ -246,7 +244,7 @@ export default function Admin() {
 
       if (response.ok) {
         const result = await response.json();
-        setProfile({ ...profile, [field]: result.url });
+        callback(result.url);
         toast.success('Document Transmitted');
       } else {
         const err = await response.json();
@@ -287,11 +285,11 @@ export default function Admin() {
             {!otpSent ? (
               <form onSubmit={handleSendOtp} className="space-y-6">
                 <div className="space-y-2">
-                  <Label htmlFor="phone" className="text-[10px] font-bold uppercase tracking-widest text-white/40 flex items-center gap-2 mb-3 px-1">
+                  <Label htmlFor="phone" className="text-[10px] font-bold uppercase tracking-widest text-white/70 flex items-center gap-2 mb-3 px-1">
                     <Smartphone className="w-3.5 h-3.5 text-violet-400" /> Mobile Number
                   </Label>
                   <div className="flex h-14 bg-white/[0.03] border border-white/[0.1] rounded-2xl overflow-hidden focus-within:ring-2 focus-within:ring-violet-500/50 focus-within:border-violet-500/30 transition-all">
-                    <div className="bg-white/[0.05] px-5 flex items-center justify-center border-r border-white/[0.05] text-white/40 font-bold text-sm select-none">
+                    <div className="bg-white/[0.05] px-5 flex items-center justify-center border-r border-white/[0.05] text-white/70 font-bold text-sm select-none">
                       +91
                     </div>
                     <Input
@@ -300,7 +298,7 @@ export default function Admin() {
                       value={phoneNumber}
                       onChange={(e) => setPhoneNumber(e.target.value.replace(/\D/g, '').slice(0, 10))}
                       placeholder="00000 00000"
-                      className="bg-transparent border-0 focus-visible:ring-0 focus-visible:ring-offset-0 h-full text-lg font-medium tracking-wider text-white placeholder:text-white/20"
+                      className="bg-transparent border-0 focus-visible:ring-0 focus-visible:ring-offset-0 h-full text-lg font-medium tracking-wider text-white placeholder:text-white/60"
                       required
                     />
                   </div>
@@ -316,7 +314,7 @@ export default function Admin() {
             ) : (
               <form onSubmit={handleVerifyOtp} className="space-y-6 text-center animate-in fade-in slide-in-from-bottom-4 duration-500">
                 <div className="space-y-2 text-left">
-                  <Label htmlFor="otp" className="text-[10px] font-bold uppercase tracking-widest text-white/40 flex items-center gap-2 mb-3 px-1">
+                  <Label htmlFor="otp" className="text-[10px] font-bold uppercase tracking-widest text-white/70 flex items-center gap-2 mb-3 px-1">
                     <Key className="w-3.5 h-3.5 text-cyan-400" /> Security Token
                   </Label>
                   <Input
@@ -408,10 +406,10 @@ export default function Admin() {
                     }}
                     className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl font-bold text-[10px] uppercase tracking-widest transition-all ${activeTab === item.value
                       ? 'bg-white/10 text-violet-400 border border-white/10'
-                      : 'text-white/40 hover:text-white hover:bg-white/5'
+                      : 'text-white/70 hover:text-white hover:bg-white/5'
                       }`}
                   >
-                    <Icon className={`w-4 h-4 ${activeTab === item.value ? 'text-violet-400' : 'text-white/40'}`} />
+                    <Icon className={`w-5 h-5 ${activeTab === item.value ? 'text-violet-400' : 'text-white/60'}`} />
                     {item.label}
                     {item.value === 'messages' && messages.length > 0 && (
                       <span className="ml-auto bg-violet-600 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full min-w-[20px] text-center">
@@ -462,12 +460,12 @@ export default function Admin() {
             onClick={handleSaveActiveTab}
             className="h-10 px-6 bg-gradient-to-r from-violet-600 to-cyan-500 text-white hover:opacity-90 shadow-xl shadow-violet-600/20 rounded-xl font-bold text-[10px] flex items-center gap-2 uppercase tracking-widest"
           >
-            <Download className="w-3.5 h-3.5" /> Sync Registry
+            <Download className="w-4 h-4" /> Sync Registry
           </Button>
           <Button variant="outline" className="border-white/10 bg-white/5 text-white/60 hover:text-white hover:bg-white/10 h-10 px-6 rounded-xl font-bold text-[10px] uppercase tracking-widest transition-all" asChild>
             <Link to="/">Live Preview</Link>
           </Button>
-          <Button variant="secondary" onClick={handleLogout} className="bg-white/5 border border-transparent hover:border-white/10 text-white/40 hover:text-white h-10 px-6 rounded-xl font-bold text-[10px] uppercase tracking-widest transition-all">Logout</Button>
+          <Button variant="secondary" onClick={handleLogout} className="bg-white/5 border border-transparent hover:border-white/10 text-white/70 hover:text-white h-10 px-6 rounded-xl font-bold text-[10px] uppercase tracking-widest transition-all">Logout</Button>
         </div>
       </div>
 
@@ -479,8 +477,9 @@ export default function Admin() {
               <TabsTrigger
                 key={item.value}
                 value={item.value}
-                className="rounded-full px-10 py-3.5 data-[state=active]:bg-white/10 data-[state=active]:text-violet-400 data-[state=active]:shadow-xl transition-all font-bold text-[10px] uppercase tracking-[0.2em] text-white/40 hover:text-white border border-transparent data-[state=active]:border-white/10 relative"
+                className="rounded-full px-8 py-3.5 data-[state=active]:bg-white/10 data-[state=active]:text-violet-400 data-[state=active]:shadow-xl transition-all font-bold text-[10px] uppercase tracking-[0.2em] text-white/60 hover:text-white border border-transparent data-[state=active]:border-white/10 relative flex items-center gap-2.5"
               >
+                {React.createElement(item.icon, { className: "w-4.5 h-4.5" })}
                 {item.label}
                 {item.value === 'messages' && messages.length > 0 && (
                   <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full animate-pulse shadow-md border-2 border-white min-w-[20px]">
@@ -500,83 +499,83 @@ export default function Admin() {
               <CardContent className="p-8">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
                   <div className="space-y-2">
-                    <Label className="text-[10px] font-bold uppercase tracking-widest text-white/40 px-1">Full Identity</Label>
-                    <Input value={profile.name} onChange={e => setProfile({ ...profile, name: e.target.value })} className="bg-white/[0.03] border-white/[0.1] h-12 rounded-xl focus-visible:ring-violet-500/50 text-white placeholder:text-white/20" />
+                    <Label className="text-[10px] font-bold uppercase tracking-widest text-white/70 px-1">Full Identity</Label>
+                    <Input value={profile.name} onChange={e => setProfile({ ...profile, name: e.target.value })} className="bg-white/[0.03] border-white/[0.1] h-12 rounded-xl focus-visible:ring-violet-500/50 text-white placeholder:text-white/60" />
                   </div>
                   <div className="space-y-2">
-                    <Label className="text-[10px] font-bold uppercase tracking-widest text-white/40 px-1">Temporal Origin (DOB)</Label>
-                    <Input type="date" value={profile.dob || ''} onChange={e => setProfile({ ...profile, dob: e.target.value })} className="bg-white/[0.03] border-white/[0.1] h-12 rounded-xl focus-visible:ring-violet-500/50 text-white invert-calendar-icon" />
+                    <Label className="text-[10px] font-bold uppercase tracking-widest text-white/70 px-1">Temporal Origin (DOB)</Label>
+                    <Input type="date" value={profile.dob || ''} onChange={e => setProfile({ ...profile, dob: e.target.value })} className="bg-white/[0.03] border-white/[0.1] h-12 rounded-xl focus-visible:ring-violet-500/50 text-white" />
                   </div>
                   <div className="space-y-2">
-                    <Label className="text-[10px] font-bold uppercase tracking-widest text-white/40 px-1">Career Launch Date</Label>
+                    <Label className="text-[10px] font-bold uppercase tracking-widest text-white/70 px-1">Career Launch Date</Label>
                     <Input type="date" value={profile.careerStartDate || ''} onChange={e => setProfile({ ...profile, careerStartDate: e.target.value })} className="bg-white/[0.03] border-white/[0.1] h-12 rounded-xl focus-visible:ring-violet-500/50 text-white" />
                   </div>
                   <div className="space-y-2">
-                    <Label className="text-[10px] font-bold uppercase tracking-widest text-white/40 px-1">Primary Designation</Label>
+                    <Label className="text-[10px] font-bold uppercase tracking-widest text-white/70 px-1">Primary Designation</Label>
                     <Input value={profile.title} onChange={e => setProfile({ ...profile, title: e.target.value })} className="bg-white/[0.03] border-white/[0.1] h-12 rounded-xl focus-visible:ring-violet-500/50 text-white" />
                   </div>
                   <div className="space-y-2">
-                    <Label className="text-[10px] font-bold uppercase tracking-widest text-white/40 px-1">Secure Uplink (Email)</Label>
+                    <Label className="text-[10px] font-bold uppercase tracking-widest text-white/70 px-1">Secure Uplink (Email)</Label>
                     <Input value={profile.email} onChange={e => setProfile({ ...profile, email: e.target.value })} className="bg-white/[0.03] border-white/[0.1] h-12 rounded-xl focus-visible:ring-violet-500/50 text-white" />
                   </div>
                   <div className="space-y-2 md:col-span-2">
-                    <Label className="text-[10px] font-bold uppercase tracking-widest text-white/40 px-1">Executive Summary (Bio)</Label>
+                    <Label className="text-[10px] font-bold uppercase tracking-widest text-white/70 px-1">Executive Summary (Bio)</Label>
                     <Textarea value={profile.bio} onChange={e => setProfile({ ...profile, bio: e.target.value })} className="bg-white/[0.03] border-white/[0.1] min-h-[140px] rounded-2xl focus-visible:ring-violet-500/50 text-white resize-none p-5 text-sm leading-relaxed" />
                   </div>
                   <div className="space-y-2">
-                    <Label className="text-[10px] font-bold uppercase tracking-widest text-white/40 px-1">Visual ID Link (Avatar)</Label>
+                    <Label className="text-[10px] font-bold uppercase tracking-widest text-white/70 px-1">Visual ID Link (Avatar)</Label>
                     <div className="flex gap-3">
                       <Input value={profile.photoUrl || ''} onChange={e => setProfile({ ...profile, photoUrl: e.target.value })} className="bg-white/[0.03] border-white/[0.1] h-12 rounded-xl flex-1 focus-visible:ring-violet-500/50 text-white" />
                       <div className="relative w-28 shrink-0">
-                        <Input type="file" accept="image/*" onChange={e => handleFileUpload(e, 'photoUrl')} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" />
+                        <Input type="file" accept="image/*" onChange={e => handleFileUpload(e, (url) => setProfile({ ...profile, photoUrl: url }))} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" />
                         <Button type="button" variant="outline" className="w-full h-12 rounded-xl border-white/10 bg-white/5 text-white/60 hover:text-white uppercase tracking-widest text-[9px] font-bold transition-all">Upload</Button>
                       </div>
                     </div>
                   </div>
                   <div className="space-y-2">
-                    <Label className="text-[10px] font-bold uppercase tracking-widest text-white/40 px-1">Brand Artifact (Logo)</Label>
+                    <Label className="text-[10px] font-bold uppercase tracking-widest text-white/70 px-1">Brand Artifact (Logo)</Label>
                     <div className="flex gap-3">
                       <Input value={profile.logoUrl || ''} onChange={e => setProfile({ ...profile, logoUrl: e.target.value })} className="bg-white/[0.03] border-white/[0.1] h-12 rounded-xl flex-1 focus-visible:ring-violet-500/50 text-white" />
                       <div className="relative w-28 shrink-0">
-                        <Input type="file" accept="image/*" onChange={e => handleFileUpload(e, 'logoUrl')} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" />
+                        <Input type="file" accept="image/*" onChange={e => handleFileUpload(e, (url) => setProfile({ ...profile, logoUrl: url }))} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" />
                         <Button type="button" variant="outline" className="w-full h-12 rounded-xl border-white/10 bg-white/5 text-white/60 hover:text-white uppercase tracking-widest text-[9px] font-bold transition-all">Upload</Button>
                       </div>
                     </div>
                   </div>
                   <div className="space-y-2">
-                    <Label className="text-[10px] font-bold uppercase tracking-widest text-white/40 px-1">GitHub Endpoint</Label>
+                    <Label className="text-[10px] font-bold uppercase tracking-widest text-white/70 px-1">GitHub Endpoint</Label>
                     <Input value={profile.github} onChange={e => setProfile({ ...profile, github: e.target.value })} className="bg-white/[0.03] border-white/[0.1] h-12 rounded-xl focus-visible:ring-violet-500/50 text-white" />
                   </div>
                   <div className="space-y-2">
-                    <Label className="text-[10px] font-bold uppercase tracking-widest text-white/40 px-1">LinkedIn Endpoint</Label>
+                    <Label className="text-[10px] font-bold uppercase tracking-widest text-white/70 px-1">LinkedIn Endpoint</Label>
                     <Input value={profile.linkedin} onChange={e => setProfile({ ...profile, linkedin: e.target.value })} className="bg-white/[0.03] border-white/[0.1] h-12 rounded-xl focus-visible:ring-violet-500/50 text-white" />
                   </div>
                   <div className="space-y-2">
-                    <Label className="text-[10px] font-bold uppercase tracking-widest text-white/40 px-1">Operational Base</Label>
+                    <Label className="text-[10px] font-bold uppercase tracking-widest text-white/70 px-1">Operational Base</Label>
                     <Input value={profile.location || ''} onChange={e => setProfile({ ...profile, location: e.target.value })} className="bg-white/[0.03] border-white/[0.1] h-12 rounded-xl focus-visible:ring-violet-500/50 text-white" />
                   </div>
                   <div className="space-y-2 md:col-span-2">
-                    <Label className="text-[10px] font-bold uppercase tracking-widest text-white/40 px-1">Professional Protocol (CV)</Label>
+                    <Label className="text-[10px] font-bold uppercase tracking-widest text-white/70 px-1">Professional Protocol (CV)</Label>
                     <div className="flex gap-3">
                       <Input value={profile.resumeUrl || ''} onChange={e => setProfile({ ...profile, resumeUrl: e.target.value })} className="bg-white/[0.03] border-white/[0.1] h-12 rounded-xl flex-1 focus-visible:ring-violet-500/50 text-white" />
                       <div className="relative w-28 shrink-0">
-                        <Input type="file" accept=".pdf,.doc,.docx" onChange={e => handleFileUpload(e, 'resumeUrl')} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" />
+                        <Input type="file" accept=".pdf,.doc,.docx" onChange={e => handleFileUpload(e, (url) => setProfile({ ...profile, resumeUrl: url }))} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" />
                         <Button type="button" variant="outline" className="w-full h-12 rounded-xl border-white/10 bg-white/5 text-white/60 hover:text-white uppercase tracking-widest text-[9px] font-bold transition-all">Upload CV</Button>
                       </div>
                     </div>
                   </div>
                   <div className="space-y-2 md:col-span-2">
-                    <Label className="text-[10px] font-bold uppercase tracking-widest text-white/40 px-1">Work Showcase Link</Label>
+                    <Label className="text-[10px] font-bold uppercase tracking-widest text-white/70 px-1">Work Showcase Link</Label>
                     <Input
                       value={profile.workLink || ''}
                       onChange={e => setProfile({ ...profile, workLink: e.target.value })}
                       className="bg-white/[0.03] border-white/[0.1] h-12 rounded-xl focus-visible:ring-violet-500/50 text-white"
                       placeholder="Redirect URL for 'View My Work' button"
                     />
-                    <p className="text-[10px] text-white/20 font-medium px-1">Optional override for the main CTA scroll behavior.</p>
+                    <p className="text-[10px] text-white/60 font-medium px-1">Optional override for the main CTA scroll behavior.</p>
                   </div>
                   <div className="space-y-2 md:col-span-2">
-                    <Label className="text-[10px] font-bold uppercase tracking-widest text-white/40 px-1">Research Index (Count)</Label>
+                    <Label className="text-[10px] font-bold uppercase tracking-widest text-white/70 px-1">Research Index (Count)</Label>
                     <Input type="number" value={profile.researchPapersCount || 0} onChange={e => setProfile({ ...profile, researchPapersCount: parseInt(e.target.value) || 0 })} className="bg-white/[0.03] border-white/[0.1] h-12 rounded-xl focus-visible:ring-violet-500/50 text-white" />
                   </div>
                 </div>
@@ -621,14 +620,14 @@ export default function Admin() {
                       <div className="flex items-center gap-2">
                         <Button
                           variant="ghost" size="icon"
-                          className="h-9 w-9 text-white/20 hover:text-white hover:bg-white/10 rounded-xl transition-all"
+                          className="h-9 w-9 text-white/60 hover:text-white hover:bg-white/10 rounded-xl transition-all"
                           onClick={() => toggleExpand(exp.id)}
                         >
                           {expandedItems[exp.id] ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                         </Button>
                         <Button
                           variant="ghost" size="icon"
-                          className="h-9 w-9 text-white/20 hover:text-red-400 hover:bg-red-400/10 rounded-xl transition-all"
+                          className="h-9 w-9 text-white/60 hover:text-red-400 hover:bg-red-400/10 rounded-xl transition-all"
                           onClick={() => setExperiences(experiences.filter(e => e.id !== exp.id))}
                         >
                           <Trash2 className="w-4 h-4" />
@@ -646,58 +645,235 @@ export default function Admin() {
                         >
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-4">
                             <div className="space-y-2">
-                              <Label className="text-[10px] font-bold uppercase tracking-widest text-white/40 px-1">Designation</Label>
+                              <Label className="text-[10px] font-bold uppercase tracking-widest text-white/70 px-1">Designation</Label>
                               <Input value={exp.role} onChange={e => {
-                                const newExp = [...experiences];
-                                newExp[index].role = e.target.value;
-                                setExperiences(newExp);
-                              }} className="bg-white/[0.03] border-white/[0.1] h-12 rounded-xl focus-visible:ring-violet-500/50 text-white" />
+                                 const val = e.target.value;
+                                 setExperiences(prev => prev.map((expItem, i) => i === index ? { ...expItem, role: val } : expItem));
+                               }} className="bg-white/[0.03] border-white/[0.1] h-12 rounded-xl focus-visible:ring-violet-500/50 text-white" />
                             </div>
                             <div className="space-y-2">
-                              <Label className="text-[10px] font-bold uppercase tracking-widest text-white/40 px-1">Entity (Company)</Label>
+                              <Label className="text-[10px] font-bold uppercase tracking-widest text-white/70 px-1">Entity (Company)</Label>
                               <Input value={exp.company} onChange={e => {
-                                const newExp = [...experiences];
-                                newExp[index].company = e.target.value;
-                                setExperiences(newExp);
-                              }} className="bg-white/[0.03] border-white/[0.1] h-12 rounded-xl focus-visible:ring-violet-500/50 text-white" />
+                                 const val = e.target.value;
+                                 setExperiences(prev => prev.map((expItem, i) => i === index ? { ...expItem, company: val } : expItem));
+                               }} className="bg-white/[0.03] border-white/[0.1] h-12 rounded-xl focus-visible:ring-violet-500/50 text-white" />
                             </div>
                             <div className="space-y-2">
-                              <Label className="text-[10px] font-bold uppercase tracking-widest text-white/40 px-1">Operational Zone (Location)</Label>
+                              <Label className="text-[10px] font-bold uppercase tracking-widest text-white/70 px-1">Operational Zone (Location)</Label>
                               <Input value={exp.location || ''} onChange={e => {
-                                const newExp = [...experiences];
-                                newExp[index].location = e.target.value;
-                                setExperiences(newExp);
-                              }} className="bg-white/[0.03] border-white/[0.1] h-12 rounded-xl focus-visible:ring-violet-500/50 text-white" />
+                                 const val = e.target.value;
+                                 setExperiences(prev => prev.map((expItem, i) => i === index ? { ...expItem, location: val } : expItem));
+                               }} className="bg-white/[0.03] border-white/[0.1] h-12 rounded-xl focus-visible:ring-violet-500/50 text-white" />
                             </div>
                             <div className="space-y-2">
-                              <Label className="text-[10px] font-bold uppercase tracking-widest text-white/40 px-1">Time Cycle (Period)</Label>
+                              <Label className="text-[10px] font-bold uppercase tracking-widest text-white/70 px-1">Time Cycle (Period)</Label>
                               <Input value={exp.period} onChange={e => {
-                                const newExp = [...experiences];
-                                newExp[index].period = e.target.value;
-                                setExperiences(newExp);
-                              }} className="bg-white/[0.03] border-white/[0.1] h-12 rounded-xl focus-visible:ring-violet-500/50 text-white" placeholder="e.g. NOV 2025 - Present" />
+                                 const val = e.target.value;
+                                 setExperiences(prev => prev.map((expItem, i) => i === index ? { ...expItem, period: val } : expItem));
+                               }} className="bg-white/[0.03] border-white/[0.1] h-12 rounded-xl focus-visible:ring-violet-500/50 text-white" placeholder="e.g. NOV 2025 - Present" />
                             </div>
                             <div className="space-y-2">
-                              <Label className="text-[10px] font-bold uppercase tracking-widest text-white/40 px-1">Stack Index (CSV)</Label>
+                              <Label className="text-[10px] font-bold uppercase tracking-widest text-white/70 px-1">Stack Index (CSV)</Label>
                               <Input value={exp.skills?.join(', ') || ''} onChange={e => {
-                                const newExp = [...experiences];
-                                newExp[index].skills = e.target.value.split(',').map(s => s.trim()).filter(Boolean);
-                                setExperiences(newExp);
-                              }} className="bg-white/[0.03] border-white/[0.1] h-12 rounded-xl focus-visible:ring-violet-500/50 text-white" />
+                                 const val = e.target.value.split(',').map(s => s.trim()).filter(Boolean);
+                                 setExperiences(prev => prev.map((expItem, i) => i === index ? { ...expItem, skills: val } : expItem));
+                               }} className="bg-white/[0.03] border-white/[0.1] h-12 rounded-xl focus-visible:ring-violet-500/50 text-white" />
                             </div>
                             <div className="space-y-2 md:col-span-2">
-                              <Label className="text-[10px] font-bold uppercase tracking-widest text-white/40 px-1">Mission Specs</Label>
+                              <Label className="text-[10px] font-bold uppercase tracking-widest text-white/70 px-1">Mission Specs</Label>
                               <Suspense fallback={<div className="h-[200px] w-full bg-white/[0.02] border border-white/10 rounded-xl animate-pulse" />}>
                                 <RichTextEditor 
                                   value={exp.description} 
                                   onChange={(val) => {
-                                    const newExp = [...experiences];
-                                    newExp[index].description = val;
-                                    setExperiences(newExp);
-                                  }}
+                                     setExperiences(prev => prev.map((expItem, i) => i === index ? { ...expItem, description: val } : expItem));
+                                   }}
                                   placeholder="Detail your professional impact..."
                                 />
                               </Suspense>
+                            </div>
+
+                            {/* Company Projects Section */}
+                            <div className="md:col-span-2 space-y-4 pt-6 mt-6 border-t border-white/5">
+                              <div className="flex items-center justify-between">
+                                <Label className="text-[10px] font-bold uppercase tracking-widest text-violet-400">Professional Projects</Label>
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  onClick={() => {
+                                    setExperiences(prev => prev.map((e, i) => 
+                                      i === index 
+                                        ? { ...e, companyProjects: [...(e.companyProjects || []), { id: Date.now().toString(), title: '', description: '' }] }
+                                        : e
+                                    ));
+                                  }}
+                                  className="h-7 px-3 border-white/10 bg-white/5 text-[9px] uppercase tracking-widest font-bold rounded-lg hover:border-violet-500/30"
+                                >
+                                  <Plus className="w-3 h-3 mr-1.5" /> Add Project
+                                </Button>
+                              </div>
+                              
+                              {exp.companyProjects?.map((proj, pIndex) => (
+                                <div key={proj.id} className="p-4 rounded-2xl bg-white/[0.02] border border-white/5 space-y-4">
+                                  <div className="flex justify-between items-center">
+                                    <Input 
+                                      placeholder="Project Title"
+                                      value={proj.title}
+                                      onChange={(e) => {
+                                        const newTitle = e.target.value;
+                                        setExperiences(prev => prev.map((expItem, i) => 
+                                          i === index 
+                                            ? { 
+                                                ...expItem, 
+                                                companyProjects: expItem.companyProjects?.map((p, pi) => 
+                                                  pi === pIndex ? { ...p, title: newTitle } : p
+                                                ) 
+                                              }
+                                            : expItem
+                                        ));
+                                      }}
+                                      className="bg-transparent border-0 border-b border-white/10 rounded-none px-0 h-8 focus-visible:ring-0 focus-visible:border-violet-500/50 text-sm font-bold"
+                                    />
+                                    <Button
+                                      variant="ghost"
+                                      size="icon"
+                                      onClick={() => {
+                                        setExperiences(prev => prev.map((expItem, i) => 
+                                          i === index 
+                                            ? { ...expItem, companyProjects: expItem.companyProjects?.filter(p => p.id !== proj.id) }
+                                            : expItem
+                                        ));
+                                      }}
+                                      className="h-8 w-8 text-white/60 hover:text-red-400"
+                                    >
+                                      <Trash2 className="w-3.5 h-3.5" />
+                                    </Button>
+                                  </div>
+                                  <div className="space-y-1">
+                                    <Label className="text-[8px] font-bold uppercase tracking-widest text-white/30">Detailed Specs</Label>
+                                    <Suspense fallback={<div className="h-[150px] w-full bg-white/[0.02] border border-white/10 rounded-xl" />}>
+                                      <RichTextEditor
+                                        value={proj.description}
+                                        onChange={(val) => {
+                                          setExperiences(prev => prev.map((expItem, i) => 
+                                            i === index 
+                                              ? { 
+                                                  ...expItem, 
+                                                  companyProjects: expItem.companyProjects?.map((p, pi) => 
+                                                    pi === pIndex ? { ...p, description: val } : p
+                                                  ) 
+                                                }
+                                              : expItem
+                                          ));
+                                        }}
+                                        placeholder="Project details, technical achievements..."
+                                      />
+                                    </Suspense>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+
+                            {/* Certificates Section */}
+                            <div className="md:col-span-2 space-y-4 pt-6 mt-6 border-t border-white/5">
+                              <div className="flex items-center justify-between">
+                                <Label className="text-[10px] font-bold uppercase tracking-widest text-cyan-400">Certificates & Artifacts</Label>
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  onClick={() => {
+                                    setExperiences(prev => prev.map((e, i) => 
+                                      i === index 
+                                        ? { ...e, certificates: [...(e.certificates || []), { id: Date.now().toString(), title: '', url: '' }] }
+                                        : e
+                                    ));
+                                  }}
+                                  className="h-7 px-3 border-white/10 bg-white/5 text-[9px] uppercase tracking-widest font-bold rounded-lg hover:border-cyan-500/30"
+                                >
+                                  <Plus className="w-3 h-3 mr-1.5" /> Add Certificate
+                                </Button>
+                              </div>
+
+                              {exp.certificates?.map((cert, cIndex) => (
+                                <div key={cert.id} className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 rounded-2xl bg-white/[0.02] border border-white/5">
+                                  <div className="space-y-1.5">
+                                    <Label className="text-[8px] font-bold uppercase tracking-widest text-white/30">Document Name</Label>
+                                    <Input 
+                                      placeholder="e.g. Experience Letter"
+                                      value={cert.title}
+                                      onChange={(e) => {
+                                        const newTitle = e.target.value;
+                                        setExperiences(prev => prev.map((expItem, i) => 
+                                          i === index 
+                                            ? { 
+                                                ...expItem, 
+                                                certificates: expItem.certificates?.map((c, ci) => 
+                                                  ci === cIndex ? { ...c, title: newTitle } : c
+                                                ) 
+                                              }
+                                            : expItem
+                                        ));
+                                      }}
+                                      className="bg-white/5 border-white/10 h-10 rounded-xl text-xs"
+                                    />
+                                  </div>
+                                  <div className="space-y-1.5">
+                                    <Label className="text-[8px] font-bold uppercase tracking-widest text-white/30">Document Uplink</Label>
+                                    <div className="flex gap-2">
+                                      <Input 
+                                        placeholder="https://..."
+                                        value={cert.url}
+                                        onChange={(e) => {
+                                          const newUrl = e.target.value;
+                                          setExperiences(prev => prev.map((expItem, i) => 
+                                            i === index 
+                                              ? { 
+                                                  ...expItem, 
+                                                  certificates: expItem.certificates?.map((c, ci) => 
+                                                    ci === cIndex ? { ...c, url: newUrl } : c
+                                                  ) 
+                                                }
+                                              : expItem
+                                          ));
+                                        }}
+                                        className="bg-white/5 border-white/10 h-10 rounded-xl text-xs flex-1"
+                                      />
+                                      <div className="relative shrink-0">
+                                        <Input 
+                                          type="file" 
+                                          onChange={(e) => handleFileUpload(e, (url) => {
+                                            setExperiences(prev => prev.map((expItem, i) => 
+                                              i === index 
+                                                ? { 
+                                                    ...expItem, 
+                                                    certificates: expItem.certificates?.map((c, ci) => 
+                                                      ci === cIndex ? { ...c, url: url } : c
+                                                    ) 
+                                                  }
+                                                : expItem
+                                            ));
+                                          })} 
+                                          className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" 
+                                        />
+                                        <Button variant="outline" className="h-10 px-4 border-white/10 bg-white/5 text-[9px] uppercase tracking-widest font-bold rounded-xl">Upload</Button>
+                                      </div>
+                                      <Button
+                                        variant="ghost"
+                                        size="icon"
+                                        onClick={() => {
+                                          setExperiences(prev => prev.map((expItem, i) => 
+                                            i === index 
+                                              ? { ...expItem, certificates: expItem.certificates?.filter(c => c.id !== cert.id) }
+                                              : expItem
+                                          ));
+                                        }}
+                                        className="h-10 w-10 text-white/60 hover:text-red-400"
+                                      >
+                                        <Trash2 className="w-3.5 h-3.5" />
+                                      </Button>
+                                    </div>
+                                  </div>
+                                </div>
+                              ))}
                             </div>
                           </div>
                         </motion.div>
@@ -748,7 +924,7 @@ export default function Admin() {
                         {!expandedItems[project.id] && (
                           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex items-center gap-3">
                             <span className="text-sm font-bold text-white uppercase tracking-wider">{project.title || 'Undeployed System'}</span>
-                            <span className="px-2 py-0.5 rounded-full bg-white/5 text-[9px] text-white/40 font-bold uppercase tracking-widest border border-white/5">
+                            <span className="px-2 py-0.5 rounded-full bg-white/5 text-[9px] text-white/70 font-bold uppercase tracking-widest border border-white/5">
                               {project.type}
                             </span>
                           </motion.div>
@@ -757,14 +933,14 @@ export default function Admin() {
                       <div className="flex items-center gap-2">
                         <Button
                           variant="ghost" size="icon"
-                          className="h-9 w-9 text-white/20 hover:text-white hover:bg-white/10 rounded-xl transition-all"
+                          className="h-9 w-9 text-white/60 hover:text-white hover:bg-white/10 rounded-xl transition-all"
                           onClick={() => toggleExpand(project.id)}
                         >
                           {expandedItems[project.id] ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                         </Button>
                         <Button
                           variant="ghost" size="icon"
-                          className="h-9 w-9 text-white/20 hover:text-red-400 hover:bg-red-400/10 rounded-xl transition-all"
+                          className="h-9 w-9 text-white/60 hover:text-red-400 hover:bg-red-400/10 rounded-xl transition-all"
                           onClick={() => setProjects(projects.filter(p => p.id !== project.id))}
                         >
                           <Trash2 className="w-4 h-4" />
@@ -782,7 +958,7 @@ export default function Admin() {
                         >
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-4">
                             <div className="space-y-2">
-                              <Label className="text-[10px] font-bold uppercase tracking-widest text-white/40 px-1">System Title</Label>
+                              <Label className="text-[10px] font-bold uppercase tracking-widest text-white/70 px-1">System Title</Label>
                               <Input value={project.title} onChange={e => {
                                 const newProj = [...projects];
                                 newProj[index].title = e.target.value;
@@ -790,7 +966,7 @@ export default function Admin() {
                               }} className="bg-white/[0.03] border-white/[0.1] h-12 rounded-xl focus-visible:ring-violet-500/50 text-white" />
                             </div>
                             <div className="space-y-2">
-                              <Label className="text-[10px] font-bold uppercase tracking-widest text-white/40 px-1">Classification</Label>
+                              <Label className="text-[10px] font-bold uppercase tracking-widest text-white/70 px-1">Classification</Label>
                               <select
                                 value={project.type}
                                 onChange={e => {
@@ -805,7 +981,7 @@ export default function Admin() {
                               </select>
                             </div>
                             <div className="space-y-2">
-                              <Label className="text-[10px] font-bold uppercase tracking-widest text-white/40 px-1">GitHub Source</Label>
+                              <Label className="text-[10px] font-bold uppercase tracking-widest text-white/70 px-1">GitHub Source</Label>
                               <Input value={project.githubLink || ''} onChange={e => {
                                 const newProj = [...projects];
                                 newProj[index].githubLink = e.target.value;
@@ -813,7 +989,7 @@ export default function Admin() {
                               }} className="bg-white/[0.03] border-white/[0.1] h-12 rounded-xl focus-visible:ring-violet-500/50 text-white" />
                             </div>
                             <div className="space-y-2">
-                              <Label className="text-[10px] font-bold uppercase tracking-widest text-white/40 px-1">Live Uplink</Label>
+                              <Label className="text-[10px] font-bold uppercase tracking-widest text-white/70 px-1">Live Uplink</Label>
                               <Input value={project.liveLink || ''} onChange={e => {
                                 const newProj = [...projects];
                                 newProj[index].liveLink = e.target.value;
@@ -821,7 +997,7 @@ export default function Admin() {
                               }} className="bg-white/[0.03] border-white/[0.1] h-12 rounded-xl focus-visible:ring-violet-500/50 text-white" />
                             </div>
                             <div className="space-y-2">
-                              <Label className="text-[10px] font-bold uppercase tracking-widest text-white/40 px-1">Image Asset Link</Label>
+                              <Label className="text-[10px] font-bold uppercase tracking-widest text-white/70 px-1">Image Asset Link</Label>
                               <Input value={project.image || ''} onChange={e => {
                                 const newProj = [...projects];
                                 newProj[index].image = e.target.value;
@@ -829,7 +1005,7 @@ export default function Admin() {
                               }} className="bg-white/[0.03] border-white/[0.1] h-12 rounded-xl focus-visible:ring-violet-500/50 text-white" />
                             </div>
                             <div className="space-y-2">
-                              <Label className="text-[10px] font-bold uppercase tracking-widest text-white/40 px-1">Tags (CSV)</Label>
+                              <Label className="text-[10px] font-bold uppercase tracking-widest text-white/70 px-1">Tags (CSV)</Label>
                               <Input value={project.tags?.join(', ') || ''} onChange={e => {
                                 const newProj = [...projects];
                                 newProj[index].tags = e.target.value.split(',').map(t => t.trim()).filter(Boolean);
@@ -837,7 +1013,7 @@ export default function Admin() {
                               }} className="bg-white/[0.03] border-white/[0.1] h-12 rounded-xl focus-visible:ring-violet-500/50 text-white" />
                             </div>
                             <div className="space-y-2 md:col-span-2">
-                              <Label className="text-[10px] font-bold uppercase tracking-widest text-white/40 px-1">Project Spec</Label>
+                              <Label className="text-[10px] font-bold uppercase tracking-widest text-white/70 px-1">Project Spec</Label>
                               <Suspense fallback={<div className="h-[200px] w-full bg-white/[0.02] border border-white/10 rounded-xl animate-pulse" />}>
                                 <RichTextEditor 
                                   value={project.description} 
@@ -881,14 +1057,14 @@ export default function Admin() {
                     <div key={index} className="p-6 border border-white/10 rounded-2xl relative bg-white/[0.02] group transition-all hover:bg-white/[0.04] hover:border-violet-500/20">
                       <Button
                         variant="ghost" size="icon"
-                        className="absolute top-3 right-3 h-8 w-8 text-white/20 hover:text-red-400 hover:bg-red-400/10 rounded-lg transition-all"
+                        className="absolute top-3 right-3 h-8 w-8 text-white/60 hover:text-red-400 hover:bg-red-400/10 rounded-lg transition-all"
                         onClick={() => setSkills(skills.filter((_, i) => i !== index))}
                       >
                         <Trash2 className="w-3.5 h-3.5" />
                       </Button>
                       <div className="space-y-4 pr-6">
                         <div className="space-y-2">
-                          <Label className="text-[10px] font-bold uppercase tracking-widest text-white/40 px-1">Node Title</Label>
+                          <Label className="text-[10px] font-bold uppercase tracking-widest text-white/70 px-1">Node Title</Label>
                           <Input value={skill.name} onChange={e => {
                             const newSkills = [...skills];
                             newSkills[index].name = e.target.value;
@@ -896,7 +1072,7 @@ export default function Admin() {
                           }} className="bg-white/[0.03] border-white/[0.1] h-10 rounded-xl focus-visible:ring-violet-500/50 text-white placeholder:text-white/10" />
                         </div>
                         <div className="space-y-2">
-                          <Label className="text-[10px] font-bold uppercase tracking-widest text-white/40 px-1 flex justify-between">Efficiency <span>{skill.level}%</span></Label>
+                          <Label className="text-[10px] font-bold uppercase tracking-widest text-white/70 px-1 flex justify-between">Efficiency <span>{skill.level}%</span></Label>
                           <input
                             type="range"
                             min="0" max="100"
@@ -933,10 +1109,10 @@ export default function Admin() {
                 <div className="divide-y divide-white/5">
                   {messages.length === 0 ? (
                     <div className="p-20 text-center space-y-4">
-                      <div className="w-16 h-16 bg-white/[0.03] rounded-full flex items-center justify-center mx-auto border border-white/5 text-white/20">
-                        <MessageSquare className="w-8 h-8" />
+                      <div className="w-16 h-16 bg-white/[0.03] rounded-full flex items-center justify-center mx-auto border border-white/5 text-white/70">
+                        <MessageSquare className="w-10 h-10" />
                       </div>
-                      <p className="text-white/20 font-bold uppercase tracking-[0.2em] text-[10px]">Registry Empty</p>
+                      <p className="text-white/60 font-bold uppercase tracking-[0.2em] text-[10px]">Registry Empty</p>
                     </div>
                   ) : (
                     messages.map((msg) => (
@@ -944,7 +1120,7 @@ export default function Admin() {
                         <Button
                           variant="ghost"
                           size="icon"
-                          className="absolute top-8 right-8 text-white/20 hover:text-red-400 hover:bg-red-400/10 rounded-xl transition-all"
+                          className="absolute top-8 right-8 text-white/60 hover:text-red-400 hover:bg-red-400/10 rounded-xl transition-all"
                           onClick={() => handleDeleteMessage(msg._id)}
                         >
                           <Trash2 className="w-4 h-4" />
@@ -956,11 +1132,11 @@ export default function Admin() {
                           <div>
                             <h3 className="text-base font-bold text-white mb-1">{msg.name}</h3>
                             <div className="flex flex-wrap items-center gap-3">
-                              <span className="text-[10px] font-bold text-white/40 uppercase tracking-widest flex items-center gap-1.5">
+                              <span className="text-[10px] font-bold text-white/70 uppercase tracking-widest flex items-center gap-1.5">
                                 <span className="w-1 h-1 rounded-full bg-cyan-400"></span> {msg.email}
                               </span>
-                              <span className="text-[10px] font-bold text-white/20 uppercase tracking-widest">|</span>
-                              <span className="text-[10px] font-bold text-white/40 uppercase tracking-widest flex items-center gap-1.5">
+                              <span className="text-[10px] font-bold text-white/60 uppercase tracking-widest">|</span>
+                              <span className="text-[10px] font-bold text-white/70 uppercase tracking-widest flex items-center gap-1.5">
                                 <span className="w-1 h-1 rounded-full bg-violet-400"></span> {new Date(msg.createdAt).toLocaleDateString()}
                               </span>
                             </div>

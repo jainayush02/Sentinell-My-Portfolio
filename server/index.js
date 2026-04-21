@@ -1,7 +1,8 @@
+import 'dotenv/config';
+
 import express from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
-import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
@@ -14,8 +15,6 @@ import { fileTypeFromBuffer } from 'file-type';
 import { Readable } from 'stream';
 import twilio from 'twilio';
 import mongoSanitize from 'express-mongo-sanitize';
-
-dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;

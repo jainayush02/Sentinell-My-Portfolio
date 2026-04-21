@@ -30,84 +30,84 @@ const MenuBar = ({ editor }: { editor: any }) => {
       <button
         type="button"
         onClick={() => editor.chain().focus().toggleBold().run()}
-        className={`p-2 rounded-lg transition-all ${editor.isActive('bold') ? 'bg-violet-500/20 text-violet-400' : 'text-white/40 hover:text-white hover:bg-white/5'}`}
+        className={`p-2 rounded-lg transition-all ${editor.isActive('bold') ? 'bg-violet-500/20 text-violet-400' : 'text-white/60 hover:text-white hover:bg-white/5'}`}
       >
-        <Bold className="w-4 h-4" />
+        <Bold className="w-4.5 h-4.5" />
       </button>
       <button
         type="button"
         onClick={() => editor.chain().focus().toggleItalic().run()}
-        className={`p-2 rounded-lg transition-all ${editor.isActive('italic') ? 'bg-violet-500/20 text-violet-400' : 'text-white/40 hover:text-white hover:bg-white/5'}`}
+        className={`p-2 rounded-lg transition-all ${editor.isActive('italic') ? 'bg-violet-500/20 text-violet-400' : 'text-white/60 hover:text-white hover:bg-white/5'}`}
       >
-        <Italic className="w-4 h-4" />
+        <Italic className="w-4.5 h-4.5" />
       </button>
       <button
         type="button"
         onClick={() => editor.chain().focus().toggleUnderline().run()}
-        className={`p-2 rounded-lg transition-all ${editor.isActive('underline') ? 'bg-violet-500/20 text-violet-400' : 'text-white/40 hover:text-white hover:bg-white/5'}`}
+        className={`p-2 rounded-lg transition-all ${editor.isActive('underline') ? 'bg-violet-500/20 text-violet-400' : 'text-white/60 hover:text-white hover:bg-white/5'}`}
       >
-        <UnderlineIcon className="w-4 h-4" />
+        <UnderlineIcon className="w-4.5 h-4.5" />
       </button>
       <div className="w-px h-6 bg-white/10 mx-1 self-center" />
       <button
         type="button"
         onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
-        className={`p-2 rounded-lg transition-all ${editor.isActive('heading', { level: 1 }) ? 'bg-violet-500/20 text-violet-400' : 'text-white/40 hover:text-white hover:bg-white/5'}`}
+        className={`p-2 rounded-lg transition-all ${editor.isActive('heading', { level: 1 }) ? 'bg-violet-500/20 text-violet-400' : 'text-white/60 hover:text-white hover:bg-white/5'}`}
       >
-        <Heading1 className="w-4 h-4" />
+        <Heading1 className="w-4.5 h-4.5" />
       </button>
       <button
         type="button"
         onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
-        className={`p-2 rounded-lg transition-all ${editor.isActive('heading', { level: 2 }) ? 'bg-violet-500/20 text-violet-400' : 'text-white/40 hover:text-white hover:bg-white/5'}`}
+        className={`p-2 rounded-lg transition-all ${editor.isActive('heading', { level: 2 }) ? 'bg-violet-500/20 text-violet-400' : 'text-white/60 hover:text-white hover:bg-white/5'}`}
       >
-        <Heading2 className="w-4 h-4" />
+        <Heading2 className="w-4.5 h-4.5" />
       </button>
       <div className="w-px h-6 bg-white/10 mx-1 self-center" />
       <button
         type="button"
         onClick={() => editor.chain().focus().toggleBulletList().run()}
-        className={`p-2 rounded-lg transition-all ${editor.isActive('bulletList') ? 'bg-violet-500/20 text-violet-400' : 'text-white/40 hover:text-white hover:bg-white/5'}`}
+        className={`p-2 rounded-lg transition-all ${editor.isActive('bulletList') ? 'bg-violet-500/20 text-violet-400' : 'text-white/60 hover:text-white hover:bg-white/5'}`}
       >
-        <List className="w-4 h-4" />
+        <List className="w-4.5 h-4.5" />
       </button>
       <button
         type="button"
         onClick={() => editor.chain().focus().toggleOrderedList().run()}
-        className={`p-2 rounded-lg transition-all ${editor.isActive('orderedList') ? 'bg-violet-500/20 text-violet-400' : 'text-white/40 hover:text-white hover:bg-white/5'}`}
+        className={`p-2 rounded-lg transition-all ${editor.isActive('orderedList') ? 'bg-violet-500/20 text-violet-400' : 'text-white/60 hover:text-white hover:bg-white/5'}`}
       >
-        <ListOrdered className="w-4 h-4" />
+        <ListOrdered className="w-4.5 h-4.5" />
       </button>
       <div className="w-px h-6 bg-white/10 mx-1 self-center" />
       <button
         type="button"
         onClick={addLink}
-        className={`p-2 rounded-lg transition-all ${editor.isActive('link') ? 'bg-violet-500/20 text-violet-400' : 'text-white/40 hover:text-white hover:bg-white/5'}`}
+        className={`p-2 rounded-lg transition-all ${editor.isActive('link') ? 'bg-violet-500/20 text-violet-400' : 'text-white/60 hover:text-white hover:bg-white/5'}`}
       >
-        <LinkIcon className="w-4 h-4" />
+        <LinkIcon className="w-4.5 h-4.5" />
       </button>
       <button
         type="button"
         onClick={() => editor.chain().focus().toggleBlockquote().run()}
-        className={`p-2 rounded-lg transition-all ${editor.isActive('blockquote') ? 'bg-violet-500/20 text-violet-400' : 'text-white/40 hover:text-white hover:bg-white/5'}`}
+        className={`p-2 rounded-lg transition-all ${editor.isActive('blockquote') ? 'bg-violet-500/20 text-violet-400' : 'text-white/60 hover:text-white hover:bg-white/5'}`}
       >
-        <Quote className="w-4 h-4" />
+        <Quote className="w-4.5 h-4.5" />
       </button>
       <button
         type="button"
         onClick={() => editor.chain().focus().toggleCodeBlock().run()}
-        className={`p-2 rounded-lg transition-all ${editor.isActive('codeBlock') ? 'bg-violet-500/20 text-violet-400' : 'text-white/40 hover:text-white hover:bg-white/5'}`}
+        className={`p-2 rounded-lg transition-all ${editor.isActive('codeBlock') ? 'bg-violet-500/20 text-violet-400' : 'text-white/60 hover:text-white hover:bg-white/5'}`}
       >
-        <Code className="w-4 h-4" />
+        <Code className="w-4.5 h-4.5" />
       </button>
       <div className="w-px h-6 bg-white/10 mx-1 self-center" />
       <button
         type="button"
         onClick={() => editor.chain().focus().unsetAllMarks().clearNodes().run()}
-        className="p-2 rounded-lg text-white/40 hover:text-red-400 hover:bg-red-400/10 transition-all"
+        className="p-2 rounded-lg text-white/60 hover:text-red-400 hover:bg-red-400/10 transition-all"
         title="Clear Formatting"
       >
-        <Eraser className="w-4 h-4" />
+        <Eraser className="w-4.5 h-4.5" />
       </button>
     </div>
   );

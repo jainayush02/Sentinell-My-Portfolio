@@ -49,6 +49,7 @@
 }
 
 :root {
+  color-scheme: dark;
   --background: #060612;
   --foreground: #f0f0ff;
   --card: rgba(255, 255, 255, 0.05);
@@ -104,6 +105,39 @@
     scroll-behavior: smooth;
     scroll-padding-top: 5rem;
   }
+
+  /* Global fix for date input icons in dark mode */
+  input[type="date"] {
+    position: relative;
+  }
+
+  /* Hide the default calendar icon if possible, or force it to be white */
+  input[type="date"]::-webkit-calendar-picker-indicator {
+    background: transparent;
+    bottom: 0;
+    color: transparent;
+    cursor: pointer;
+    height: auto;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: auto;
+    z-index: 10;
+  }
+
+  /* Add a custom white calendar icon as a background */
+  input[type="date"] {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>');
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 1.25rem;
+  }
+
+  /* Ensure the custom icon doesn't block the actual input text */
+  input[type="date"] {
+    padding-right: 2.5rem;
+  }
 }
 
 /* --- RICH TEXT EDITOR (TIPTAP) STYLES --- */
@@ -116,7 +150,8 @@
   margin-bottom: 0.5rem;
 }
 
-.ProseMirror ul, .ProseMirror ol {
+.ProseMirror ul,
+.ProseMirror ol {
   margin-bottom: 1rem;
   padding-left: 1.5rem;
 }
@@ -161,7 +196,7 @@
   margin-bottom: 1rem;
 }
 
-.formatted-content ul, 
+.formatted-content ul,
 .formatted-content ol {
   margin-bottom: 1.5rem;
   padding-left: 0;
@@ -177,7 +212,8 @@
 
 .formatted-content li p {
   margin: 0 !important;
-  display: inline; /* Ensure p doesn't create a block that offsets the bullet */
+  display: inline;
+  /* Ensure p doesn't create a block that offsets the bullet */
 }
 
 .formatted-content li::before {
@@ -238,5 +274,19 @@
   .no-scrollbar {
     -ms-overflow-style: none;
     scrollbar-width: none;
+  }
+
+  .vibrancy-overdrive {
+    filter: brightness(1.05) contrast(1.05) saturate(1.05);
+    transition: filter 1s ease-in-out;
+  }
+
+  @keyframes pulse-slow {
+    0%, 100% { opacity: 0.8; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.05); }
+  }
+
+  .animate-pulse-slow {
+    animation: pulse-slow 8s ease-in-out infinite;
   }
 }

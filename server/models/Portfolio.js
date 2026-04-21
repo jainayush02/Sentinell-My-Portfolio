@@ -6,7 +6,20 @@ const experienceSchema = new mongoose.Schema({
   company: String,
   period: String,
   description: String,
-  skills: [String]
+  location: String,
+  skills: [String],
+  companyProjects: [{
+    _id: false,
+    id: String,
+    title: String,
+    description: String
+  }],
+  certificates: [{
+    _id: false,
+    id: String,
+    title: String,
+    url: String
+  }]
 });
 
 const projectSchema = new mongoose.Schema({

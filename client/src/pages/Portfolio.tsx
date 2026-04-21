@@ -58,7 +58,40 @@ const ProjectTagStrip = ({ tags, isExpanded, onToggle }: { tags: string[]; isExp
   );
 };
 
+const useWakeLock = () => {
+  useEffect(() => {
+    let wakeLock: any = null;
+
+    const requestWakeLock = async () => {
+      if ('wakeLock' in navigator) {
+        try {
+          wakeLock = await (navigator as any).wakeLock.request('screen');
+          console.log('🛡️ SENTINELL: High-Vibrancy Wake Lock Active');
+        } catch (err: any) {
+          console.log(`⚠️ WAKE LOCK ERROR: ${err.name}, ${err.message}`);
+        }
+      }
+    };
+
+    requestWakeLock();
+
+    const handleVisibilityChange = async () => {
+      if (wakeLock !== null && document.visibilityState === 'visible') {
+        await requestWakeLock();
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      if (wakeLock) wakeLock.release();
+    };
+  }, []);
+};
+
 export default function Portfolio() {
+  useWakeLock();
   const { data, loading } = usePortfolioData();
   const { profile, experiences, projects, skills, features } = data;
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -69,6 +102,8 @@ export default function Portfolio() {
   const [expandedProjects, setExpandedProjects] = useState<Record<string, boolean>>({});
   const [expandedExperiences, setExpandedExperiences] = useState<Record<string, boolean>>({});
   const [expandedTags, setExpandedTags] = useState<Record<string, boolean>>({});
+  const [expandedCompanyProjects, setExpandedCompanyProjects] = useState<Record<string, boolean>>({});
+  const [expandedProjectSections, setExpandedProjectSections] = useState<Record<string, boolean>>({});
 
   const toggleProjectExpansion = (id: string) => {
     setExpandedProjects(prev => ({ ...prev, [id]: !prev[id] }));
@@ -80,6 +115,14 @@ export default function Portfolio() {
 
   const toggleExperienceExpansion = (id: string) => {
     setExpandedExperiences(prev => ({ ...prev, [id]: !prev[id] }));
+  };
+
+  const toggleCompanyProjectExpansion = (id: string) => {
+    setExpandedCompanyProjects(prev => ({ ...prev, [id]: !prev[id] }));
+  };
+
+  const toggleProjectSection = (id: string) => {
+    setExpandedProjectSections(prev => ({ ...prev, [id]: !prev[id] }));
   };
 
   const [activeTab, setActiveTab] = useState('profile');
@@ -113,7 +156,7 @@ export default function Portfolio() {
 
   const handleViewWork = async (e?: React.MouseEvent) => {
     if (e) e.preventDefault();
-    
+
     // If no workLink configured, just scroll to projects
     if (!profile.workLink) {
       scrollToSection('projects');
@@ -129,7 +172,7 @@ export default function Portfolio() {
       if (response.ok) {
         const { url } = await response.json();
         toast.success('Access Granted. Redirecting to Kryonex Studio.', { id: toastId });
-        
+
         // Short delay for visual feedback
         setTimeout(() => {
           window.open(url, '_blank');
@@ -231,7 +274,7 @@ export default function Portfolio() {
             />
           </div>
           <div className="flex flex-col items-center gap-1.5">
-            <p className="text-[10px] font-bold uppercase tracking-[0.5em] text-white/40 animate-pulse">Initializing System</p>
+            <p className="text-[10px] font-bold uppercase tracking-[0.5em] text-white/80 animate-pulse">Initializing System</p>
             <p className="text-[9px] font-medium uppercase tracking-[0.2em] text-violet-400/30">Sentinell Neural Interface</p>
           </div>
         </div>
@@ -288,10 +331,10 @@ export default function Portfolio() {
           <rect width="100%" height="100%" filter="url(#noiseFilter)" />
         </svg>
 
-        {/* Static Aurora Decorative Blobs */}
-        <div className="absolute -top-[10%] -left-[5%] w-[800px] h-[800px] rounded-full bg-violet-500/8 blur-[160px]"></div>
-        <div className="absolute -bottom-[5%] -right-[5%] w-[600px] h-[600px] rounded-full bg-cyan-500/6 blur-[140px]"></div>
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] rounded-full bg-indigo-500/5 blur-[100px]"></div>
+        {/* Static Aurora Decorative Blobs - ENHANCED VIBRANCY */}
+        <div className="absolute -top-[10%] -left-[5%] w-[800px] h-[800px] rounded-full bg-violet-500/15 blur-[180px] animate-pulse-slow"></div>
+        <div className="absolute -bottom-[5%] -right-[5%] w-[600px] h-[600px] rounded-full bg-cyan-500/12 blur-[160px] animate-pulse-slow"></div>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] rounded-full bg-indigo-500/10 blur-[120px]"></div>
       </div>
 
       <div className="relative z-10">
@@ -312,7 +355,7 @@ export default function Portfolio() {
               <div className="flex flex-col">
                 <span className="text-2xl tracking-[0.2em] font-black bg-clip-text text-transparent bg-gradient-to-r from-violet-400 to-cyan-400 leading-none uppercase" style={{ fontFamily: "var(--font-heading)" }}>Sentinell</span>
                 <div className="flex items-center gap-1.5 mt-1.5">
-                  <span className="text-[10px] text-white/40 font-medium">By</span>
+                  <span className="text-[10px] text-white/80 font-medium">By</span>
                   <span className="text-[10px] text-white/80 font-black uppercase tracking-[0.2em]" style={{ fontFamily: "var(--font-sans)" }}>Kryonex Studio</span>
                 </div>
               </div>
@@ -415,7 +458,7 @@ export default function Portfolio() {
                     </span>
                     <Download className="w-4 h-4 text-cyan-400 group-hover:translate-y-0.5 transition-transform" />
                   </Button>
-                  <a href="/admin" className="flex items-center justify-center gap-2 w-full py-2 text-[10px] font-bold text-white/30 hover:text-violet-400 transition-colors uppercase tracking-[0.2em] mt-2">
+                  <a href="/admin" className="flex items-center justify-center gap-2 w-full py-2 text-[10px] font-bold text-white/70 hover:text-violet-400 transition-colors uppercase tracking-[0.2em] mt-2">
                     <Terminal className="w-3 h-3" /> Admin Portal
                   </a>
                 </div>
@@ -524,19 +567,19 @@ export default function Portfolio() {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               <div className="bg-white/[0.04] backdrop-blur-xl rounded-2xl p-4 sm:p-6 shadow-sm border border-white/[0.08] text-center">
                 <div className="text-xl sm:text-4xl font-bold text-white mb-2">{yearsOfExperience}+</div>
-                <div className="text-[9px] font-bold text-white/40 uppercase tracking-[0.2em]">Years Experience</div>
+                <div className="text-[9px] font-bold text-white/80 uppercase tracking-[0.2em]">Years Experience</div>
               </div>
               <div className="bg-white/[0.04] backdrop-blur-xl rounded-2xl p-4 sm:p-6 shadow-sm border border-white/[0.08] text-center">
                 <div className="text-xl sm:text-4xl font-bold text-white mb-2">{totalProjects}</div>
-                <div className="text-[9px] font-bold text-white/40 uppercase tracking-[0.2em]">Projects Done</div>
+                <div className="text-[9px] font-bold text-white/80 uppercase tracking-[0.2em]">Projects Done</div>
               </div>
               <div className="bg-white/[0.04] backdrop-blur-xl rounded-2xl p-4 sm:p-6 shadow-sm border border-white/[0.08] text-center">
                 <div className="text-xl sm:text-4xl font-bold text-white mb-2">{profile.researchPapersCount || 0}</div>
-                <div className="text-[9px] font-bold text-white/40 uppercase tracking-[0.2em]">Research Papers</div>
+                <div className="text-[9px] font-bold text-white/80 uppercase tracking-[0.2em]">Research Papers</div>
               </div>
               <div className="bg-white/[0.04] backdrop-blur-xl rounded-2xl p-4 sm:p-6 shadow-sm border border-white/[0.08] text-center">
                 <div className="text-xl sm:text-4xl font-bold text-white mb-2">{currentAge}</div>
-                <div className="text-[9px] font-bold text-white/40 uppercase tracking-[0.2em]">Years Old</div>
+                <div className="text-[9px] font-bold text-white/80 uppercase tracking-[0.2em]">Years Old</div>
               </div>
             </div>
           </section>
@@ -567,12 +610,14 @@ export default function Portfolio() {
 
                     <div className="bg-white/[0.04] backdrop-blur-xl rounded-2xl sm:rounded-[2rem] p-5 sm:p-8 border border-white/[0.08] shadow-xl shadow-black/20 hover:border-violet-400/20 transition-all group">
                       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
-                        <div>
-                          <h3 className="text-lg font-bold text-white group-hover:text-violet-400 transition-colors">{exp.role}</h3>
-                          <div className="flex items-center gap-2 mt-1">
-                            <span className="text-violet-400 font-medium">{exp.company}</span>
-                            <span className="text-white/20">•</span>
-                            <span className="text-white/40 text-sm">{exp.location}</span>
+                        <div className="flex-1">
+                          <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mb-1">
+                            <h3 className="text-lg font-extrabold text-white group-hover:text-violet-400 transition-colors uppercase tracking-tight">{exp.role}</h3>
+                            <span className="hidden sm:block text-lg font-bold text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-cyan-400">@</span>
+                            <span className="text-lg font-bold tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-cyan-400">{exp.company}</span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <span className="text-[10px] text-white/50 font-black uppercase tracking-[0.2em]">{exp.location}</span>
                           </div>
                         </div>
                         <div className="px-4 py-1.5 bg-white/[0.05] rounded-full border border-white/10 text-white/60 text-xs font-bold whitespace-nowrap self-start md:self-center">
@@ -580,11 +625,93 @@ export default function Portfolio() {
                         </div>
                       </div>
                       <div className="relative">
-                        <div 
+                        <div
                           className={`formatted-content text-white/60 leading-relaxed transition-all duration-300 ${!expandedExperiences[exp.id] ? 'line-clamp-[12]' : ''}`}
                           dangerouslySetInnerHTML={{ __html: exp.description || '' }}
                         />
-                        {(exp.description.length > 1000) && (
+
+                        {/* Company Projects Subsection */}
+                        {exp.companyProjects && exp.companyProjects.length > 0 && (
+                          <div className="mt-6 pt-6 border-t border-white/5">
+                            <div className="flex items-center">
+                              <button
+                                onClick={() => toggleProjectSection(exp.id)}
+                                className={`flex items-center gap-2.5 py-1.5 rounded-lg transition-all group/header border border-transparent ${expandedProjectSections[exp.id] ? 'bg-violet-500/10 border-violet-500/20 px-3 -ml-3' : 'hover:bg-white/5 hover:border-white/10 px-3 -ml-3'}`}
+                              >
+                                <ChevronRight className={`w-3.5 h-3.5 text-violet-400 transition-all duration-300 ${expandedProjectSections[exp.id] ? 'rotate-90' : 'rotate-0'}`} />
+                                <span className="text-[10px] font-black uppercase tracking-[0.3em] text-violet-400">Personal Projects</span>
+                              </button>
+                              <div className="h-[1px] flex-1 bg-gradient-to-r from-violet-500/20 to-transparent ml-4"></div>
+                            </div>
+
+                            <AnimatePresence>
+                              {expandedProjectSections[exp.id] && (
+                                <motion.div
+                                  initial={{ height: 0, opacity: 0 }}
+                                  animate={{ height: 'auto', opacity: 1 }}
+                                  exit={{ height: 0, opacity: 0 }}
+                                  className="overflow-hidden mt-4"
+                                >
+                                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 pb-2">
+                                    {exp.companyProjects.map((proj) => (
+                                      <div key={proj.id} className="relative group/project p-4 sm:p-5 rounded-2xl bg-white/[0.02] border border-white/5 hover:border-violet-500/20 transition-all hover:bg-white/[0.04]">
+                                        <div className="flex items-start justify-between gap-3 mb-3">
+                                          <h5 className="text-xs sm:text-sm font-bold text-white group-hover/project:text-violet-400 transition-colors uppercase tracking-wider line-clamp-1">{proj.title}</h5>
+                                          <Terminal className="w-3.5 h-3.5 text-violet-500/40 group-hover/project:text-violet-500 shrink-0" />
+                                        </div>
+                                        <div
+                                          className={`formatted-content text-[11px] sm:text-xs text-white/50 leading-relaxed transition-all duration-300 ${!expandedCompanyProjects[proj.id] ? 'line-clamp-4' : ''}`}
+                                          dangerouslySetInnerHTML={{ __html: proj.description || '' }}
+                                        />
+                                        {(proj.description?.length > 150) && (
+                                          <button
+                                            onClick={(e) => {
+                                              e.preventDefault();
+                                              toggleCompanyProjectExpansion(proj.id);
+                                            }}
+                                            className="text-violet-400 text-[9px] font-bold mt-3 hover:text-cyan-400 transition-all uppercase tracking-widest flex items-center gap-1.5"
+                                          >
+                                            {expandedCompanyProjects[proj.id] ? 'Collapse' : 'Expand Details'}
+                                            <ChevronRight className={`w-3 h-3 transition-transform ${expandedCompanyProjects[proj.id] ? '-rotate-90' : 'rotate-90'}`} />
+                                          </button>
+                                        )}
+                                      </div>
+                                    ))}
+                                  </div>
+                                </motion.div>
+                              )}
+                            </AnimatePresence>
+                          </div>
+                        )}
+
+                        {/* Certificates & Artifacts Subsection */}
+                        {exp.certificates && exp.certificates.length > 0 && (
+                          <div className="mt-6 pt-6 border-t border-white/5">
+                            <h4 className="text-[10px] font-bold uppercase tracking-[0.3em] text-cyan-400 mb-3">Certificates & Artifacts</h4>
+                            <div className="flex flex-wrap gap-3">
+                              {exp.certificates.map((cert) => (
+                                <a
+                                  key={cert.id}
+                                  href={cert.url}
+                                  target="_blank"
+                                  rel="noreferrer"
+                                  className="flex items-center gap-2 px-4 py-2 bg-white/[0.03] border border-white/10 rounded-xl hover:border-cyan-400/30 hover:bg-white/[0.06] transition-all group/cert"
+                                >
+                                  <div className="w-8 h-8 rounded-lg bg-cyan-500/10 flex items-center justify-center text-cyan-400">
+                                    <Award className="w-4 h-4" />
+                                  </div>
+                                  <div className="flex flex-col">
+                                    <span className="text-[10px] font-bold text-white group-hover/cert:text-cyan-400 transition-colors whitespace-nowrap">{cert.title}</span>
+                                    <span className="text-[8px] text-white/70 font-medium uppercase tracking-widest">Verify Securely</span>
+                                  </div>
+                                  <ExternalLink className="w-3 h-3 text-white/60 group-hover/cert:text-cyan-400 ml-2" />
+                                </a>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+
+                        {(exp.description.length > 1000 || (exp.companyProjects && exp.companyProjects.length > 1)) && (
                           <button
                             onClick={(e) => {
                               e.preventDefault();
@@ -665,7 +792,7 @@ export default function Portfolio() {
                             className="h-full bg-gradient-to-r from-violet-500 to-cyan-500 rounded-full"
                           />
                         </div>
-                        <span className="text-xs font-bold text-white/40">{skill.level}%</span>
+                        <span className="text-xs font-bold text-white/80">{skill.level}%</span>
                       </div>
                     </motion.div>
                   );
@@ -677,7 +804,7 @@ export default function Portfolio() {
           {/* Projects Section */}
           <section id="projects" className="max-w-7xl mx-auto px-6 mb-16 sm:mb-20 lg:mb-24">
             <div className="text-center mb-16">
-              <h2 className="text-xl sm:text-3xl md:text-4xl font-extrabold text-white mb-4">Featured Projects</h2>
+              <h2 className="text-xl sm:text-3xl md:text-4xl font-extrabold text-white mb-4">Personal Projects</h2>
               <div className="w-12 h-1 bg-gradient-to-r from-violet-500 to-cyan-400 mx-auto rounded-full"></div>
             </div>
 
@@ -703,7 +830,7 @@ export default function Portfolio() {
 
                         <h3 className="text-xl sm:text-3xl font-bold text-white mb-4 group-hover:text-violet-400 transition-colors tracking-tight leading-none">{project.title}</h3>
                         <div className="relative mb-6 flex-grow">
-                          <div 
+                          <div
                             className={`formatted-content text-sm sm:text-base text-white/60 leading-relaxed transition-all duration-300 ${!expandedProjects[project.id] ? 'line-clamp-[12]' : ''}`}
                             dangerouslySetInnerHTML={{ __html: project.description || '' }}
                           />
@@ -722,13 +849,13 @@ export default function Portfolio() {
                         <div className="flex items-center justify-end pt-6 border-t border-white/[0.06] mt-auto">
                           <div className="flex gap-6">
                             {project.githubLink && (
-                              <a href={project.githubLink} target="_blank" rel="noreferrer" className="text-white/40 hover:text-violet-400 transition-colors flex items-center gap-2 group cursor-pointer" title="GitHub Repository">
+                              <a href={project.githubLink} target="_blank" rel="noreferrer" className="text-white/80 hover:text-violet-400 transition-colors flex items-center gap-2 group cursor-pointer" title="GitHub Repository">
                                 <span className="text-[10px] font-bold font-sans">Source code</span>
                                 <Github className="w-5 h-5" />
                               </a>
                             )}
                             {project.liveLink && (
-                              <a href={project.liveLink} target="_blank" rel="noreferrer" className="text-white/40 hover:text-cyan-400 transition-colors flex items-center gap-2 group cursor-pointer" title="Live Demo">
+                              <a href={project.liveLink} target="_blank" rel="noreferrer" className="text-white/80 hover:text-cyan-400 transition-colors flex items-center gap-2 group cursor-pointer" title="Live Demo">
                                 <span className="text-[10px] font-bold font-sans">Live preview</span>
                                 <ExternalLink className="w-5 h-5" />
                               </a>
@@ -797,7 +924,7 @@ export default function Portfolio() {
                           <p className="text-white/60 text-sm mb-6 line-clamp-3">{blog.description}</p>
 
                           <div className="flex items-center justify-between mt-auto pt-4 border-t border-white/[0.06]">
-                            <span className="text-xs text-white/40 flex items-center">
+                            <span className="text-xs text-white/80 flex items-center">
                               <Clock className="w-3 h-3 mr-1" /> {blog.readTime || '5 min read'}
                             </span>
                             <span className="text-sm font-medium text-violet-400 flex items-center group-hover:text-cyan-400 transition-colors">
@@ -840,7 +967,7 @@ export default function Portfolio() {
                       <Mail className="w-6 h-6" />
                     </div>
                     <div>
-                      <h4 className="text-sm font-bold text-white/40 uppercase tracking-widest">Email Me</h4>
+                      <h4 className="text-sm font-bold text-white/80 uppercase tracking-widest">Email Me</h4>
                       <p className="text-white font-medium">{profile.email}</p>
                     </div>
                   </div>
@@ -849,7 +976,7 @@ export default function Portfolio() {
                       <MapPin className="w-6 h-6" />
                     </div>
                     <div>
-                      <h4 className="text-sm font-bold text-white/40 uppercase tracking-widest">Location</h4>
+                      <h4 className="text-sm font-bold text-white/80 uppercase tracking-widest">Location</h4>
                       <p className="text-white font-medium">{profile.location || 'Remote / Worldwide'}</p>
                     </div>
                   </div>
@@ -875,21 +1002,21 @@ export default function Portfolio() {
                     <form onSubmit={handleContactSubmit} className="space-y-6">
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="space-y-2">
-                          <label className="text-xs font-bold text-white/40 uppercase tracking-widest ml-1">Your Name</label>
+                          <label className="text-xs font-bold text-white/80 uppercase tracking-widest ml-1">Your Name</label>
                           <Input
                             placeholder="John Doe"
-                            className="h-14 bg-white/[0.05] border-white/10 text-white rounded-2xl focus-visible:ring-violet-500 placeholder:text-white/20"
+                            className="h-14 bg-white/[0.05] border-white/10 text-white rounded-2xl focus-visible:ring-violet-500 placeholder:text-white/60"
                             value={contactForm.name}
                             onChange={(e) => setContactForm({ ...contactForm, name: e.target.value })}
                             required
                           />
                         </div>
                         <div className="space-y-2">
-                          <label className="text-xs font-bold text-white/40 uppercase tracking-widest ml-1">Email Address</label>
+                          <label className="text-xs font-bold text-white/80 uppercase tracking-widest ml-1">Email Address</label>
                           <Input
                             type="email"
                             placeholder="john@example.com"
-                            className="h-14 bg-white/[0.05] border-white/10 text-white rounded-2xl focus-visible:ring-violet-500 placeholder:text-white/20"
+                            className="h-14 bg-white/[0.05] border-white/10 text-white rounded-2xl focus-visible:ring-violet-500 placeholder:text-white/60"
                             value={contactForm.email}
                             onChange={(e) => setContactForm({ ...contactForm, email: e.target.value })}
                             required
@@ -897,20 +1024,20 @@ export default function Portfolio() {
                         </div>
                       </div>
                       <div className="space-y-2">
-                        <label className="text-xs font-bold text-white/40 uppercase tracking-widest ml-1">Subject</label>
+                        <label className="text-xs font-bold text-white/80 uppercase tracking-widest ml-1">Subject</label>
                         <Input
                           placeholder="How can I help you?"
-                          className="h-14 bg-white/[0.05] border-white/10 text-white rounded-2xl focus-visible:ring-violet-500 placeholder:text-white/20"
+                          className="h-14 bg-white/[0.05] border-white/10 text-white rounded-2xl focus-visible:ring-violet-500 placeholder:text-white/60"
                           value={contactForm.subject}
                           onChange={(e) => setContactForm({ ...contactForm, subject: e.target.value })}
                           required
                         />
                       </div>
                       <div className="space-y-2">
-                        <label className="text-xs font-bold text-white/40 uppercase tracking-widest ml-1">Message</label>
+                        <label className="text-xs font-bold text-white/80 uppercase tracking-widest ml-1">Message</label>
                         <Textarea
                           placeholder="Tell me about your project..."
-                          className="min-h-[160px] bg-white/[0.05] border-white/10 text-white rounded-2xl focus-visible:ring-violet-500 placeholder:text-white/20 resize-none"
+                          className="min-h-[160px] bg-white/[0.05] border-white/10 text-white rounded-2xl focus-visible:ring-violet-500 placeholder:text-white/60 resize-none"
                           value={contactForm.message}
                           onChange={(e) => setContactForm({ ...contactForm, message: e.target.value })}
                           required
@@ -979,7 +1106,7 @@ export default function Portfolio() {
 
         {/* Admin Link - Hidden on mobile/tablet as it is already in the sidebar */}
         <div className="fixed bottom-4 right-6 z-50 hidden lg:block">
-          <a href="/admin" className="text-[10px] font-black text-white/30 hover:text-violet-400 transition-all flex items-center gap-1 uppercase tracking-[0.2em]" style={{ fontFamily: "var(--font-heading)" }}>
+          <a href="/admin" className="text-[10px] font-black text-white/70 hover:text-violet-400 transition-all flex items-center gap-1 uppercase tracking-[0.2em]" style={{ fontFamily: "var(--font-heading)" }}>
             <Terminal className="w-3 h-3" /> Admin Portal
           </a>
         </div>

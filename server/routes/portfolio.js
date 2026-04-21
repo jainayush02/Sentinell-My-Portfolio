@@ -28,12 +28,13 @@ router.post('/', authenticateToken, async (req, res) => {
     
     if (portfolio) {
       // Update existing
-      portfolio.set(data);
+      Object.assign(portfolio, data);
+      
       // Ensure complex nested objects are marked as modified
-      portfolio.markModified('profile');
-      portfolio.markModified('projects');
-      portfolio.markModified('skills');
-      portfolio.markModified('experiences');
+      Object.keys(data).forEach(key => {
+        portfolio.markModified(key);
+      });
+      
       await portfolio.save();
     } else {
       // Create new

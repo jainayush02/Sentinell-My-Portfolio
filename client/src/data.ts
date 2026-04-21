@@ -1,3 +1,15 @@
+export interface CompanyProject {
+  id: string;
+  title: string;
+  description: string;
+}
+
+export interface Certificate {
+  id: string;
+  title: string;
+  url: string;
+}
+
 export interface Experience {
   id: string;
   role: string;
@@ -5,6 +17,9 @@ export interface Experience {
   period: string;
   description: string;
   skills?: string[];
+  location?: string;
+  companyProjects?: CompanyProject[];
+  certificates?: Certificate[];
 }
 
 export interface Project {
