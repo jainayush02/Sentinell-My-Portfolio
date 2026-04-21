@@ -3,6 +3,7 @@ import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Underline from '@tiptap/extension-underline';
 import Link from '@tiptap/extension-link';
+import { sanitizeHtml } from '@/src/lib/sanitizeHtml';
 import { 
   Bold, Italic, Underline as UnderlineIcon, 
   List, ListOrdered, Link as LinkIcon, 
@@ -127,7 +128,7 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({ value, onChange, placeh
     ],
     content: value,
     onUpdate: ({ editor }) => {
-      onChange(editor.getHTML());
+      onChange(sanitizeHtml(editor.getHTML()));
     },
     editorProps: {
       attributes: {
@@ -138,8 +139,9 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({ value, onChange, placeh
 
   // Sync content if value changes externally (e.g. on load)
   useEffect(() => {
-    if (editor && value !== editor.getHTML()) {
-      editor.commands.setContent(value);
+    const sanitizedValue = sanitizeHtml(value);
+    if (editor && sanitizedValue !== editor.getHTML()) {
+      editor.commands.setContent(sanitizedValue, { emitUpdate: false });
     }
   }, [value, editor]);
 

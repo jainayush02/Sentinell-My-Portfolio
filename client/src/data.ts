@@ -38,6 +38,7 @@ export interface Project {
 export interface Skill {
   name: string;
   level: number;
+  id?: string;
 }
 
 export interface Feature {
@@ -59,10 +60,10 @@ export interface PortfolioData {
     github: string;
     linkedin: string;
     twitter: string;
-    location: String;
-    dob: String;
-    careerStartDate: String;
-    resumeUrl?: String;
+    location: string;
+    dob: string;
+    careerStartDate: string;
+    resumeUrl?: string;
     workLink?: string;
     researchPapersCount: number;
   };

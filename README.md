@@ -7,7 +7,7 @@ A high-performance, full-stack SaaS portfolio architecture featuring a secure Ad
 ```mermaid
 graph TD
     subgraph "Frontend Layer (Nexus UI)"
-        A[React 18 + Vite] --> B[Framer Motion Animations]
+        A[React 19 + Vite] --> B[Framer Motion Animations]
         B --> C{API Handlers}
     end
 
@@ -52,7 +52,7 @@ Sentinell-Portfolio/
 ```
 
 ## 🛠️ Core Technology Stack
-- **Frontend**: React 18, Vite, Framer Motion (Animations), Tailwind CSS.
+- **Frontend**: React 19, Vite, Motion, Tailwind CSS.
 - **Backend**: Node.js, Express, JWT (Authentication), Twilio (WhatsApp API).
 - **Database**: MongoDB with Mongoose ODM.
 - **Security**: Hardened with Helmet.js, Express-Rate-Limit, and NoSQL Injection Sanitation.
@@ -67,8 +67,10 @@ This platform is built with a "Zero-Trust" administrative philosophy:
 ## 🚀 Quick Start
 1. **Initialize Environment**:
    - Create `.env` files in both `client/` and `server/` using your private credentials.
-2. **Start Services**:
-   - Run `python start.py` from the root directory to launch both the frontend and backend concurrently.
+2. **Install Dependencies**:
+   - Run `npm run install:all` from the project root.
+3. **Start Services**:
+   - Run `npm run dev` from the root directory to launch both the frontend and backend concurrently.
 
 ---
 *Built for High-Impact Engineers.*

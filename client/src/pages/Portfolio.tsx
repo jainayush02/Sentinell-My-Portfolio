@@ -11,6 +11,7 @@ import {
   ExternalLink, ChevronRight, Terminal, Globe, Award, Menu, X, Eye
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
+import { sanitizeHtml } from '@/src/lib/sanitizeHtml';
 
 const ProjectTagStrip = ({ tags, isExpanded, onToggle }: { tags: string[]; isExpanded: boolean; onToggle: () => void }) => {
   const [hasOverflow, setHasOverflow] = useState(false);
@@ -627,7 +628,7 @@ export default function Portfolio() {
                       <div className="relative">
                         <div
                           className={`formatted-content text-white/60 leading-relaxed transition-all duration-300 ${!expandedExperiences[exp.id] ? 'line-clamp-[12]' : ''}`}
-                          dangerouslySetInnerHTML={{ __html: exp.description || '' }}
+                          dangerouslySetInnerHTML={{ __html: sanitizeHtml(exp.description || '') }}
                         />
 
                         {/* Company Projects Subsection */}
@@ -661,7 +662,7 @@ export default function Portfolio() {
                                         </div>
                                         <div
                                           className={`formatted-content text-[11px] sm:text-xs text-white/50 leading-relaxed transition-all duration-300 ${!expandedCompanyProjects[proj.id] ? 'line-clamp-4' : ''}`}
-                                          dangerouslySetInnerHTML={{ __html: proj.description || '' }}
+                                          dangerouslySetInnerHTML={{ __html: sanitizeHtml(proj.description || '') }}
                                         />
                                         {(proj.description?.length > 150) && (
                                           <button
@@ -766,7 +767,7 @@ export default function Portfolio() {
 
                   return (
                     <motion.div
-                      key={skill.id || index}
+                      key={skill.id || skill.name || index}
                       initial={{ opacity: 0, scale: 0.95 }}
                       whileInView={{ opacity: 1, scale: 1 }}
                       viewport={{ once: true }}
@@ -832,7 +833,7 @@ export default function Portfolio() {
                         <div className="relative mb-6 flex-grow">
                           <div
                             className={`formatted-content text-sm sm:text-base text-white/60 leading-relaxed transition-all duration-300 ${!expandedProjects[project.id] ? 'line-clamp-[12]' : ''}`}
-                            dangerouslySetInnerHTML={{ __html: project.description || '' }}
+                            dangerouslySetInnerHTML={{ __html: sanitizeHtml(project.description || '') }}
                           />
                           {(project.description.length > 1000) && (
                             <button

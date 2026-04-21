@@ -20,7 +20,7 @@ router.get('/', async (req, res) => {
 // Update portfolio data
 router.post('/', authenticateToken, async (req, res) => {
   try {
-    const allowed = ['profile', 'projects', 'skills', 'experience', 'experiences', 'education', 'certifications'];
+    const allowed = ['profile', 'features', 'projects', 'skills', 'experience', 'experiences', 'education', 'certifications'];
     const data = Object.fromEntries(Object.entries(req.body).filter(([k]) => allowed.includes(k)));
 
     // We update the existing one or create a new one if none exists

@@ -40,6 +40,12 @@ const skillSchema = new mongoose.Schema({
   level: Number
 });
 
+const featureSchema = new mongoose.Schema({
+  title: String,
+  description: String,
+  icon: String
+}, { _id: false });
+
 const portfolioSchema = new mongoose.Schema({
   profile: {
     name: String,
@@ -60,6 +66,7 @@ const portfolioSchema = new mongoose.Schema({
     workLink: String,
     researchPapersCount: { type: Number, default: 0 }
   },
+  features: [featureSchema],
   experiences: [experienceSchema],
   projects: [projectSchema],
   skills: [skillSchema]

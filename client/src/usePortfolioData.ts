@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { PortfolioData, initialData } from './data';
+import { getAdminToken } from '@/src/lib/adminSession';
 
 const API_BASE = '/api';
 
@@ -25,7 +26,15 @@ export function usePortfolioData() {
             });
             result.profile = { ...initialData.profile, ...result.profile };
           }
-          setData(result);
+          setData({
+            ...initialData,
+            ...result,
+            profile: result.profile ? result.profile : initialData.profile,
+            features: Array.isArray(result.features) ? result.features : initialData.features,
+            experiences: Array.isArray(result.experiences) ? result.experiences : initialData.experiences,
+            projects: Array.isArray(result.projects) ? result.projects : initialData.projects,
+            skills: Array.isArray(result.skills) ? result.skills : initialData.skills,
+          });
         } else {
           console.log('Using initial data (portfolio not found on server)');
         }
@@ -41,7 +50,7 @@ export function usePortfolioData() {
 
   // Sync with backend on change
   const syncWithBackend = async (updatedData: PortfolioData) => {
-    const token = localStorage.getItem('adminToken');
+    const token = getAdminToken();
     if (!token) return; // Don't sync if not logged in
 
     try {

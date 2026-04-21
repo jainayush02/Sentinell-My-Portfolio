@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { usePortfolioData } from '../usePortfolioData';
-import { Button } from '@/components/ui/button';
+import { Button, buttonVariants } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -11,6 +11,8 @@ import { ArrowLeft, Plus, Trash2, Hexagon, Smartphone, Key, Zap, Menu, X, Globe,
 import { Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import { Suspense, lazy } from 'react';
+import { clearAdminToken, getAdminToken, setAdminToken } from '@/src/lib/adminSession';
+import { cn } from '@/lib/utils';
 
 const RichTextEditor = lazy(() => import('@/src/components/RichTextEditor'));
 
@@ -63,7 +65,7 @@ export default function Admin() {
   }, [loading, data]);
 
   useEffect(() => {
-    const token = localStorage.getItem('adminToken');
+    const token = getAdminToken();
     if (token) {
       setIsAuthenticated(true);
       fetchMessages();
@@ -73,7 +75,7 @@ export default function Admin() {
   const [messages, setMessages] = useState<any[]>([]);
 
   const fetchMessages = async () => {
-    const token = localStorage.getItem('adminToken');
+    const token = getAdminToken();
     if (!token) return;
     try {
       const response = await fetch(`${API_BASE}/messages`, {
@@ -89,7 +91,7 @@ export default function Admin() {
   };
 
   const handleDeleteMessage = async (id: string) => {
-    const token = localStorage.getItem('adminToken');
+    const token = getAdminToken();
     if (!token) return;
     try {
       const response = await fetch(`${API_BASE}/messages/${id}`, {
@@ -106,7 +108,7 @@ export default function Admin() {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('adminToken');
+    clearAdminToken();
     window.location.reload();
   };
 
@@ -178,7 +180,7 @@ export default function Admin() {
       });
       const result = await response.json();
       if (response.ok) {
-        localStorage.setItem('adminToken', result.token);
+        setAdminToken(result.token);
         setIsAuthenticated(true);
         toast.success('Access Granted. Welcome back.');
       } else {
@@ -228,7 +230,7 @@ export default function Admin() {
     formData.append('image', file);
 
     try {
-      const token = localStorage.getItem('adminToken');
+      const token = getAdminToken();
       if (!token) {
         toast.error('Session expired. Please log in again.');
         return;
@@ -422,9 +424,12 @@ export default function Admin() {
             </nav>
 
             <div className="p-4 border-t border-white/5 flex flex-col gap-2">
-              <Button variant="outline" className="w-full justify-start h-10 rounded-xl border-white/10 bg-white/5 text-white/60 hover:text-white hover:bg-white/10 px-4 text-[10px] uppercase tracking-widest font-bold" asChild>
-                <Link to="/"><ArrowLeft className="w-4 h-4 mr-2" /> Live Site</Link>
-              </Button>
+              <Link
+                to="/"
+                className={cn(buttonVariants({ variant: 'outline' }), 'w-full justify-start h-10 rounded-xl border-white/10 bg-white/5 text-white/60 hover:text-white hover:bg-white/10 px-4 text-[10px] uppercase tracking-widest font-bold')}
+              >
+                <ArrowLeft className="w-4 h-4 mr-2" /> Live Site
+              </Link>
               <Button variant="secondary" onClick={handleLogout} className="w-full justify-start h-10 rounded-xl bg-white/5 text-white/60 hover:text-white hover:bg-white/10 px-4 text-[10px] uppercase tracking-widest font-bold border border-transparent">
                 Logout
               </Button>
@@ -462,9 +467,12 @@ export default function Admin() {
           >
             <Download className="w-4 h-4" /> Sync Registry
           </Button>
-          <Button variant="outline" className="border-white/10 bg-white/5 text-white/60 hover:text-white hover:bg-white/10 h-10 px-6 rounded-xl font-bold text-[10px] uppercase tracking-widest transition-all" asChild>
-            <Link to="/">Live Preview</Link>
-          </Button>
+          <Link
+            to="/"
+            className={cn(buttonVariants({ variant: 'outline' }), 'border-white/10 bg-white/5 text-white/60 hover:text-white hover:bg-white/10 h-10 px-6 rounded-xl font-bold text-[10px] uppercase tracking-widest transition-all')}
+          >
+            Live Preview
+          </Link>
           <Button variant="secondary" onClick={handleLogout} className="bg-white/5 border border-transparent hover:border-white/10 text-white/70 hover:text-white h-10 px-6 rounded-xl font-bold text-[10px] uppercase tracking-widest transition-all">Logout</Button>
         </div>
       </div>

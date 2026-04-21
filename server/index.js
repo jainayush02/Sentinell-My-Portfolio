@@ -222,9 +222,11 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-app.listen(PORT, () => {
+if (!process.env.VERCEL && process.env.NODE_ENV !== 'test') {
+  app.listen(PORT, () => {
   console.log('🛡️ SENTINELL SHIELD: ACTIVE');
   console.log(`🚀 SERVICE: Listening on Port ${PORT}`);
-});
+  });
+}
 
 export default app;
